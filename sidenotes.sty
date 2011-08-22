@@ -1,0 +1,112 @@
+%%
+%% This is file `sidenotes.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% sidenotes.dtx  (with options: `package')
+%% 
+%% IMPORTANT NOTE:
+%% 
+%% This is a generated file and you are not allowed to distribute it
+%% without the source of the work.  See below about more informations
+%% about the files the work consists of.
+%% 
+\ProvidesPackage{sidenotes}[%
+  2011/08/21 v0.2 footnotes in the margin for LaTeX]
+\RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
+\RequirePackage{caption} % handles the figure caption (in the margin)
+\RequirePackage{environ} % to define new environments more easily
+\RequirePackage{xifthen} % provide an if command
+\RequirePackage{twoopt} % cite in the biblatex package has 2 optional arguments
+\newcommand*{\sidestyle}{\footnotesize}
+\newcounter{sidenote} % make counter
+\newcounter{@sidenotes@buffer}
+\setcounter{sidenote}{1} % init counter
+
+\newcommand*{\sidenote}[2][]{%
+\begingroup%
+\@ifnextchar [{\@sidenotes@sidenote[{#1}]{#2}}{\@sidenotes@sidenote[{#1}]{#2}[]}%
+}
+
+\newcommand{\@sidenotes@sidenote}{}
+\def\@sidenotes@sidenote[#1]#2[#3]{%
+\endgroup%
+\@sidenotes@@sidenote[{#1}]{#2}[{#3}]%
+}
+
+\newcommand{\@sidenotes@@sidenote}{}
+\def\@sidenotes@@sidenote[#1]#2[#3]{%
+\ifthenelse{\isempty{#1}}%
+{\sidenotemark%
+\sidenotetext{#2}[#3]}%
+{\sidenotemark[#1]%
+\sidenotetext[#1]{#2}}%
+}
+\newcommand{\sidenotemark}[1][]{%
+\nobreak\hspace{0.1pt}\nobreak%
+\ifthenelse{\isempty{#1}}%
+{\textsuperscript{\thesidenote}%
+\refstepcounter{sidenote}}% if no argument is given use sidenote counter%
+{\setcounter{@sidenotes@buffer}{\value{sidenote}}%
+\setcounter{sidenote}{#1}%
+\textsuperscript{\thesidenote}% print out the argument otherwise
+\setcounter{sidenote}{\value{@sidenotes@buffer}}}%
+\ignorespaces%
+}%
+\newcommand*{\sidenotetext}[2][]{%
+\begingroup%
+\@ifnextchar [{\@sidenotes@sidenotetext[{#1}]{#2}}{\@sidenotes@sidenotetext[{#1}]{#2}[]}%
+}
+
+\newcommand{\@sidenotes@sidenotetext}{}
+\def\@sidenotes@sidenotetext[#1]#2[#3]{%
+\endgroup%
+\@sidenotes@@sidenotetext[{#1}]{#2}[{#3}]%
+}
+
+\newcommand{\@sidenotes@@sidenotetext}{}
+\def\@sidenotes@@sidenotetext[#1]#2[#3]{%
+\ifthenelse{\isempty{#1}}{% sitenotemark given?
+\addtocounter{sidenote}{-1}%
+\ifthenelse{\isempty{#3}}{% offset?
+\marginpar{\textsuperscript{\thesidenote}{} \sidestyle#2}}% no offset
+{\marginnote{\textsuperscript{\thesidenote}{} \sidestyle#2}[#3]} % with offest
+\addtocounter{sidenote}{1}}%
+{\ifthenelse{\isempty{#3}}% offset?
+{\marginpar{\textsuperscript{#1} \sidestyle#2}}% no offset
+{\marginnote{\textsuperscript{\thesidenote}{} \sidestyle#2}}% with offset
+}% fi
+}%
+\newcommandtwoopt{\sidecite}[3][][]{%
+\begingroup%
+\@ifnextchar [{\@sidenotes@sidecite[{#1}][{#2}]{#3}}{\@sidenotes@sidecite[{#1}][{#2}]{#3}[]}%
+}
+\newcommand{\@sidenotes@sidecite}{}
+\def\@sidenotes@sidecite[#1][#2]#3[#4]{%
+\endgroup%
+\@sidenotes@@sidecite[{#1}][{#2}]{#3}[{#4}]%
+}
+
+\newcommand{\@sidenotes@@sidecite}{}
+\def\@sidenotes@@sidecite[#1][#2]#3[#4]{%
+\sidenote{\fullcite[#1][#2]{#3}}[#4]%
+}%
+\newcommand{\sidecaption}[2][]{%
+\ifthenelse{\isempty{#1}}%
+{\marginnote{\caption{#2}}}%
+{\marginnote{\caption[#1]{#2}}}%
+}%
+\NewEnviron{sidefigure}[1][]{%
+\ifthenelse{\isempty{#1}} % offset?
+{\marginpar{\captionsetup{type=figure}\BODY}} % no offset
+{\marginnote{\captionsetup{type=figure}\BODY}[#1]} % with offset
+}%
+\NewEnviron{sidetable}[1][]{%
+\ifthenelse{\isempty{#1}} % offset?
+{\marginpar{\captionsetup{type=table}\sidestyle\BODY}} % no offset
+{\marginnote{\captionsetup{type=table}\sidestyle\BODY}[#1]} % with offset
+}%
+\endinput
+%%
+%% End of file `sidenotes.sty'.
