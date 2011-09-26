@@ -25,7 +25,7 @@
   \pagenumbering{arabic}%
   %\pagestyle{plain}%
   \fancyhf{}%
-  \ifthenelse{\boolean{@caesar@twoside}}%
+  \ifthenelse{\boolean{@twoside}}%
     {\fancyhead[LE,RO]{\thepage}}%
     {\fancyhead[RE,RO]{\thepage}}%
 }

@@ -15,7 +15,7 @@
 \RequirePackage{caption}
 \RequirePackage{sidenotes}
 
-\AtBeginDocument{\usepackage{changepage}}
+\RequirePackage{changepage}
 
 %%
 % `scroll' option
@@ -23,6 +23,18 @@
 \newboolean{@caesar@scroll}
 \setboolean{@caesar@scroll}{false}
 \DeclareOption{scroll}{\setboolean{@caesar@scroll}{true}}%
+
+
+\newboolean{@caesar@debug}
+\DeclareOption{debug}{\setboolean{@caesar@debug}{true}}
+
+%%
+% twoside option
+\newboolean{@caesar@twoside}
+\DeclareOption{twoside}{%
+  \setboolean{@caesar@twoside}{true}
+}
+
 
 %\ExecuteOptions{}
 \ProcessOptions\relax
@@ -42,12 +54,13 @@
 \usepackage{fontspec}
 % Use the Palatino-Clone Tex Gyre Pagella as main font
 \usepackage{mathpazo}
-\setmainfont[Ligatures=TeX, Scale=1, Numbers=OldStyle]{Tex Gyre Pagella}
+\setmainfont[Ligatures=TeX, Numbers=OldStyle]{Tex Gyre Pagella}
+%\setmainfont[Ligatures=TeX, Numbers=OldStyle]{Tex Gyre Termes}
 %\setmainfont{Helvetica}
 % Use Tex Gyre Cursor als Monospace Font
 \setmonofont{Tex Gyre Cursor}
 % Use Tex Gyre Heros Cn als Sans Serif Font
-\setmonofont{Tex Gyre Heros Cn}
+\setsansfont{Tex Gyre Heros Cn}
 % fontsize is 10pt, 13pt 
 \renewcommand{\normalsize}{\fontsize{10pt}{13pt}\selectfont} 
 
@@ -75,8 +88,47 @@
 	{1\baselineskip}%		    	% Nachabstand
 	{\normalfont\large\itshape}}%	% format
 
+\renewcommand{\subsection}{\@startsection
+	{subsection}%
+	{2}%
+	{0pt}%
+	{-1\baselineskip}%
+	{1\baselineskip} % not sure about this one, look at Bringhurst
+	{\normalfont\itshape}%
+	}%
 
-\usepackage{fancyhdr}
+\renewcommand{\paragraph}{\@startsection%
+	{paragraph}%
+	{3}%
+	{0pt}%
+	{-1\baselineskip}%
+	{-10pt}%
+	{\normalfont\itshape}%
+}
+
+%%
+% Turns newlines into spaces.  Based on code from the `titlesec' package.
+
+\DeclareRobustCommand{\@caesar@newlinetospace}{%
+  \@ifstar{\@caesar@newlinetospace@i}{\@caesar@newlinetospace@i}%
+}
+
+\def\@caesar@newlinetospace@i{%
+  \ifdim\lastskip>\z@\else\space\fi
+  \ignorespaces%
+}
+
+\DeclareRobustCommand{\newlinetospace}[1]{%
+  \let\@caesar@orig@cr\\% save the original meaning of \\
+  \def\\{\@caesar@newlinetospace}% turn \\ and \\* into \space
+  \let\newline\\% turn \newline into \space
+  #1%
+  \let\\\@caesar@orig@cr% revert to original meaning of \\
+}
+
+
+
+\RequirePackage{fancyhdr}
 \fancypagestyle{plain}{% 
 \fancyhf{} % clear all header and footer fields 
 \fancyfoot[LE,RO]{\thepage}
@@ -208,11 +260,11 @@
   {%
   \sffamily%
   \begin{fullwidth}%
-  \fontsize{18}{20}\selectfont\par\noindent\textcolor{darkgray}{\allcaps{\thanklessauthor}}%
+  \fontsize{18}{20}\selectfont\par\noindent\textcolor{darkgray}{\lsstyle\allcaps{\thanklessauthor}}%
   \vspace{11.5pc}%
-  \fontsize{36}{40}\selectfont\par\noindent\textcolor{darkgray}{\allcaps{\thanklesstitle}}%
+  \fontsize{36}{40}\selectfont\par\noindent\textcolor{darkgray}{\lsstyle\allcaps{\thanklesstitle}}%
   \vfill%
-  \fontsize{14}{16}\selectfont\par\noindent\allcaps{\thanklesspublisher}%
+  \fontsize{14}{16}\selectfont\par\noindent\lsstyle\allcaps{\thanklesspublisher}%
   \end{fullwidth}%
   }
   \thispagestyle{empty}%
@@ -238,4 +290,125 @@
     \@@date%
   \endgroup%
   \thispagestyle{plain}% suppress the running head
+}
+
+%%
+% When \cleardoublepage is called, produce a blank (empty) page -- i.e.,
+% without headers and footers
+\def\cleardoublepage{\clearpage\if@twoside\ifodd\c@page\else
+  \hbox{}
+  %\vspace*{\fill}
+  %\begin{center}
+  %  This page intentionally contains only this sentence.
+  %\end{center}
+  %\vspace{\fill}
+  \thispagestyle{empty}
+  \newpage
+  \if@twocolumn\hbox{}\newpage\fi\fi\fi}
+
+\newcommand{\CaesarInfoNL}[1]{\ClassInfo{\@caesar@pkgname}{#1\@gobble}}
+\newcommand{\CaesarDebugInfoNL}[1]{\ifthenelse{\boolean{@caesar@debug}}{\CaesarInfoNL{#1}}{}}
+\newcommand{\CaesarError}[2]{\ClassError{\@caesar@pkgname}{#1}{#2}}
+
+\def\morefloats{% provides a total of 52 floats
+  \ifthenelse{\isundefined{\bx@S}}{%
+    \CaesarDebugInfoNL{Adding 34 more float slots.}
+    \newinsert\bx@S
+    \newinsert\bx@T
+    \newinsert\bx@U
+    \newinsert\bx@V
+    \newinsert\bx@W
+    \newinsert\bx@X
+    \newinsert\bx@Y
+    \newinsert\bx@Z
+    \newinsert\bx@a
+    \newinsert\bx@b
+    \newinsert\bx@c
+    \newinsert\bx@d
+    \newinsert\bx@e
+    \newinsert\bx@f
+    \newinsert\bx@g
+    \newinsert\bx@h
+    \newinsert\bx@i
+    \newinsert\bx@j
+    \newinsert\bx@k
+    \newinsert\bx@l
+    \newinsert\bx@m
+    \newinsert\bx@n
+    \newinsert\bx@o
+    \newinsert\bx@p
+    \newinsert\bx@q
+    \newinsert\bx@r
+    \newinsert\bx@s
+    \newinsert\bx@t
+    \newinsert\bx@u
+    \newinsert\bx@v
+    \newinsert\bx@w
+    \newinsert\bx@x
+    \newinsert\bx@y
+    \newinsert\bx@z
+    \gdef\@freelist{\@elt\bx@A\@elt\bx@B\@elt\bx@C\@elt\bx@D\@elt\bx@E
+                    \@elt\bx@F\@elt\bx@G\@elt\bx@H\@elt\bx@I\@elt\bx@J
+                    \@elt\bx@K\@elt\bx@L\@elt\bx@M\@elt\bx@N
+                    \@elt\bx@O\@elt\bx@P\@elt\bx@Q\@elt\bx@R
+                    \@elt\bx@S\@elt\bx@T\@elt\bx@U\@elt\bx@V
+                    \@elt\bx@W\@elt\bx@X\@elt\bx@Y\@elt\bx@Z
+                    \@elt\bx@a\@elt\bx@b\@elt\bx@c\@elt\bx@d\@elt\bx@e
+                    \@elt\bx@f\@elt\bx@g\@elt\bx@h\@elt\bx@i\@elt\bx@j
+                    \@elt\bx@k\@elt\bx@l\@elt\bx@m\@elt\bx@n
+                    \@elt\bx@o\@elt\bx@p\@elt\bx@q\@elt\bx@r
+                    \@elt\bx@s\@elt\bx@t\@elt\bx@u\@elt\bx@v
+                    \@elt\bx@w\@elt\bx@x\@elt\bx@y\@elt\bx@z}%
+  }{% we've already added another 34 floats, so we'll add 26 more, but that's it!
+    \ifthenelse{\isundefined{\bx@AA}}{%
+      \CaesarDebugInfoNL{Adding 26 more float slots.}
+      \newinsert\bx@AA
+      \newinsert\bx@BB
+      \newinsert\bx@CC
+      \newinsert\bx@DD
+      \newinsert\bx@EE
+      \newinsert\bx@FF
+      \newinsert\bx@GG
+      \newinsert\bx@HH
+      \newinsert\bx@II
+      \newinsert\bx@JJ
+      \newinsert\bx@KK
+      \newinsert\bx@LL
+      \newinsert\bx@MM
+      \newinsert\bx@NN
+      \newinsert\bx@OO
+      \newinsert\bx@PP
+      \newinsert\bx@QQ
+      \newinsert\bx@RR
+      \newinsert\bx@SS
+      \newinsert\bx@TT
+      \newinsert\bx@UU
+      \newinsert\bx@VV
+      \newinsert\bx@WW
+      \newinsert\bx@XX
+      \newinsert\bx@YY
+      \newinsert\bx@ZZ
+      \gdef\@freelist{\@elt\bx@A\@elt\bx@B\@elt\bx@C\@elt\bx@D\@elt\bx@E
+                      \@elt\bx@F\@elt\bx@G\@elt\bx@H\@elt\bx@I\@elt\bx@J
+                      \@elt\bx@K\@elt\bx@L\@elt\bx@M\@elt\bx@N
+                      \@elt\bx@O\@elt\bx@P\@elt\bx@Q\@elt\bx@R
+                      \@elt\bx@S\@elt\bx@T\@elt\bx@U\@elt\bx@V
+                      \@elt\bx@W\@elt\bx@X\@elt\bx@Y\@elt\bx@Z
+                      \@elt\bx@a\@elt\bx@b\@elt\bx@c\@elt\bx@d\@elt\bx@e
+                      \@elt\bx@f\@elt\bx@g\@elt\bx@h\@elt\bx@i\@elt\bx@j
+                      \@elt\bx@k\@elt\bx@l\@elt\bx@m\@elt\bx@n
+                      \@elt\bx@o\@elt\bx@p\@elt\bx@q\@elt\bx@r
+                      \@elt\bx@s\@elt\bx@t\@elt\bx@u\@elt\bx@v
+                      \@elt\bx@w\@elt\bx@x\@elt\bx@y\@elt\bx@z
+                      \@elt\bx@AA\@elt\bx@BB\@elt\bx@CC\@elt\bx@DD\@elt\bx@EE
+                      \@elt\bx@FF\@elt\bx@GG\@elt\bx@HH\@elt\bx@II\@elt\bx@JJ
+                      \@elt\bx@KK\@elt\bx@LL\@elt\bx@MM\@elt\bx@NN
+                      \@elt\bx@OO\@elt\bx@PP\@elt\bx@QQ\@elt\bx@RR
+                      \@elt\bx@SS\@elt\bx@TT\@elt\bx@UU\@elt\bx@VV
+                      \@elt\bx@WW\@elt\bx@XX\@elt\bx@YY\@elt\bx@ZZ}%
+    }{%
+      \CaesarError{You may only call \string\morefloats\space twice. See the\MessageBreak Tufte-LaTeX documentation for other workarounds}
+        {There are already 78 float slots allocated. Try using \string\FloatBarrier\space or\MessageBreak \string\clearpage\space to place some floats before creating more.}
+    }%
+  }%
 }
