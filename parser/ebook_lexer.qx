@@ -1,0 +1,78 @@
+// -*- C++ -*-
+header {
+#include <stdlib.h> 
+}
+
+start = HEADER;
+
+token {
+    MY_FAILURE_ID;
+    TEXT;
+    CHAPTER;
+    COMMAND;
+    SECTION;
+    TEXTGRAPHICS;
+    PARAGRAPH;
+    INCLUDEGRAPHICS;
+    SIDEGRAPHICS;
+    EMPH;
+    QUOTETEXT;
+    TEXTSC;
+    SIDECITE;
+    REF;
+}
+
+
+define {
+	TEXT				[^\\\{\}\[\]%\n]+
+    COMMAND				\\\\?[^\\\{\}\[\]% \t\n]*
+    CHAPTER             \\chapter
+    SECTION             \\section
+    TEXTGRAPHICS        \\textgraphics
+    SIDEGRAPHICS        \\sidegraphics
+    INCLUDEGRAPHICS     \\includegraphics
+    EMPH                \\emph
+    QUOTETEXT           \\quotetext
+    TEXTSC              \\textsc
+    PARAGRAPH           \n\n
+    SIDECITE            \\sidecite
+    REF                 \\ref
+	}
+
+
+mode HEADER
+{
+    \\begin\{document\}     {self_enter_mode(&DOCUMENT);}
+    .|\n                    {}
+}
+
+mode DOCUMENT:
+<skip_range:"%" "\n">
+{
+	<<EOF>>    				=> TKN_TERMINATION;
+    \\end\{document\}       {self_enter_mode(&END);}
+    {CHAPTER}               => TKN_CHAPTER;
+    {SECTION}               => TKN_SECTION;
+    {TEXTGRAPHICS}          => TKN_TEXTGRAPHICS;
+    {SIDEGRAPHICS}          => TKN_SIDEGRAPHICS;
+    {INCLUDEGRAPHICS}       => TKN_INCLUDEGRAPHICS;
+    {EMPH}                  => TKN_EMPH;
+    {QUOTETEXT}             => TKN_QUOTETEXT;
+    {TEXTSC}                => TKN_TEXTSC;
+    {SIDECITE}              => TKN_SIDECITE;
+    {REF}                   => TKN_REF;
+    {TEXT}					=> TKN_TEXT(Lexeme);
+    {PARAGRAPH}             => TKN_PARAGRAPH;
+	"{"                     => '{';
+	"}"                     => '}';
+	"["                     => '[';
+	"]"                     => ']';
+    "\n"                    => '\n';
+	{COMMAND}				=> TKN_COMMAND(Lexeme);
+    on_failure  			=> TKN_MY_FAILURE_ID(Lexeme);
+}
+
+mode END:
+{
+    .|\n    {}
+}
