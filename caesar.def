@@ -39,6 +39,39 @@
 %\ExecuteOptions{}
 \ProcessOptions\relax
 
+
+%% high level macro set
+
+% provide the ragged outer option
+\newcommand{\raggedouter}{%
+	\checkoddpage%
+    	\ifoddpage%
+		\raggedright%
+    	\else%
+		\raggedleft%
+    	\fi%
+}%
+
+% graphics in text, #1 filename, #2 caption, #3 label, #4 width
+\newcommand{\textgraphics}[4]{%
+\begin{figure}%
+	\ifthenelse{\isempty{#4}}%
+	{\includegraphics{#1}}
+	{\includegraphics[width=#4]{#1}}%
+	\sidecaption{#2\label{#3}}%
+\end{figure}%
+}
+
+%graphics in the margin, #1 filename, #2 caption, #3 label
+\newcommand{\sidegraphics}[4]{%
+\begin{sidefigure}%
+	\ifthenelse{\isempty{#4}}%
+	{\includegraphics{#1}}
+	{\includegraphics[width=#4]{#1}}%
+	\caption{#2\label{#3}}%
+\end{sidefigure}%x
+}
+
 %%
 % Set page layout geometry
 
