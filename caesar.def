@@ -52,11 +52,10 @@
 
 % load fonts 
 \usepackage{fontspec}
-% Use the Palatino-Clone Tex Gyre Pagella as main font
+
 \usepackage{mathpazo}
+% Use the Palatino-Clone Tex Gyre Pagella as main font
 \setmainfont[Ligatures=TeX, Numbers=OldStyle]{Tex Gyre Pagella}
-%\setmainfont[Ligatures=TeX, Numbers=OldStyle]{Tex Gyre Termes}
-%\setmainfont{Helvetica}
 % Use Tex Gyre Cursor als Monospace Font
 \setmonofont{Tex Gyre Cursor}
 % Use Tex Gyre Heros Cn als Sans Serif Font
@@ -126,17 +125,22 @@
   \let\\\@caesar@orig@cr% revert to original meaning of \\
 }
 
-
+%%
+% From here on: Header and Footer
 
 \RequirePackage{fancyhdr}
-\fancypagestyle{plain}{% 
-\fancyhf{} % clear all header and footer fields 
-\fancyfoot[LE,RO]{\thepage}
-\renewcommand{\headrulewidth}{0pt} 
+
+% The running heads/feet don't have rules
+\renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
-}
-\pagestyle{plain}
-%
+
+\pagestyle{fancy}
+
+\fancyhf{}%
+{\fancyfoot[LE,RO]{\thepage}}
+
+%%
+% Newthought environment
 \newcommand\newthought[1]{%
    \addvspace{1.0\baselineskip plus 0.5ex minus 0.2ex}%
    \noindent\textsc{#1}%

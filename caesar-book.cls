@@ -14,20 +14,12 @@
 %%
 % Set up any book-specific stuff now (this code is borrowed from the tufte-book.cls file
 
-%%
-% The front matter in Tufte's /Beautiful Evidence/ contains everything up
-% to the opening page of Chapter 1.  The running heads, when they appear,
-% contain only the (arabic) page number in the outside corner.
-%\newif\if@mainmatter \@mainmattertrue
 \renewcommand\frontmatter{%
   \cleardoublepage%
-  \@mainmatterfalse%
-  \pagenumbering{arabic}%
-  %\pagestyle{plain}%
+%  \@mainmatterfalse%
   \fancyhf{}%
-  \ifthenelse{\boolean{@twoside}}%
-    {\fancyhead[LE,RO]{\thepage}}%
-    {\fancyhead[RE,RO]{\thepage}}%
+   \fancyfoot[LE]{\thepage}
+   \fancyfoot[RO]{\thepage}
 }
 
 
@@ -36,17 +28,11 @@
 % numbering---it continues where it left off in the front matter.
 \renewcommand\mainmatter{%
   \cleardoublepage%
-  \@mainmattertrue%
+%  \@mainmattertrue%
   \fancyhf{}%
-  \ifthenelse{\boolean{@caesar@twoside}}%
-    {% two-side
       \renewcommand{\chaptermark}[1]{\markboth{##1}{}}%
-      \fancyhead[LE]{\thepage\quad\smallcaps{\newlinetospace{\plaintitle}}}% book title
-      \fancyhead[RO]{\smallcaps{\newlinetospace{\leftmark}}\quad\thepage}% chapter title
-    }%
-    {% one-side
-      \fancyhead[RE,RO]{\smallcaps{\newlinetospace{\plaintitle}}\quad\thepage}% book title
-    }%
+      \fancyfoot[LE]{\thepage\newlinetospace}
+      \fancyfoot[RO]{\newlinetospace\thepage}
 }
 
 
@@ -54,12 +40,6 @@
 % The back matter contains appendices, indices, glossaries, endnotes,
 % biliographies, list of contributors, illustration credits, etc.
 \renewcommand\backmatter{%
-  \if@openright%
-    \cleardoublepage%
-  \else%
-    \clearpage%
-  \fi%
-  \@mainmatterfalse%
 }
 
 %%
