@@ -17,6 +17,8 @@
 
 \RequirePackage{changepage}
 
+\RequirePackage{titlesec,titletoc}
+
 %%
 % `scroll' option
 
@@ -84,9 +86,9 @@
 \ifthenelse{\boolean{@caesar@scroll}}{\setcounter{totalnumber}{100}}
 
 % load fonts 
-\usepackage{fontspec}
+\RequirePackage{fontspec}
 
-\usepackage{mathpazo}
+\RequirePackage{mathpazo}
 % Use the Palatino-Clone Tex Gyre Pagella as main font
 \setmainfont[Ligatures=TeX, Numbers=OldStyle]{Tex Gyre Pagella}
 % Use Tex Gyre Cursor als Monospace Font
@@ -104,39 +106,38 @@
 % Section
 %\titleformat{\section}[hang]{\normalfont\Large\itshape}{\thesection}{1em}{}
 %
-\renewcommand{\chapter}{\@startsection
-	{chapter}%				        % the name
-	{0}%					      	% level
-	{0pt}%					        % indention
-	{-1\baselineskip}%			    % vertical distance to text before
-	{1\baselineskip}%			    % Nachabstand
-	{\normalfont\Large\itshape}}%	% format
-	
-\renewcommand{\section}{\@startsection
-	{section}%                      % the name
-	{0}%					      	% level
-	{0pt}%					        % indention
-	{-1\baselineskip}%		    	% vertical distance to text before
-	{1\baselineskip}%		    	% Nachabstand
-	{\normalfont\large\itshape}}%	% format
 
-\renewcommand{\subsection}{\@startsection
-	{subsection}%
-	{2}%
-	{0pt}%
-	{-1\baselineskip}%
-	{1\baselineskip} % not sure about this one, look at Bringhurst
-	{\normalfont\itshape}%
-	}%
+\titleformat{\chapter}%
+  [display]% shape
+  {\relax\begin{fullwidth}}% format applied to label+text
+  {\itshape\huge\thechapter}% label
+  {0pt}% horizontal separation between label and title body
+  {\huge\rmfamily\itshape}% before the title body
+  [\end{fullwidth}]% after the title body
 
-\renewcommand{\paragraph}{\@startsection%
-	{paragraph}%
-	{3}%
-	{0pt}%
-	{-1\baselineskip}%
-	{-10pt}%
-	{\normalfont\itshape}%
-}
+\titleformat{\section}%
+  [hang]% shape
+  {\normalfont\Large\itshape}% format applied to label+text
+  {\thesection}% label
+  {1em}% horizontal separation between label and title body
+  {}% before the title body
+  []% after the title body
+
+\titleformat{\subsection}%
+  [hang]% shape
+  {\normalfont\large\itshape}% format applied to label+text
+  {\thesubsection}% label
+  {1em}% horizontal separation between label and title body
+  {}% before the title body
+  []% after the title body
+
+\titleformat{\paragraph}%
+  [runin]% shape
+  {\normalfont\itshape}% format applied to label+text
+  {\theparagraph}% label
+  {1em}% horizontal separation between label and title body
+  {}% before the title body
+  []% after the title body
 
 %%
 % Turns newlines into spaces.  Based on code from the `titlesec' package.
@@ -171,6 +172,10 @@
 
 \fancyhf{}%
 {\fancyfoot[LE,RO]{\thepage}}
+
+\fancypagestyle{plain}{%
+	\fancyhf{}
+}
 
 %%
 % Newthought environment
