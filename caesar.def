@@ -152,6 +152,17 @@
   []% after the title body
 
 %%
+% The Table of Contents
+
+\titlecontents{chapter}%
+	[0em] % distance from left margin
+	{\vspace{1.5\baselineskip}\begin{fullwidth}\LARGE\rmfamily\itshape} % above (global formatting of entry)
+	{\hspace*{0em}\contentslabel{2em}} % before w/label (label = ``2'')
+	{\hspace*{0em}} % before w/o label
+	{\rmfamily\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
+	[\end{fullwidth}] % after
+
+%%
 % Turns newlines into spaces.  Based on code from the `titlesec' package.
 
 \DeclareRobustCommand{\@caesar@newlinetospace}{%
