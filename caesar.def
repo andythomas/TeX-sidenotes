@@ -54,13 +54,25 @@
     	\fi%
 }%
 
+% figure across the whole page including the margin
+\renewenvironment{figure*}
+{\begin{figure}
+	\checkoddpage%
+    	\ifoddpage%
+		\hspace{0pt}%
+    	\else%
+		\hspace{-120pt}%
+    	\fi%
+}
+{\end{figure}}
+
 % graphics in text, #1 filename, #2 caption, #3 label, #4 width
 \newcommand{\textgraphics}[4]{%
-\begin{figure}%
-	\ifthenelse{\isempty{#4}}%
-	{\includegraphics{#1}}
-	{\includegraphics[width=#4]{#1}}%
+\begin{figure}[htbp]%
 	\sidecaption{#2\label{#3}}%
+	\ifthenelse{\isempty{#4}}%
+	{\includegraphics{#1}}%
+	{\includegraphics[width=#4]{#1}}%
 \end{figure}%
 }
 
