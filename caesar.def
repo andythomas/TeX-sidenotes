@@ -15,7 +15,7 @@
 \RequirePackage{caption}
 \RequirePackage{sidenotes}
 
-\RequirePackage{changepage}
+\RequirePackage[strict]{changepage}
 
 \RequirePackage{titlesec,titletoc}
 
