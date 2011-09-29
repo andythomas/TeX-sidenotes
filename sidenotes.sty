@@ -13,7 +13,7 @@
 %% about the files the work consists of.
 %% 
 \ProvidesPackage{sidenotes}[%
-  2011/08/21 v0.2 footnotes in the margin for LaTeX]
+  2011/09/29 v0.3 footnotes in the margin for LaTeX]
 \RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
 \RequirePackage{caption} % handles the figure caption (in the margin)
 \RequirePackage{environ} % to define new environments more easily
@@ -97,11 +97,23 @@
 {\marginnote{\caption{#2}}}%
 {\marginnote{\caption[#1]{#2}}}%
 }%
-\NewEnviron{sidefigure}[1][]{%
-\ifthenelse{\isempty{#1}} % offset?
-{\marginpar{\captionsetup{type=figure}\BODY}} % no offset
-{\marginnote{\captionsetup{type=figure}\BODY}[#1]} % with offset
-}%
+\newsavebox{\@sidenotes@sidefigurebox}
+\newboolean{@sidenotes@sidefigure@skip}
+\newcommand{\@sidenotes@sidefigure@skiplength}{}
+
+\newenvironment{sidefigure}[1][]%
+{\ifthenelse{\isempty{#1}} % offset?
+{\setboolean{@sidenotes@sidefigure@skip}{false}} % no offset
+{\setboolean{@sidenotes@sidefigure@skip}{true}\renewcommand{\@sidenotes@sidefigure@skiplength}{#1}} % with offset
+\begin{lrbox}{\@sidenotes@sidefigurebox}%
+\begin{minipage}{\marginparwidth}%
+\captionsetup{type=figure}}%
+{ \end{minipage}%
+\end{lrbox}%
+\ifthenelse{\boolean{@sidenotes@sidefigure@skip}}% offset?
+{\marginnote{\usebox{\@sidenotes@sidefigurebox}}[\@sidenotes@sidefigure@skiplength]} % with offset
+{\marginpar{\usebox{\@sidenotes@sidefigurebox}}} % no offset
+}
 \NewEnviron{sidetable}[1][]{%
 \ifthenelse{\isempty{#1}} % offset?
 {\marginpar{\captionsetup{type=table}\sidestyle\BODY}} % no offset
