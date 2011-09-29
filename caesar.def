@@ -66,22 +66,18 @@
 }
 {\end{figure}}
 
-% graphics in text, #1 filename, #2 caption, #3 label, #4 width
-\newcommand{\textgraphics}[4]{%
+% graphics in text, #1 filename, #2 caption, #3 label
+\newcommand{\textgraphics}[3]{%
 \begin{figure}[htbp]%
 	\sidecaption{#2\label{#3}}%
-	\ifthenelse{\isempty{#4}}%
-	{\includegraphics{#1}}%
-	{\includegraphics[width=#4]{#1}}%
+	\includegraphics[width=\textwidth]{#1}
 \end{figure}%
 }
 
-%graphics in the margin, #1 filename, #2 caption, #3 label
+%graphics in the margin, #1 filename, #2 caption, #3 label, #4 offset
 \newcommand{\sidegraphics}[4]{%
-\begin{sidefigure}%
-	\ifthenelse{\isempty{#4}}%
-	{\includegraphics{#1}}
-	{\includegraphics[width=#4]{#1}}%
+\begin{sidefigure}[#4]%
+	\includegraphics[width=\marginparwidth]{#1}%
 	\caption{#2\label{#3}}%
 \end{sidefigure}%x
 }
