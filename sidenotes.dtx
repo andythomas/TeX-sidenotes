@@ -17,11 +17,10 @@
 %</driver>
 %<package>\ProvidesPackage{sidenotes}[%
 %<*driver|package>
-  2011/09/29 v0.3 footnotes in the margin for LaTeX]
+  2011/09/30 v0.4 footnotes in the margin for LaTeX]
 %</driver|package>
 %<package>\RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
 %<package>\RequirePackage{caption} % handles the figure caption (in the margin)
-%<package>\RequirePackage{environ} % to define new environments more easily
 %<package>\RequirePackage{xifthen} % provide an if command 
 %<package>\RequirePackage{twoopt} % cite in the biblatex package has 2 optional arguments
 %<*driver>
@@ -58,6 +57,7 @@
 %
 % \changes{v0.2}{2011/08/21}{Initial version}
 % \changes{v0.3}{2011/09/29}{define the sidefigure enviroment without the environ package}
+% \changes{v0.4}{2011/09/30}{define the sidetable enviroment without the environ package}
 %
 % \GetFileInfo{sidenotes.dtx}
 %
@@ -141,8 +141,8 @@
 % The formatting of the figure and table captions
 % has to be done through the caption package.
 %
-% Right now, the package also requires the packages twoopt, environ and xifthen as well. At least the dependence
-% on twoopt and environ should be omitted in the next versions.
+% Right now, the package also requires the packages twoopt and xifthen as well. At least the dependence
+% on twoopt should be omitted in the next versions.
 % 
 % When writing the package, we tried to be as general as possible. Someone can e.g.\ use sidenotes mixed with
 % footnotes. Also, the package tries to provide only functionality and does not know anything about formatting
@@ -304,11 +304,24 @@
 % The sidetable is similar to the table environment. But the table is put in the margin and the positioning
 % is not h or b, but rather an offset, e.g.\ 10pt.\
 %    \begin{macrocode}
-\NewEnviron{sidetable}[1][]{%
-	\ifthenelse{\isempty{#1}} % offset?
-		{\marginpar{\captionsetup{type=table}\sidestyle\BODY}} % no offset
-		{\marginnote{\captionsetup{type=table}\sidestyle\BODY}[#1]} % with offset
-}%
+\newsavebox{\@sidenotes@sidetablebox}
+\newboolean{@sidenotes@sidetable@skip}
+\newcommand{\@sidenotes@sidetable@skiplength}{}
+
+\newenvironment{sidetable}[1][]%
+	{\ifthenelse{\isempty{#1}} % offset?
+		{\setboolean{@sidenotes@sidetable@skip}{false}} % no offset
+		{\setboolean{@sidenotes@sidetable@skip}{true}\renewcommand{\@sidenotes@sidetable@skiplength}{#1}} % with offset
+	\begin{lrbox}{\@sidenotes@sidetablebox}%
+		\begin{minipage}{\marginparwidth}%
+			\captionsetup{type=table}%
+			\sidestyle}%
+	{	\end{minipage}%
+	\end{lrbox}%
+	\ifthenelse{\boolean{@sidenotes@sidetable@skip}}% offset?
+		{\marginnote{\usebox{\@sidenotes@sidetablebox}}[\@sidenotes@sidetable@skiplength]} % with offset
+		{\marginpar{\usebox{\@sidenotes@sidetablebox}}} % no offset
+	}
 %    \end{macrocode}
 % \end{environment}
 %

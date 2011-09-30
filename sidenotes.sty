@@ -13,10 +13,9 @@
 %% about the files the work consists of.
 %% 
 \ProvidesPackage{sidenotes}[%
-  2011/09/29 v0.3 footnotes in the margin for LaTeX]
+  2011/09/30 v0.4 footnotes in the margin for LaTeX]
 \RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
 \RequirePackage{caption} % handles the figure caption (in the margin)
-\RequirePackage{environ} % to define new environments more easily
 \RequirePackage{xifthen} % provide an if command
 \RequirePackage{twoopt} % cite in the biblatex package has 2 optional arguments
 \newcommand*{\sidestyle}{\footnotesize}
@@ -114,11 +113,24 @@
 {\marginnote{\usebox{\@sidenotes@sidefigurebox}}[\@sidenotes@sidefigure@skiplength]} % with offset
 {\marginpar{\usebox{\@sidenotes@sidefigurebox}}} % no offset
 }
-\NewEnviron{sidetable}[1][]{%
-\ifthenelse{\isempty{#1}} % offset?
-{\marginpar{\captionsetup{type=table}\sidestyle\BODY}} % no offset
-{\marginnote{\captionsetup{type=table}\sidestyle\BODY}[#1]} % with offset
-}%
+\newsavebox{\@sidenotes@sidetablebox}
+\newboolean{@sidenotes@sidetable@skip}
+\newcommand{\@sidenotes@sidetable@skiplength}{}
+
+\newenvironment{sidetable}[1][]%
+{\ifthenelse{\isempty{#1}} % offset?
+{\setboolean{@sidenotes@sidetable@skip}{false}} % no offset
+{\setboolean{@sidenotes@sidetable@skip}{true}\renewcommand{\@sidenotes@sidetable@skiplength}{#1}} % with offset
+\begin{lrbox}{\@sidenotes@sidetablebox}%
+\begin{minipage}{\marginparwidth}%
+\captionsetup{type=table}%
+\sidestyle}%
+{ \end{minipage}%
+\end{lrbox}%
+\ifthenelse{\boolean{@sidenotes@sidetable@skip}}% offset?
+{\marginnote{\usebox{\@sidenotes@sidetablebox}}[\@sidenotes@sidetable@skiplength]} % with offset
+{\marginpar{\usebox{\@sidenotes@sidetablebox}}} % no offset
+}
 \endinput
 %%
 %% End of file `sidenotes.sty'.
