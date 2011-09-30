@@ -1,14 +1,61 @@
-%$Id: cleopatra.bbx,v 0.1 2011/08/11 18:45:46 Thomas Chez Baum stable $
+%$Id: cleopatra.bbx,v 0.3 2011/09/30 13:14:46 iimort stable $
 
 \ProvidesFile{cleopatra.bbx}
-[\abx@bbxid $Id: cleopatra.bbx,v 0.1 2011/08/11 18:45:46 Thomas Chez Baum stable $]
+[\abx@bbxid $Id: cleopatra.bbx,v 0.3 2011/09/30 13:14:46 iimort stable $]
 
-\RequireBibliographyStyle{numeric}
+\RequireBibliographyStyle{numeric-comp}
+
+\DeclareFieldFormat{title}{\mkbibemph{#1\isdot}}
+\DeclareFieldFormat[article]{title}{\mkbibemph{#1\isdot}}
+\DeclareFieldFormat[journal]{title}{\mkbibemph{#1\isdot}}
+\DeclareFieldFormat[books]{title}{\mkbibemph{#1\isdot}}
+\DeclareFieldFormat[thesis]{title}{\mkbibemph{#1\isdot}}
+\DeclareFieldFormat{booktitle}{#1\isdot}
+\DeclareFieldFormat{journaltitle}{#1\isdot}
+\DeclareFieldFormat{thesistitle}{#1\isdot}
+%\DeclareFieldFormat{postnote}{#1}
+%\DeclareFieldFormat{multipostnote}{#1}
+\DeclareFieldFormat{volume}{\mkbibbold{#1\isdot}}
+\DeclareFieldFormat[article]{volume}{\mkbibbold{#1\isdot}}
+
+\renewcommand*{\labelnamepunct}{\addcomma\space}
+\renewcommand*{\multinamedelim}{\addcomma\space}
+\renewcommand*{\multilistdelim}{\addcomma\space}
+\renewcommand*{\finalnamedelim}{\space and\space}
+\renewcommand*{\finallistdelim}{}
+\renewcommand*{\intitlepunct}{\addcomma\space}
+\renewcommand*{\newunitpunct}{\addcomma\space}
+\renewcommand{\postnotedelim}{\addspace} 
 
 \DeclareFieldFormat{pages}{#1}
-\DeclareFieldFormat{journaltitle}{#1}
+
+
+\renewbibmacro*{journal+issuetitle}{% 
+  \usebibmacro{journal}% 
+  \setunit*{\addspace}% 
+  \iffieldundef{series} 
+    {} 
+    {\newunit 
+     \printfield{series}% 
+     \setunit{\addspace}}% 
+  \printfield{volume}%  
+  \setunit*{\addspace}% 
+  \printfield{eid}% 
+  \usebibmacro{issue+date}% 
+  \newunit\newblock
+\usebibmacro{issue}%
+\nopunct
+\newunit}
+
+\renewbibmacro*{issue+date}{%
+\iffieldundef{year}
+{}
+{\printtext[parens]{%
+\printfield{year}%
+\printfield{extrayear}}}}
 
 \newbibmacro*{in:}{%
 }
+
 
 \endinput

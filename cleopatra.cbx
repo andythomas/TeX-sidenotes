@@ -1,8 +1,8 @@
-% $Id: cleopatra.cbx, v 0.1 2011/08/11 18:45:46 Thomas Chez Baum stable  $
+% $Id: cleopatra.cbx, v 0.3 2011/09/30 13:14:46 iimort stable  $
 
 \ProvidesFile{cleopatra.cbx}
-[\abx@cbxid $Id: cleopatra.cbx, v 0.1 2011/08/11 18:45:46 Thomas Chez Baum stable $]
-
+[\abx@cbxid $Id: cleopatra.cbx, v 0.3 2011/09/30 13:14:46 iimort stable $]
+%\ProvidesFile{authortitle.cbx}
 \ExecuteBibliographyOptions{labelnumber,sortcites,autocite=inline}
 \renewcommand*{\multicitedelim}{\addcomma\space}
 \providebool{bbx:subentry}
@@ -114,7 +114,7 @@
   {\usebibmacro{cite:init}%
    \usebibmacro{prenote}}
   {\usebibmacro{citeindex}%
-   \usebibmacro{cite:comp}}
+  \usebibmacro{cite:comp}}
   {}
   {\usebibmacro{cite:dump}%
    \usebibmacro{postnote}}
@@ -176,9 +176,32 @@
    \usebibmacro{cite:comp}}
   {}
   {\usebibmacro{cite:dump}}
+ 
+ 
+%\DeclareCiteCommand{\parencite}[\mkbibparens] 
+ % {\usebibmacro{prenote}} 
+  %{\usebibmacro{citeindex}% 
+   %\printtext[bibhyperref]{% 
+     %\mkbibbrackets{\printfield{labelnumber}}% 
+     %\ifbool{bbx:subentry} 
+       %{\printfield{entrysetcount}} 
+       %{}}} 
+  %{\multicitedelim} 
+  %{\usebibmacro{postnote}} 
 
 \DeclareMultiCiteCommand{\cites}[\mkbibbrackets]{\cite}{\multicitedelim}
 \DeclareMultiCiteCommand{\parencites}[\mkbibbrackets]{\parencite}{\multicitedelim}
 \DeclareMultiCiteCommand{\smartcites}[\iffootnote\mkbibbrackets\mkbibfootnote]{\smartcite}{\multicitedelim}
+\DeclareFieldFormat{citetitle}{\mkbibemph{#1\isdot}}
+\DeclareFieldFormat[article]{citetitle}{\mkbibemph{#1\isdot}}
+\DeclareFieldFormat[books]{citetitle}{\mkbibemph{#1\isdot}}
+\DeclareFieldFormat[thesis]{citetitle}{\mkbibemph{#1\isdot}}
+\DeclareFieldFormat{postnote}{#1}
+\DeclareFieldFormat{multipostnote}{#1}
+\DeclareFieldFormat{citevolume}{\mkbibbold{#1\isdot}}
+\DeclareFieldFormat[article]{citevolume}{\mkbibbold{#1\isdot}}
+\DeclareFieldFormat{postnote}{#1}
+\DeclareFieldFormat{multipostnote}{#1}
+\DeclareFieldFormat{citetitle}{false}
 
 \endinput
