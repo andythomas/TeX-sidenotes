@@ -10,7 +10,7 @@
 %%
 % We use the `ifthen' package to handle our package option switches
 \RequirePackage{ifthen}
-
+\RequirePackage{ragged2e}
 \RequirePackage{marginnote}
 \RequirePackage{caption}
 \RequirePackage{sidenotes}
@@ -48,9 +48,9 @@
 \newcommand{\raggedouter}{%
 	\checkoddpage%
     	\ifoddpage%
-		\raggedright%
+		\RaggedRight%
     	\else%
-		\raggedleft%
+		\RaggedLeft%
     	\fi%
 }%
 
