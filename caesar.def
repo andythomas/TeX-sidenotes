@@ -26,7 +26,14 @@
 \setboolean{@caesar@scroll}{false}
 \DeclareOption{scroll}{\setboolean{@caesar@scroll}{true}}%
 
+%%
+% alternative Chapter and Section headings
+\newboolean{@ceasar@arminius}%
+\setboolean{@ceasar@arminius}{false}%
+\DeclareOption{arminius}{\setboolean{@ceasar@arminius}{true}}
 
+%%
+% debug option
 \newboolean{@caesar@debug}
 \DeclareOption{debug}{\setboolean{@caesar@debug}{true}}
 
@@ -71,6 +78,7 @@
 \begin{figure}[htbp]%
 	\sidecaption{#2\label{#3}}[-16pt]%
 	\includegraphics[width=\textwidth]{#1}
+	\vspace{1\baselineskip}
 \end{figure}%
 }
 
@@ -118,14 +126,33 @@
 %\titleformat{\section}[hang]{\normalfont\Large\itshape}{\thesection}{1em}{}
 %
 
-\titleformat{\chapter}%
-  [display]% shape
-  {\relax}% format applied to label+text
-  {\itshape\huge\thechapter}% label
-  {0pt}% horizontal separation between label and title body
-  {\huge\rmfamily\itshape}% before the title body
-  []% after the title body
+\ifthenelse{\boolean{@ceasar@arminius}}{%
+	\titleformat{\chapter}%
+ 	 [hang]% shape
+ 	 {\relax}% format applied to label+text
+ 	 {\thechapter}% label
+ 	 {0pt}% horizontal separation between label and title body
+	 {\rmfamily\MakeUppercase}% before the title body
+	 [\titlerule]% after the title body
+}{%
+	\titleformat{\chapter}%
+	  [display]% shape
+	  {\relax\itshape\huge}% format applied to label+text
+	  {\thechapter}% label
+	  {0pt}% horizontal separation between label and title body
+	  {\huge\rmfamily\itshape}% before the title body
+	  []% after the title body
+}
 
+\ifthenelse{\boolean{@ceasar@arminius}}{%
+\titleformat{\section}%
+  [hang]% shape
+  {\normalfont\scshape\MakeLowercase}% format applied to label+text
+  {\thesection}% label
+  {}% horizontal separation between label and title body
+  {}% before the title body
+  []% after the title body
+}{%
 \titleformat{\section}%
   [hang]% shape
   {\normalfont\Large\itshape}% format applied to label+text
@@ -133,6 +160,7 @@
   {1em}% horizontal separation between label and title body
   {}% before the title body
   []% after the title body
+  }%
 
 \titleformat{\subsection}%
   [hang]% shape
@@ -151,8 +179,23 @@
   []% after the title body
 
 %%
-% The Table of Contents
+% spaces before and after the headings
+\ifthenelse{\boolean{@ceasar@arminius}}{%
+\titlespacing*{\chapter}{0pt}{\baselineskip}{\baselineskip}
+\titlespacing*{\section}{0pt}{\baselineskip}{\baselineskip}
+}{}%
 
+%%
+% The Table of Contents
+\ifthenelse{\boolean{@ceasar@arminius}}{%
+\titlecontents{chapter}%
+	[0em] % distance from left margin
+	{\vspace{1.5\baselineskip}\begin{fullwidth}\rmfamily} % above (global formatting of entry)
+	{\hspace*{0em}\contentslabel{2em}} % before w/label (label = ``2'')
+	{\hspace*{0em}} % before w/o label
+	{\rmfamily\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
+	[\end{fullwidth}] % after
+}{%
 \titlecontents{chapter}%
 	[0em] % distance from left margin
 	{\vspace{1.5\baselineskip}\begin{fullwidth}\LARGE\rmfamily\itshape} % above (global formatting of entry)
@@ -160,6 +203,7 @@
 	{\hspace*{0em}} % before w/o label
 	{\rmfamily\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
 	[\end{fullwidth}] % after
+}
 
 %%
 % Turns newlines into spaces.  Based on code from the `titlesec' package.
@@ -179,7 +223,7 @@
   \let\newline\\% turn \newline into \space
   #1%
   \let\\\@caesar@orig@cr% revert to original meaning of \\
-}
+}%
 
 %%
 % From here on: Header and Footer
