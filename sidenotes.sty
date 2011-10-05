@@ -13,11 +13,10 @@
 %% about the files the work consists of.
 %% 
 \ProvidesPackage{sidenotes}[%
-  2011/09/30 v0.4 footnotes in the margin for LaTeX]
+  2011/10/05 v0.51 rich text in the margin for LaTeX]
 \RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
 \RequirePackage{caption} % handles the figure caption (in the margin)
 \RequirePackage{xifthen} % provide an if command
-\RequirePackage{twoopt} % cite in the biblatex package has 2 optional arguments
 \newcommand*{\sidestyle}{\footnotesize}
 \newcounter{sidenote} % make counter
 \newcounter{@sidenotes@buffer}
@@ -77,8 +76,17 @@
 {\marginnote{\textsuperscript{\thesidenote}{} \sidestyle#2}}% with offset
 }% fi
 }%
-\newcommandtwoopt{\sidecite}[3][][]{%
-\begingroup%
+\newcommand{\sidecite}[1][]{%
+  \@ifnextchar[{%
+    \expandafter\@sidenotes@sidecitedo\@sidenotes@getnextopt{#1}%
+  }{%
+    \@sidenotes@sidecitedo{#1}{}%
+  }%
+}
+\newcommand{\@sidenotes@getnextopt}{}
+\long\def\@sidenotes@getnextopt#1[#2]{{#1}{#2}}
+\newcommand{\@sidenotes@sidecitedo}[3]{%
+  \begingroup%
 \@ifnextchar [{\@sidenotes@sidecite[{#1}][{#2}]{#3}}{\@sidenotes@sidecite[{#1}][{#2}]{#3}[]}%
 }
 \newcommand{\@sidenotes@sidecite}{}
