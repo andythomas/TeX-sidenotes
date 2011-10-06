@@ -20,15 +20,16 @@
 %</driver>
 %<package>\ProvidesPackage{sidenotes}[%
 %<*driver|package>
-  2011/10/05 v0.51 rich text in the margin for LaTeX]
+  2011/10/06 v0.52 rich text in the margin for LaTeX]
 %</driver|package>
 %<package>\RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
 %<package>\RequirePackage{caption} % handles the figure caption (in the margin)
 %<package>\RequirePackage{xifthen} % provide an if command 
 %<*driver>
 \documentclass{ltxdoc}
-\begin{document}
+\CodelineIndex
 \RecordChanges
+\begin{document}
   \DocInput{sidenotes.dtx}
 \PrintIndex
   \PrintChanges
@@ -145,15 +146,23 @@
 % Technically, every time something is evoked with an offset, \verb+\marginnote+ is called. If it is called without
 % an offset, it calls the normal \LaTeX{} macro \verb+\marginpar+. This is not true for the sidecaption, since
 % the caption has to be adjacent to the figure or table. In that case, \verb+\marginnote+ is always used.
-% The package also relies on the caption package by Harald Axel Sommerfeldt.
-% The formatting of the figure and table captions
-% has to be done through the caption package.
-% The package also requires xifthen as well. 
 % 
 % When writing the package, we tried to be as general as possible. Someone can e.g.\ use sidenotes mixed with
 % footnotes. Also, the package tries to provide only functionality and does not know anything about formatting
 % such as margin text size, color or anything else. Only \verb+\sidestyle+ was added for convenience. If you are
 % looking for a package that provides formatting defaults as well you might want to look into the tufte-latex packages.
+%
+% \section{Required packages}
+% 
+%  \changes{v0.52}{2011/10/06}{added a section that the package needs marginnote, caption and xifthen.}
+%  This package requires the following packages:
+%  \begin{description}
+%     \item[marginnote]
+%        supports another command to create notes in the margin. The notes are no floats and can be shifted up or down.
+%     \item[caption]
+%        is used to set figure and table captions in the margin and to allow formatting of these captions.
+%	\item[xifthen] is used to test for empty, optional arguments.  
+%  \end{description}%
 %
 % \section{Implementation}
 %
