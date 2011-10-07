@@ -147,7 +147,7 @@
 \ifthenelse{\boolean{@ceasar@arminius}}{%
 \titleformat{\section}%
   [hang]% shape
-  {\normalfont\scshape\MakeLowercase}% format applied to label+text
+  {\normalfont\scshape}% format applied to label+text
   {\thesection}% label
   {}% horizontal separation between label and title body
   {}% before the title body
