@@ -28,3 +28,6 @@
 \renewenvironment{abstract}
   {\begin{quotation}}
   {\end{quotation}}
+  
+  \captionsetup{width=\marginparwidth, justification=RaggedRight, font=footnotesize, skip = 0pt}
+\renewcommand{\sidestyle}{\footnotesize\RaggedRight}
