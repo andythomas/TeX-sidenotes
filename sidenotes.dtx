@@ -20,7 +20,7 @@
 %</driver>
 %<package>\ProvidesPackage{sidenotes}[%
 %<*driver|package>
-  2011/10/06 v0.52 rich text in the margin for LaTeX]
+  2011/10/06 v0.53 rich text in the margin for LaTeX]
 %</driver|package>
 %<package>\RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
 %<package>\RequirePackage{caption} % handles the figure caption (in the margin)
@@ -186,6 +186,7 @@
 
 % \begin{macro}{\sidenote}
 % Introduce the sidenote macro with an additional optional argument postfix to set the offset.
+% \changes{v0.53}{2011/10/07}{bugfix, now optional number and offset possible}
 %    \begin{macrocode}
 \newcommand*{\sidenote}[2][]{%
 	\begingroup%
@@ -204,7 +205,7 @@
 		{\sidenotemark%
 		\sidenotetext{#2}[#3]}%
 		{\sidenotemark[#1]%
-		\sidenotetext[#1]{#2}}%
+		\sidenotetext[#1]{#2}[#3]}%
 }
 %    \end{macrocode}
 % \end{macro}
