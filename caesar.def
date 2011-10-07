@@ -91,6 +91,9 @@
 \end{sidefigure}%
 }
 
+% quoted text
+\newcommand{\quotetext}{\textit}
+
 %%
 % Set page layout geometry
 
