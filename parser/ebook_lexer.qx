@@ -15,6 +15,7 @@ token {
     PARAGRAPH;
     INCLUDEGRAPHICS;
     SIDEGRAPHICS;
+    SIDETABLE;
     EMPH;
     QUOTETEXT;
     TEXTSC;
@@ -30,6 +31,7 @@ define {
     SECTION             \\section
     TEXTGRAPHICS        \\textgraphics
     SIDEGRAPHICS        \\sidegraphics
+    SIDETABLE           \\sidetable
     INCLUDEGRAPHICS     \\includegraphics
     EMPH                \\emph
     QUOTETEXT           \\quotetext
@@ -55,6 +57,7 @@ mode DOCUMENT:
     {SECTION}               => TKN_SECTION;
     {TEXTGRAPHICS}          => TKN_TEXTGRAPHICS;
     {SIDEGRAPHICS}          => TKN_SIDEGRAPHICS;
+    {SIDETABLE}             => TKN_SIDETABLE;
     {INCLUDEGRAPHICS}       => TKN_INCLUDEGRAPHICS;
     {EMPH}                  => TKN_EMPH;
     {QUOTETEXT}             => TKN_QUOTETEXT;

@@ -31,7 +31,7 @@ void ebook_sidegraphics(const char* filename, const char* caption, const char* l
 %type<str> doc arg group textgraphics emph quotetext sidecite textsc
 
 %token<str> TKN_TEXT TKN_COMMAND
-%token TKN_MY_FAILURE_ID TKN_CHAPTER TKN_SECTION TKN_TEXTGRAPHICS TKN_PARAGRAPH TKN_INCLUDEGRAPHICS TKN_SIDEGRAPHICS
+%token TKN_MY_FAILURE_ID TKN_CHAPTER TKN_SECTION TKN_TEXTGRAPHICS TKN_SIDETABLE TKN_PARAGRAPH TKN_INCLUDEGRAPHICS TKN_SIDEGRAPHICS
 %token TKN_EMPH TKN_QUOTETEXT TKN_SIDECITE TKN_REF TKN_TEXTSC
 %%
 
@@ -46,11 +46,12 @@ doc:      TKN_COMMAND           {printf("zz.");}
         | section               {}
         | textgraphics          {}
         | sidegraphics          {}
+        | sidetable             {}
         | includegraphics       {}
         | emph                  {printf("%s", $1);}
         | quotetext             {printf("%s", $1);}
         | textsc                {printf("%s", $1);}
-        | sidecite              {printf("(cite:%s)", $1);}
+        | sidecite              {printf(" [%s]", $1);}
         | ref                   {}
         | TKN_TEXT              {printf("%s", $1);}
         | TKN_PARAGRAPH         {printf("</p>\n<p class=\"body\">");}
@@ -68,19 +69,25 @@ ref:        TKN_REF '{' TKN_TEXT '}'        {printf("<a href=\"#%s\">%i</a>", $3
 ;
 
 sidecite:       TKN_SIDECITE '{' TKN_TEXT '}'       {$$ = $3}
-            |   TKN_SIDECITE '[' TKN_TEXT ']' '{' TKN_TEXT '}'  {sprintf($$, "%s, %s", $3, $6);}
+            |   TKN_SIDECITE '[' arg ']' '{' TKN_TEXT '}'  {sprintf($$, "%s %s", $3, $6);}
 ;
 
 emph:       TKN_EMPH '{' TKN_TEXT '}'       {sprintf($$, "<em>%s</em>", $3);}
 ;
 
-quotetext:      TKN_QUOTETEXT '{' TKN_TEXT '}'      {sprintf($$, "<q>%s</q>", $3);}
+quotetext:      TKN_QUOTETEXT '{' arg '}'      {sprintf($$, "<q>%s</q>", $3);}
 ;
 
-sidegraphics:       TKN_SIDEGRAPHICS '{' TKN_TEXT '}' '{' TKN_TEXT '}' '{' TKN_TEXT '}''{' TKN_TEXT '}'     {ebook_sidegraphics($3, $6, $9);}
+sidegraphics:     TKN_SIDEGRAPHICS '{' TKN_TEXT '}' '{' arg '}' '{' '}' '{' '}'     {ebook_sidegraphics($3, $6, $3);}
+                | TKN_SIDEGRAPHICS '{' TKN_TEXT '}' '{' arg '}' '{' TKN_TEXT '}' '{' '}'     {ebook_sidegraphics($3, $6, $9);}
+                | TKN_SIDEGRAPHICS '{' TKN_TEXT '}' '{' arg '}' '{' TKN_TEXT '}' '{' TKN_TEXT '}'     {ebook_sidegraphics($3, $6, $9);}
 ;
 
-includegraphics:      TKN_INCLUDEGRAPHICS '{' TKN_TEXT '}'      {printf("<img src=\"images/%s.pdf\" style=\"vertical-align:text-bottom\" alt=\"%s\" />",$3,$3);}
+// EINE DER GRÖSSEREN BAUSTELLEN, MACRO IN TEX HINZUFÜGEN
+sidetable:     TKN_SIDETABLE '{' TKN_TEXT '}' '{' arg '}' '{' '}' '{' '}'     //{ebook_sidegraphics($3, $6, $3);}
+;
+
+includegraphics:      TKN_INCLUDEGRAPHICS '{' TKN_TEXT '}'      {printf("<img src=\"images/%s.pdf\" style=\"vertical-align:text-center\" alt=\"%s\" />",$3,$3);}
 ;
 
 textgraphics:     TKN_TEXTGRAPHICS '{' TKN_TEXT '}' '{' TKN_TEXT '}' '{' TKN_TEXT '}' '{' TKN_TEXT '}'    {ebook_textgraphics($3, $6, $9, $12)}
@@ -96,6 +103,7 @@ section:    TKN_SECTION '{' arg '}'     {printf("</p><h2 class=\"header\">%s</h2
 arg:          TKN_TEXT          {$$ = $1}
             | TKN_COMMAND       {strcpy($$,"");}
             | textsc            {$$ = $1}
+            | emph              {$$ = $1}
             | config            {strcpy($$,"");}
             | group             {$$ = $1}
             | arg arg           {$$ = strcat($1, $2);}
@@ -120,20 +128,28 @@ int ebook_ref(const char* label)
     return 0;
 }
 
+// HIER MUSS DIE GRÖSSENANGABE DER BILDER NOCH RICHTIG REIN.
+    // AM BESTEN ALLES ÜBER CLASSES
 void ebook_sidegraphics(const char* filename, const char* caption, const char* label)
 {
-    printf("</p><div class=\"keep\" style=\"float:left; width:100px\" >");
-    printf("<img src=\"images/%s.pdf\" id=\"%s\" alt=\"%s\" />", filename, label, filename);
+    printf("</p>");
+    printf("<div class=\"keep\" style=\"\" >");
+    printf("<table class=\"sidefigure\"><tr><th>");
+    printf("<img class=\"sidefigure\" src=\"images/%s.pdf\" id=\"%s\" alt=\"%s\" />", filename, label, filename);
+    printf("</th><th>");
     printf("<p class=\"caption\">Abbildung %i: %s</p>", figure_counter, caption);
-    printf("</div><p class=\"body\">");
+    printf("</th></tr></table>");
+    printf("</div>");
+    printf("<p class=\"body\">");
+
     strcpy(figure_labels[figure_counter], label);
     figure_counter++;
 }
 
 void ebook_textgraphics(const char* filename, const char* caption, const char *label, const char* width)
 {
-    printf("</p><div class=\"keep\" style=\"float:left; width:100px\" >");
-    printf("<img src=\"images/%s\" id=\"%s\" alt=\"%s\" />", filename, label, filename);
+    printf("</p><div class=\"keep\" style=\" \" >");
+    printf("<img style=\"width:100px\" src=\"images/%s\" id=\"%s\" alt=\"%s\" />", filename, label, filename);
     printf("<p class=\"caption\">Abbildung %i: %s</p>", figure_counter, caption);
     printf("</div><p class=\"body\">");
     strcpy(figure_labels[figure_counter], label);
