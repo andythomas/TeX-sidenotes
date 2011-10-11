@@ -68,6 +68,7 @@ ref:        TKN_REF '{' TKN_TEXT '}'        {printf("<a href=\"#%s\">%i</a>", $3
 ;
 
 sidecite:       TKN_SIDECITE '{' TKN_TEXT '}'       {$$ = $3}
+            |   TKN_SIDECITE '[' TKN_TEXT ']' '{' TKN_TEXT '}'  {sprintf($$, "%s, %s", $3, $6);}
 ;
 
 emph:       TKN_EMPH '{' TKN_TEXT '}'       {sprintf($$, "<em>%s</em>", $3);}
@@ -76,7 +77,7 @@ emph:       TKN_EMPH '{' TKN_TEXT '}'       {sprintf($$, "<em>%s</em>", $3);}
 quotetext:      TKN_QUOTETEXT '{' TKN_TEXT '}'      {sprintf($$, "<q>%s</q>", $3);}
 ;
 
-sidegraphics:       TKN_SIDEGRAPHICS '{' TKN_TEXT '}' '{' TKN_TEXT '}' '{' TKN_TEXT '}'     {ebook_sidegraphics($3, $6, $9);}
+sidegraphics:       TKN_SIDEGRAPHICS '{' TKN_TEXT '}' '{' TKN_TEXT '}' '{' TKN_TEXT '}''{' TKN_TEXT '}'     {ebook_sidegraphics($3, $6, $9);}
 ;
 
 includegraphics:      TKN_INCLUDEGRAPHICS '{' TKN_TEXT '}'      {printf("<img src=\"images/%s.pdf\" style=\"vertical-align:text-bottom\" alt=\"%s\" />",$3,$3);}
