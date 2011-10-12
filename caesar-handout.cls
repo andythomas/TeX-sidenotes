@@ -1,7 +1,8 @@
 \NeedsTeXFormat{LaTeX2e}
 
-\ProvidesClass{caesar-article}[2011/08/16 v0.2 Caesar Article class]
+\ProvidesClass{caesar-handout}[2011/10/12 v0.1 Caesar Handout class]
 
+% Renamed to Caesar-Handout, based upon
 % Caesar Article version 0.1 2011-08-11 OS/AT
 
 % first load the article-class
