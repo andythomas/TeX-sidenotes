@@ -48,52 +48,6 @@
 %\ExecuteOptions{}
 \ProcessOptions\relax
 
-
-%% high level macro set
-
-% provide the ragged outer option
-\newcommand{\raggedouter}{%
-	\checkoddpage%
-    	\ifoddpage%
-		\RaggedRight%
-    	\else%
-		\RaggedLeft%
-    	\fi%
-}%
-
-% figure across the whole page including the margin
-\renewenvironment{figure*}
-{\begin{figure}
-	\checkoddpage%
-    	\ifoddpage%
-		\hspace{0pt}%
-    	\else%
-		\hspace{-120pt}%
-    	\fi%
-}
-{\end{figure}}
-
-% graphics in text, #1 filename, #2 caption, #3 label
-\newcommand{\textgraphics}[3]{%
-\begin{figure}[htbp]%
-	\sidecaption{#2\label{#3}}[-16pt]%
-	\includegraphics[width=\textwidth]{#1}
-	\vspace{1\baselineskip}
-\end{figure}%
-}
-
-%graphics in the margin, #1 filename, #2 caption, #3 label, #4 offset
-\newcommand{\sidegraphics}[4]{%
-\begin{sidefigure}[#4]%
-	\includegraphics[width=\marginparwidth]{#1}%
-	\vspace{2pt}%
-	\caption{#2\label{#3}}%
-\end{sidefigure}%
-}
-
-% quoted text
-\newcommand{\quotetext}{\textit}
-
 %%
 % Set page layout geometry
 
