@@ -29,5 +29,26 @@
   {\begin{quotation}}
   {\end{quotation}}
   
-  \captionsetup{width=\marginparwidth, justification=RaggedRight, font=footnotesize, skip = 0pt}
+\geometry{paperwidth=210mm, paperheight=297mm, left=50pt, top=50pt, textwidth=345pt, marginparsep=25pt, marginparwidth=124pt, textheight=692pt, footskip=50pt}
+
+% fontsize is 12pt, 14pt
+% footnotes are 10/12 
+\renewcommand{\normalsize}{\fontsize{12pt}{14pt}\selectfont} 
+\renewcommand{\footnotesize}{\fontsize{10pt}{12pt}\selectfont} 
+
+\captionsetup{width=\marginparwidth, justification=RaggedRight, font=footnotesize, skip = 0pt}
 \renewcommand{\sidestyle}{\footnotesize\RaggedRight}
+
+% make an unused chapter counter to avoid an error
+\newcounter{chapter}
+\renewcommand\chapter[1]{}
+% define a questions environment
+\newenvironment{questions}
+{\section{Fragen}
+\begin{enumerate}}
+{\end{enumerate}}
+% define a tutorial environment
+\newenvironment{tutorials}
+{\section{Aufgaben}
+\begin{enumerate}}
+{\end{enumerate}}

@@ -45,3 +45,28 @@
 %%
 % Only show the chapter titles in the table of contents
 \setcounter{tocdepth}{0}
+
+% swallow the abstract
+\newsavebox{\abstractbox}
+\newenvironment{abstract}
+{\begin{lrbox}{\abstractbox}}
+{\end{lrbox}}
+% swallow the maketitle command
+\renewcommand{\maketitle}{}
+% swallow the questions
+\newsavebox{\questionsbox}
+\newenvironment{questions}
+{
+\begin{lrbox}{\questionsbox}
+\begin{minipage}{5cm}
+\begin{enumerate}}
+{\end{enumerate}
+\end{minipage}
+\end{lrbox}
+}
+% define a tutorial environment
+\newenvironment{tutorials}
+{\section{Aufgaben}
+\begin{enumerate}}
+{\end{enumerate}}
+
