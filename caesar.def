@@ -48,6 +48,16 @@
 %\ExecuteOptions{}
 \ProcessOptions\relax
 
+% provide the ragged outer option
+\newcommand{\raggedouter}{%
+	\checkoddpage%
+    	\ifoddpage%
+		\RaggedRight%
+    	\else%
+		\RaggedLeft%
+    	\fi%
+}%
+
 %%
 % Set page layout geometry
 
