@@ -11,6 +11,8 @@
 % Load the common style elements
 \input{caesar.def}
 
+\setboolean{@caesar@twoside}{true}
+
 %%
 % Set up any book-specific stuff now (this code is borrowed from the tufte-book.cls file
 

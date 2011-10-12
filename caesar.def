@@ -21,7 +21,6 @@
 
 %%
 % `scroll' option
-
 \newboolean{@caesar@scroll}
 \setboolean{@caesar@scroll}{false}
 \DeclareOption{scroll}{\setboolean{@caesar@scroll}{true}}%
@@ -44,8 +43,8 @@
   \setboolean{@caesar@twoside}{true}
 }
 
-
-%\ExecuteOptions{}
+%%
+% \ExecuteOptions{}
 \ProcessOptions\relax
 
 % provide the ragged outer option
@@ -231,9 +230,14 @@
 \addtolength{\overhang}{\marginparsep}
 
 \newenvironment{fullwidth}
-	{\begin{adjustwidth*}{}{-\overhang}}%
-	{\end{adjustwidth*}}
-
+  {\ifthenelse{\boolean{@twoside}}%
+     {\begin{adjustwidth*}{}{-\overhang}}%
+     {\begin{adjustwidth}{}{-\overhang}}%
+  }%
+  {\ifthenelse{\boolean{@twoside}}%
+    {\end{adjustwidth*}}%
+    {\end{adjustwidth}}%
+  }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Author, titel and publisher
