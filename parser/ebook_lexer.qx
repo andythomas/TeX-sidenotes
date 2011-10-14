@@ -15,12 +15,14 @@ token {
     PARAGRAPH;
     INCLUDEGRAPHICS;
     SIDEGRAPHICS;
-    SIDETABLE;
+    SIDECHART;
     EMPH;
     QUOTETEXT;
     TEXTSC;
     SIDECITE;
     REF;
+    SIDECHART;
+    EQNLABEL;
 }
 
 
@@ -31,7 +33,7 @@ define {
     SECTION             \\section
     TEXTGRAPHICS        \\textgraphics
     SIDEGRAPHICS        \\sidegraphics
-    SIDETABLE           \\sidetable
+    SIDECHART           \\sidechart
     INCLUDEGRAPHICS     \\includegraphics
     EMPH                \\emph
     QUOTETEXT           \\quotetext
@@ -48,31 +50,56 @@ mode HEADER
     .|\n                    {}
 }
 
-mode DOCUMENT:
+mode TEXTFORMATING:
+<skip_range:"%<!--" "%-->">
+<skip_range:"\\begin{abstract}" "\\end{abstract}">
+<skip_range:"\\begin{questions}" "\\end{questions}">
+<skip_range:"\\begin{tutorials}" "\\end{tutorials}">
 <skip_range:"%" "\n">
+{
+    
+    {EMPH}                  => TKN_EMPH;
+    {QUOTETEXT}             => TKN_QUOTETEXT;
+    {TEXTSC}                => TKN_TEXTSC;
+    {REF}                   => TKN_REF;
+    {TEXT}					=> TKN_TEXT(Lexeme);
+    "{"                     => '{';
+    "}"                     => '}';
+    "["                     => '[';
+    "]"                     => ']';
+    on_failure  			=> TKN_MY_FAILURE_ID(Lexeme);
+}
+
+
+mode DOCUMENT:TEXTFORMATING
 {
 	<<EOF>>    				=> TKN_TERMINATION;
     \\end\{document\}       {self_enter_mode(&END);}
+ //   "%<!--"                 {self_enter_mode(&SKIPPER);}
+    \\begin\{eqnarray\}     {self_enter_mode(&EQNARRAY);}
     {CHAPTER}               => TKN_CHAPTER;
     {SECTION}               => TKN_SECTION;
     {TEXTGRAPHICS}          => TKN_TEXTGRAPHICS;
     {SIDEGRAPHICS}          => TKN_SIDEGRAPHICS;
-    {SIDETABLE}             => TKN_SIDETABLE;
+    {SIDECHART}             => TKN_SIDECHART;
     {INCLUDEGRAPHICS}       => TKN_INCLUDEGRAPHICS;
-    {EMPH}                  => TKN_EMPH;
-    {QUOTETEXT}             => TKN_QUOTETEXT;
-    {TEXTSC}                => TKN_TEXTSC;
     {SIDECITE}              => TKN_SIDECITE;
-    {REF}                   => TKN_REF;
-    {TEXT}					=> TKN_TEXT(Lexeme);
     {PARAGRAPH}             => TKN_PARAGRAPH;
-	"{"                     => '{';
-	"}"                     => '}';
-	"["                     => '[';
-	"]"                     => ']';
     "\n"                    => '\n';
 	{COMMAND}				=> TKN_COMMAND(Lexeme);
-    on_failure  			=> TKN_MY_FAILURE_ID(Lexeme);
+}
+
+mode SKIPPER:
+{
+    "-->"                  {self_enter_mode(&DOCUMENT);}
+    .|\n    {}
+}
+
+mode EQNARRAY:
+{
+    \\end\{eqnarray\}      {self_enter_mode(&DOCUMENT);}
+    \\label\{[^\\\{\}\[\]%\n]+\}        => TKN_EQNLABEL(Lexeme);
+    .|\n    {}
 }
 
 mode END:
