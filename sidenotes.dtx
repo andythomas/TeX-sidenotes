@@ -1,4 +1,4 @@
-% \CheckSum{180}
+% \CheckSum{10}
 % \iffalse meta-comment
 %
 % sidenotes.dtx
@@ -20,7 +20,7 @@
 %</driver>
 %<package>\ProvidesPackage{sidenotes}[%
 %<*driver|package>
-  2011/10/06 v0.53 rich text in the margin for LaTeX]
+  2011/10/16 v0.6 rich text in the margin for LaTeX]
 %</driver|package>
 %<package>\RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
 %<package>\RequirePackage{caption} % handles the figure caption (in the margin)
@@ -259,6 +259,27 @@
 %    \end{macrocode}
 % \end{macro}
 %
+%
+% \begin{macro}{\sidetext}
+% \changes{v0.6}{2011/10/16}{define sidetext}
+% Sidetext puts some text in the margin (similarly to marginpar).
+% It calls marginpar without an offset and marginnote if an offset 
+% is given. This ensures interface consistency.
+%    \begin{macrocode}
+\newcommand*{\sidetext}[1]{%
+\begingroup%
+\@ifnextchar[{\@sidenotes@sidetext{#1}}{\@sidenotes@sidetext{#1}[]}%
+}
+\newcommand{\@sidenotes@sidetext}{}
+\def\@sidenotes@sidetext#1[#2]{%
+\endgroup%
+{\ifthenelse{\isempty{#2}}% offset?
+{\marginpar{#1}}% no offset
+{\marginnote{#1}[#2]}% with offset
+}%fi
+}%
+%    \end{macrocode}
+% \end{macro}
 %
 % \begin{macro}{\sidecite}
 % \changes{v0.5}{2011/10/05}{define the sidecite macro without the twoopt package}
