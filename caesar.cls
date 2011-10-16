@@ -2,7 +2,7 @@
 %% This file is the new, unified caesar class file 2011-10-14 (OS-AT)
 \NeedsTeXFormat{LaTeX2e}
 
-\ProvidesFile{caesar.cls}[2011/10/14 v0.0.1 Grand Unified Caesar Class]
+\ProvidesFile{caesar.cls}[2011/10/16 v0.2 Grand Unified Caesar Class]
 
 %%
 % The `keyval' package simplifies the user interface for the document class options
@@ -83,6 +83,17 @@
     	\fi%
 }%
 
+% figure across the whole page including the margin	 	
+\renewenvironment{figure*}[1][] 	
+{\begin{figure}[#1]	 	
+\checkoddpage%	
+\ifoddpage% 	
+\hspace{0pt}%	
+\else%
+\hspace{-120pt}%
+\fi%
+}
+{\end{figure}}
 
 %%
 % Changepage package for symmetric twoside handling
@@ -364,80 +375,6 @@
 \RequirePackage{color}
 \definecolor{darkgray}{rgb}{0.25,0.25,0.25}
 
-%%
-% Produces a full title page
-
-% Modified \title, \author, and \date commands.  These store the
-% (footnote-less) values in \plaintitle, \plainauthor, and \thedate, respectively.
-
-\newcommand{\plaintitle}{}%     plain-text-only title
-\newcommand{\plainauthor}{}%    plain-text-only author
-\newcommand{\plainpublisher}{}% plain-text-only publisher
-
-\newcommand{\thanklesstitle}{}%     full title text minus \thanks{}
-\newcommand{\thanklessauthor}{}%    full author text minus \thanks{}
-\newcommand{\thanklesspublisher}{}% full publisher minus \thanks{}
-
-\newcommand{\@publisher}{}% full publisher with \thanks{}
-\newcommand{\thedate}{\today}
-
-% TODO Fix it so that \thanks is not spaced out (with `soul') and can be
-% used in \maketitle when the `sfsidenotes' option is provided.
-\renewcommand{\thanks}[1]{\NoCaseChange{\footnote{#1}}}
-
-\renewcommand{\title}[2][]{%
-  \gdef\@title{#2}%
-  \begingroup%
-    % TODO store contents of \thanks command
-    \renewcommand{\thanks}[1]{}% swallow \thanks contents
-    \protected@xdef\thanklesstitle{#2}%
-  \endgroup%
-  \ifthenelse{\isempty{#1}}%
-    {\renewcommand{\plaintitle}{\thanklesstitle}}% use thankless title
-    {\renewcommand{\plaintitle}{#1}}% use provided plain-text title
-  \ifthenelse{\isundefined{\hypersetup}}%
-    {}% hyperref is not loaded; do nothing
-    {\hypersetup{pdftitle={\plaintitle}}}% set the PDF metadata title
-}
-
-\let\@author\@empty% suppress default latex.ltx ``no author'' warning
-\renewcommand{\author}[2][]{%
-  \ifthenelse{\isempty{#2}}{}{\gdef\@author{#2}}%
-  \begingroup%
-    % TODO store contents of \thanks command
-    \renewcommand{\thanks}[1]{}% swallow \thanks contents
-    \protected@xdef\thanklessauthor{#2}%
-  \endgroup%
-  \ifthenelse{\isempty{#1}}%
-    {\renewcommand{\plainauthor}{\thanklessauthor}}% use thankless author
-    {\renewcommand{\plainauthor}{#1}}% use provided plain-text author
-  \ifthenelse{\isundefined{\hypersetup}}%
-    {}% hyperref is not loaded; do nothing
-    {\hypersetup{pdfauthor={\plainauthor}}}% set the PDF metadata author
-}
-
-\renewcommand{\date}[1]{%
-  \gdef\@date{#1}%
-  \begingroup%
-    % TODO store contents of \thanks command
-    \renewcommand{\thanks}[1]{}% swallow \thanks contents
-    \protected@xdef\thedate{#1}%
-  \endgroup%
-}
-
-%%
-% Provides a \publisher command to set the publisher
-
-\newcommand{\publisher}[2][]{%
-  \gdef\@publisher{#2}%
-  \begingroup%
-    \renewcommand{\thanks}[1]{}% swallow \thanks contents
-    \protected@xdef\thanklesspublisher{#2}%
-  \endgroup%
-  \ifthenelse{\isempty{#1}}
-    {\renewcommand{\plainpublisher}{\thanklesspublisher}}% use thankless publisher
-    {\renewcommand{\plainpublisher}{#1}}% use provided plain-text publisher
-}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % designing the titlepage \maketitlepage
@@ -456,11 +393,11 @@
   {%
   \sffamily%
   \begin{fullwidth}%
-  \fontsize{18}{20}\selectfont\par\noindent\textcolor{darkgray}{\lsstyle\allcaps{\thanklessauthor}}%
-  \vspace{11.5pc}%
-  \fontsize{36}{40}\selectfont\par\noindent\textcolor{darkgray}{\lsstyle\allcaps{\thanklesstitle}}%
+  \huge\par\noindent\textcolor{darkgray}{\lsstyle\allcaps{\author}}%
+  \vspace{6em}%
+  \Huge\par\noindent\textcolor{darkgray}{\lsstyle\allcaps{\title}}%
   \vfill%
-  \fontsize{14}{16}\selectfont\par\noindent\lsstyle\allcaps{\thanklesspublisher}%
+  \LARGE\selectfont\par\noindent\lsstyle\allcaps{\publisher}%
   \end{fullwidth}%
   }
   \thispagestyle{empty}%
