@@ -120,7 +120,7 @@
 \RequirePackage{fontspec}
 
 % Use Neo Euler as math font
-\RequirePackage[math-style=upright,vargreek-shape=TeX]{unicode-math}%
+\RequirePackage[math-style=upright, vargreek-shape=TeX]{unicode-math}% 
 \setmathfont{Neo Euler}%
 % Use the Palatino-Clone Tex Gyre Pagella as main font
 \setmainfont[Ligatures=TeX, Numbers=OldStyle]{Tex Gyre Pagella}%
@@ -379,11 +379,12 @@
 \newcommand{\maketitlepage}[0]{%
   \let\@@title\@empty%
    \let\@@author\@empty%
+   \let\@@publisher\@empty%
    \let\@@date\@empty%
-      \gdef\@@title{\Huge\lsstyle\allcaps{\@title}\par}%
-      \gdef\@@author{\large\@author\par}%
+      \gdef\@@title{\Huge\lsstyle\textcolor{darkgray}{\allcaps{\@title}}\par}%
+      \gdef\@@author{\LARGE\textcolor{darkgray}{\lsstyle\allcaps{\@author}}\par}%
+      \gdef\@@publisher{\Large\selectfont\par\noindent\lsstyle\allcaps{\publisher}\par}%
       \gdef\@@date{\large\@date\par}%
-
   \cleardoublepage%
   \begingroup%
   {%
@@ -393,9 +394,10 @@
   \@@author
   \vspace{6em}%
 %  \Huge\par\noindent\textcolor{darkgray}{\lsstyle\allcaps{\title}}%
-  \@@title
+  \noindent\@@title
   \vfill%
 %  \Large\selectfont\par\noindent\lsstyle\allcaps{\publisher}%
+  \@@publisher
   \end{fullwidth}%
   }%
   \endgroup%
