@@ -13,7 +13,7 @@
 %% about the files the work consists of.
 %% 
 \ProvidesPackage{sidenotes}[%
-  2011/10/06 v0.52 rich text in the margin for LaTeX]
+  2011/10/17 v0.61 rich text in the margin for LaTeX]
 \RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
 \RequirePackage{caption} % handles the figure caption (in the margin)
 \RequirePackage{xifthen} % provide an if command
@@ -75,6 +75,18 @@
 {\marginpar{\textsuperscript{#1} \sidestyle#2}}% no offset
 {\marginnote{\textsuperscript{\thesidenote}{} \sidestyle#2}}% with offset
 }% fi
+}%
+\newcommand*{\sidetext}[1]{%
+\begingroup%
+\@ifnextchar[{\@sidenotes@sidetext{#1}}{\@sidenotes@sidetext{#1}[]}%
+}
+\newcommand{\@sidenotes@sidetext}{}
+\def\@sidenotes@sidetext#1[#2]{%
+\endgroup%
+{\ifthenelse{\isempty{#2}}% offset?
+{\marginpar{\sidestyle#1}}% no offset
+{\marginnote{\sidestyle#1}[#2]}% with offset
+}%fi
 }%
 \newcommand{\sidecite}[1][]{%
   \@ifnextchar[{%

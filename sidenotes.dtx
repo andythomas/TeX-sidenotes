@@ -1,4 +1,3 @@
-% \CheckSum{10}
 % \iffalse meta-comment
 %
 % sidenotes.dtx
@@ -20,7 +19,7 @@
 %</driver>
 %<package>\ProvidesPackage{sidenotes}[%
 %<*driver|package>
-  2011/10/16 v0.6 rich text in the margin for LaTeX]
+  2011/10/17 v0.61 rich text in the margin for LaTeX]
 %</driver|package>
 %<package>\RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
 %<package>\RequirePackage{caption} % handles the figure caption (in the margin)
@@ -102,10 +101,16 @@
 % first, optional parameter will manually change the numbering of the sidenote, the second optional postfix 
 % will adjust the position with an offset: \verb+\sidenotetext[number]{text}[offset]+ 
 %
+% \changes{v0.61}{2011/10/17}{documentation of sidetext}
+% \DescribeMacro{\sidetext}
+% The macro \verb+\sidetext{text}[offset]+ puts text in the margin, but without a mark. 
+% If no offset is given it is equivalent to marginpar, if an offset is given it is
+% equivalent to marginnote.
+%
 % \DescribeMacro{\sidestyle}
 % You can use \verb+\renewcommand{\sidestyle}{something}+ 
 % if you want to change the font, text size, text color or something else of the sidenotes.
-% It it initialized with \verb+\footnotesize+. It is used as a prefix of the sidenotetext.
+% It it initialized with \verb+\footnotesize+. It is used as a prefix of the sidenotetext and sidetext.
 %
 % \DescribeMacro{\sidecite}
 % The macro \verb+\sidecite+ puts a citation in the margin. It uses the biblatex package
@@ -274,8 +279,8 @@
 \def\@sidenotes@sidetext#1[#2]{%
 \endgroup%
 {\ifthenelse{\isempty{#2}}% offset?
-{\marginpar{#1}}% no offset
-{\marginnote{#1}[#2]}% with offset
+{\marginpar{\sidestyle#1}}% no offset
+{\marginnote{\sidestyle#1}[#2]}% with offset
 }%fi
 }%
 %    \end{macrocode}
