@@ -1,4 +1,4 @@
-%$Id: cleopatra.bbx,v 0.3 2011/09/30 13:14:46 iimort stable $
+%$Id: cleopatra.bbx,v 0.3 2011/10/17 thomasa $
 
 \ProvidesFile{cleopatra.bbx}
 [\abx@bbxid $Id: cleopatra.bbx,v 0.3 2011/09/30 13:14:46 iimort stable $]
@@ -13,8 +13,8 @@
 \DeclareFieldFormat{booktitle}{#1\isdot}
 \DeclareFieldFormat{journaltitle}{#1\isdot}
 \DeclareFieldFormat{thesistitle}{#1\isdot}
-%\DeclareFieldFormat{postnote}{#1}
-%\DeclareFieldFormat{multipostnote}{#1}
+\DeclareFieldFormat{postnote}{#1}
+\DeclareFieldFormat{multipostnote}{#1}
 \DeclareFieldFormat{volume}{\mkbibbold{#1\isdot}}
 \DeclareFieldFormat[article]{volume}{\mkbibbold{#1\isdot}}
 
@@ -27,10 +27,15 @@
 \renewcommand*{\newunitpunct}{\addcomma\space}
 \renewcommand{\postnotedelim}{\addspace} 
 
-\DeclareFieldFormat{pages}{#1}
-
+\newbibmacro{string+url}[1]{%
+  \iffieldundef{url}{#1}{\href{\thefield{url}}{#1}}}
+  
+\DeclareFieldFormat{pages}{
+\usebibmacro{string+url}{%
+#1}}
 
 \renewbibmacro*{journal+issuetitle}{% 
+\usebibmacro{string+url}{%
   \usebibmacro{journal}% 
   \setunit*{\addspace}% 
   \iffieldundef{series} 
@@ -45,7 +50,7 @@
   \newunit\newblock
 \usebibmacro{issue}%
 \nopunct
-\newunit}
+\newunit}}
 
 \renewbibmacro*{issue+date}{%
 \iffieldundef{year}
