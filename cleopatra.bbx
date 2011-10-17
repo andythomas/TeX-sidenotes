@@ -13,8 +13,8 @@
 \DeclareFieldFormat{booktitle}{#1\isdot}
 \DeclareFieldFormat{journaltitle}{#1\isdot}
 \DeclareFieldFormat{thesistitle}{#1\isdot}
-\DeclareFieldFormat{postnote}{#1}
-\DeclareFieldFormat{multipostnote}{#1}
+%\DeclareFieldFormat{postnote}{#1}
+%\DeclareFieldFormat{multipostnote}{#1}
 \DeclareFieldFormat{volume}{\mkbibbold{#1\isdot}}
 \DeclareFieldFormat[article]{volume}{\mkbibbold{#1\isdot}}
 
@@ -30,12 +30,9 @@
 \newbibmacro{string+url}[1]{%
   \iffieldundef{url}{#1}{\href{\thefield{url}}{#1}}}
   
-\DeclareFieldFormat{pages}{
-\usebibmacro{string+url}{%
-#1}}
+\DeclareFieldFormat{pages}{#1}
 
 \renewbibmacro*{journal+issuetitle}{% 
-\usebibmacro{string+url}{%
   \usebibmacro{journal}% 
   \setunit*{\addspace}% 
   \iffieldundef{series} 
@@ -50,7 +47,7 @@
   \newunit\newblock
 \usebibmacro{issue}%
 \nopunct
-\newunit}}
+\newunit}
 
 \renewbibmacro*{issue+date}{%
 \iffieldundef{year}
@@ -59,8 +56,44 @@
 \printfield{year}%
 \printfield{extrayear}}}}
 
+
 \renewbibmacro*{in:}{%
 }
 
+
+\DeclareBibliographyDriver{article}{%
+\usebibmacro{string+url}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author/translator+others}%
+  \setunit{\labelnamepunct}\newblock
+  \usebibmacro{title}%
+ % \newunit
+%  \printlist{language}%
+%  \newunit\newblock
+%  \usebibmacro{byauthor}%
+%  \newunit\newblock
+ % \usebibmacro{bytranslator+others}%
+%  \newunit\newblock
+%  \printfield{version}%
+  \newunit\newblock
+  \usebibmacro{in:}%
+  \usebibmacro{journal+issuetitle}%
+%  \newunit
+ % \usebibmacro{byeditor+others}%
+  \newunit
+  \usebibmacro{note+pages}%
+  \newunit\newblock
+  \iftoggle{bbx:isbn}
+    {\printfield{issn}}
+    {}%
+ % \newunit\newblock
+ % \usebibmacro{doi+eprint+url}%
+ % \newunit\newblock
+ % \usebibmacro{addendum+pubstate}%
+  \setunit{\bibpagerefpunct}\newblock
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}
+  }}
 
 \endinput
