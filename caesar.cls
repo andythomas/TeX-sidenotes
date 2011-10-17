@@ -29,12 +29,6 @@
 \DeclareOption{handout}{\setboolean{@caesar@handout}{true}\setboolean{@caesar@book}{false}}%
 
 %%
-% epubli option -- from now on default
-\newboolean{@caesar@epubli}%
-\setboolean{@caesar@epubli}{true}%
-\DeclareOption{epubli}{\setboolean{@caesar@kindle}{false}\setboolean{@caesar@scroll}{false}}%
-
-%%
 % kindle option -- optimized pdf output for kindle eReader
 \newboolean{@caesar@kindle}%
 \setboolean{@caesar@kindle}{false}%
@@ -71,9 +65,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 % Load the underlying classes first
-\ifthenelse{\boolean{@caesar@handout}}{\LoadClass{article}}{\LoadClass{book}}
+\ifthenelse{\boolean{@caesar@handout}}{\LoadClassWithOptions{article}}{\LoadClassWithOptions{book}}
 
 % provide the ragged outer option
+\ifthenelse{\boolean{@twoside}}{%
 \newcommand{\raggedouter}{%
 	\checkoddpage%
     	\ifoddpage%
@@ -81,7 +76,7 @@
     	\else%
 		\RaggedLeft%
     	\fi%
-}%
+}}{\newcommand{\raggedouter}{\RaggedRight}}
 
 % figure across the whole page including the margin	 	
 \renewenvironment{figure*}[1][] 	
@@ -108,6 +103,7 @@
 \RequirePackage{caption}
 \RequirePackage{sidenotes}
 \RequirePackage{morefloats}
+\RequirePackage{microtype}
 
 %%
 % Set page layout geometry -- default is epubli science-book format
@@ -118,8 +114,6 @@
 \ifthenelse{\boolean{@caesar@kindle}}{\geometry{paperwidth=255pt, paperheight=340pt, left=10pt, top=10pt, textwidth=235pt, marginparsep=0pt, marginparwidth=0pt, textheight=310pt, footskip=20pt}}{}%
 
 \ifthenelse{\boolean{@caesar@scroll}}{\geometry{paperwidth=170mm, paperheight=16383pt, left=40pt, top=40pt, textwidth=280pt, marginparsep=20pt, marginparwidth=100pt, textheight=16263pt, footskip=40pt}\setcounter{totalnumber}{100}}{}%
-  
-%\ifthenelse{\boolean{@caesar@scroll}}{\setcounter{totalnumber}{100}}
 
 %%
 % set the fonts
@@ -141,7 +135,6 @@
 
 % adjust the footnote sizes
 \ifthenelse{\boolean{@caesar@handout}}{\renewcommand{\footnotesize}{\fontsize{10pt}{12pt}\selectfont}}{\renewcommand{\footnotesize}{\fontsize{8pt}{10pt}\selectfont} }%
-
 
 \setcounter{secnumdepth}{-1}
 
@@ -255,10 +248,6 @@
 \newenvironment{abstract}
 {\begin{lrbox}{\abstractbox}}
 {\end{lrbox}}}{}
-
-% swallow the maketitle command
-\ifthenelse{\boolean{@caesar@book}}{
-\renewcommand{\maketitle}{}}{}
 
 % swallow the questions
 \ifthenelse{\boolean{@caesar@book}}{
@@ -374,6 +363,7 @@
 \RequirePackage{xifthen}
 \RequirePackage{color}
 \definecolor{darkgray}{rgb}{0.25,0.25,0.25}
+\newcommand{\publisher}{}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -383,23 +373,32 @@
 %\DeclareTextFontCommand{\textsmallcaps}{\scshape}  % Wozu ist das nötig?
  
 \RequirePackage{textcase} % provides \MakeTextUppercase and \MakeTextLowercase
-%\def\allcapsspacing{\@tufte@warning{Proper spacing of ALL-CAPS letters has not been set up.}}
-%\def\smallcapsspacing{\@tufte@warning{Proper spacing of small-caps letters has not been set up.}}
 \newcommand{\allcaps}{\MakeTextUppercase}
 \newcommand{\smallcaps}{\MakeTextLowercase}
 
 \newcommand{\maketitlepage}[0]{%
+  \let\@@title\@empty%
+   \let\@@author\@empty%
+   \let\@@date\@empty%
+      \gdef\@@title{\Huge\lsstyle\allcaps{\@title}\par}%
+      \gdef\@@author{\large\@author\par}%
+      \gdef\@@date{\large\@date\par}%
+
   \cleardoublepage%
+  \begingroup%
   {%
   \sffamily%
   \begin{fullwidth}%
-  \huge\par\noindent\textcolor{darkgray}{\lsstyle\allcaps{\author}}%
+%  \LARGE\par\noindent\textcolor{darkgray}{\lsstyle\allcaps{\author}}%
+  \@@author
   \vspace{6em}%
-  \Huge\par\noindent\textcolor{darkgray}{\lsstyle\allcaps{\title}}%
+%  \Huge\par\noindent\textcolor{darkgray}{\lsstyle\allcaps{\title}}%
+  \@@title
   \vfill%
-  \LARGE\selectfont\par\noindent\lsstyle\allcaps{\publisher}%
+%  \Large\selectfont\par\noindent\lsstyle\allcaps{\publisher}%
   \end{fullwidth}%
-  }
+  }%
+  \endgroup%
   \thispagestyle{empty}%
   \clearpage%
 }
@@ -424,6 +423,10 @@
   \endgroup%
   \thispagestyle{plain}% suppress the running head
 }
+
+% if the book option is used, make a titlepage instead of the title alone
+\ifthenelse{\boolean{@caesar@book}}{
+\renewcommand{\maketitle}{\maketitlepage}}{}
 
 %%
 % When \cleardoublepage is called, produce a blank (empty) page -- i.e.,
