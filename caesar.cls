@@ -103,7 +103,7 @@
 \RequirePackage{caption}
 \RequirePackage{sidenotes}
 \RequirePackage{morefloats}
-\RequirePackage{microtype}
+%\RequirePackage{microtype}
 
 %%
 % Set page layout geometry -- default is epubli science-book format
@@ -128,8 +128,8 @@
 \setmonofont{Tex Gyre Cursor}%
 % Use Tex Gyre Heros Cn as Sans Serif Font
 \setsansfont{Tex Gyre Heros Cn}%
-% fontsize is 10pt, 13pt for book and 12pt, 14pt for handout
-\ifthenelse{\boolean{@caesar@handout}}{\renewcommand{\normalsize}{\fontsize{12pt}{14pt}\selectfont}}{\renewcommand{\normalsize}{\fontsize{10pt}{13pt}\selectfont}}%
+% fontsize is 10pt, 13pt for book and 12pt, 15pt for handout
+\ifthenelse{\boolean{@caesar@handout}}{\renewcommand{\normalsize}{\fontsize{12pt}{15pt}\selectfont}}{\renewcommand{\normalsize}{\fontsize{10pt}{13pt}\selectfont}}%
 % fontsize is 10pt, 13pt for book and 9pt, 11pt for kindle
 \ifthenelse{\boolean{@caesar@kindle}}{\renewcommand{\normalsize}{\fontsize{9pt}{11pt}\selectfont}}{}%
 
@@ -216,6 +216,10 @@
 	{\rmfamily\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
 	[\end{fullwidth}] % after
 }
+
+%%
+% display only the highest sections in the TOC
+\ifthenelse{\boolean{@caesar@handout}}{\setcounter{tocdepth}{1}}{\setcounter{tocdepth}{0}}
 
 %%
 % Set up any book-specific stuff now (this code is borrowed from the tufte-book.cls file)
