@@ -32,13 +32,13 @@
 % kindle option -- optimized pdf output for kindle eReader
 \newboolean{@caesar@kindle}%
 \setboolean{@caesar@kindle}{false}%
-\DeclareOption{epubli}{\setboolean{@caesar@kindle}{true}\setboolean{@caesar@scroll}{false}\setboolean{@caesar@epubli}{false}}%
+\DeclareOption{kindle}{\setboolean{@caesar@kindle}{true}\setboolean{@caesar@book}{false}}%
 
 %%
 % `scroll' option
 \newboolean{@caesar@scroll}%
 \setboolean{@caesar@scroll}{false}%
-\DeclareOption{scroll}{\setboolean{@caesar@scroll}{true}\setboolean{@caesar@kindle}{false}\setboolean{@caesar@epubli}{false}}%
+\DeclareOption{scroll}{\setboolean{@caesar@scroll}{true}\setboolean{@caesar@book}{false}}%
 
 %%
 % alternative Chapter and Section headings
@@ -131,36 +131,36 @@
 % fontsize is 10pt, 13pt for book and 12pt, 15pt for handout
 \ifthenelse{\boolean{@caesar@handout}}{\renewcommand{\normalsize}{\fontsize{12pt}{15pt}\selectfont}}{\renewcommand{\normalsize}{\fontsize{10pt}{13pt}\selectfont}}%
 % fontsize is 10pt, 13pt for book and 9pt, 11pt for kindle
-\ifthenelse{\boolean{@caesar@kindle}}{\renewcommand{\normalsize}{\fontsize{9pt}{11pt}\selectfont}}{}%
+\ifthenelse{\boolean{@caesar@kindle}}{\renewcommand{\normalsize}{\fontsize{9pt}{11pt}\selectfont}\renewcommand{\footnotesize}{\fontsize{8pt}{10pt}\selectfont}}{}%
 
 % adjust the footnote sizes
 \ifthenelse{\boolean{@caesar@handout}}{\renewcommand{\footnotesize}{\fontsize{10pt}{12pt}\selectfont}}{\renewcommand{\footnotesize}{\fontsize{8pt}{10pt}\selectfont} }%
-
+%
 \setcounter{secnumdepth}{-1}
-
+%
 \ifthenelse{\boolean{@caesar@arminius}}{%
-	\titleformat{\chapter}%
- 	 [hang]% shape
- 	 {\relax}% format applied to label+text
- 	 {\thechapter}% label
- 	 {0pt}% horizontal separation between label and title body
-	 {\rmfamily\MakeUppercase}% before the title body
-	 [\titlerule]% after the title body
+   \titleformat{\chapter}%
+   [hang]% shape
+   {\relax}% format applied to label+text
+   {}% label
+   {0pt}% horizontal separation between label and title body
+   {\rmfamily\MakeUppercase}% before the title body
+   [\titlerule\marginpar{\centering\fontsize{56}{0}\selectfont{\thechapter}\normalfont}]% after the title body
 }{%
-	\titleformat{\chapter}%
-	  [display]% shape
-	  {\relax\itshape\huge}% format applied to label+text
-	  {\thechapter}% label
-	  {0pt}% horizontal separation between label and title body
-	  {\huge\rmfamily\itshape}% before the title body
-	  []% after the title body
+   \titleformat{\chapter}%
+   [display]% shape
+   {\relax\itshape\huge}% format applied to label+text
+   {}% label
+   {0pt}% horizontal separation between label and title body
+   {\huge\rmfamily\itshape}% before the title body
+   []% after the title body
 }
-
+%
 \ifthenelse{\boolean{@caesar@arminius}}{%
 \titleformat{\section}%
   [hang]% shape
   {\normalfont\scshape}% format applied to label+text
-  {\thesection}% label
+  {}% label
   {}% horizontal separation between label and title body
   {}% before the title body
   []% after the title body
@@ -168,7 +168,7 @@
 \titleformat{\section}%
   [hang]% shape
   {\normalfont\Large\itshape}% format applied to label+text
-  {\thesection}% label
+  {}% label
   {1em}% horizontal separation between label and title body
   {}% before the title body
   []% after the title body
@@ -177,7 +177,7 @@
 \titleformat{\subsection}%
   [hang]% shape
   {\normalfont\large\itshape}% format applied to label+text
-  {\thesubsection}% label
+  {}% label
   {1em}% horizontal separation between label and title body
   {}% before the title body
   []% after the title body
@@ -185,7 +185,7 @@
 \titleformat{\paragraph}%
   [runin]% shape
   {\normalfont\itshape}% format applied to label+text
-  {\theparagraph}% label
+  {}% label
   {1em}% horizontal separation between label and title body
   {}% before the title body
   []% after the title body
@@ -201,20 +201,20 @@
 % The Table of Contents
 \ifthenelse{\boolean{@caesar@arminius}}{%
 \titlecontents{chapter}%
-	[0em] % distance from left margin
-	{\vspace{1.5\baselineskip}\begin{fullwidth}\rmfamily} % above (global formatting of entry)
-	{\hspace*{0em}\contentslabel{2em}} % before w/label (label = ``2'')
-	{\hspace*{0em}} % before w/o label
-	{\rmfamily\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
-	[\end{fullwidth}] % after
+   [0em] % distance from left margin
+   {\vspace{1.5\baselineskip}\begin{fullwidth}\rmfamily} % above (global formatting of entry)
+   {\hspace*{0em}\contentslabel{2em}} % before w/label (label = ``2'')
+   {\hspace*{0em}} % before w/o label
+   {\rmfamily\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
+   [\end{fullwidth}] % after
 }{%
 \titlecontents{chapter}%
-	[0em] % distance from left margin
-	{\vspace{1.5\baselineskip}\begin{fullwidth}\LARGE\rmfamily\itshape} % above (global formatting of entry)
-	{\hspace*{0em}\contentslabel{2em}} % before w/label (label = ``2'')
-	{\hspace*{0em}} % before w/o label
-	{\rmfamily\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
-	[\end{fullwidth}] % after
+   [0em] % distance from left margin
+   {\vspace{1.5\baselineskip}\begin{fullwidth}\LARGE\rmfamily\itshape} % above (global formatting of entry)
+   {\hspace*{0em}\contentslabel{2em}} % before w/label (label = ``2'')
+   {\hspace*{0em}} % before w/o label
+   {\rmfamily\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
+   [\end{fullwidth}] % after
 }
 
 %%
@@ -223,32 +223,53 @@
 
 %%
 % Set up any book-specific stuff now (this code is borrowed from the tufte-book.cls file)
-\ifthenelse{\boolean{@caesar@book}}{\renewcommand\frontmatter{%
-  \cleardoublepage%
-  \fancyhf{}%
+\ifthenelse{\boolean{@caesar@book}}% if
+   {%
+   \renewcommand\frontmatter{% then
+   \cleardoublepage%
+   \fancyhf{}%
    \fancyfoot[LE]{\thepage}%
    \fancyfoot[RO]{\thepage}}%
-}{\newcommand\frontmatter{}}
+}{% else
+   \ifthenelse{\boolean{@caesar@kindle}}% and if
+      {\renewcommand\frontmatter{}}% then
+      {\newcommand\frontmatter{}}% else
+   }%
 
 %%
 % The main matter in Tufte's /Beautiful Evidence/ doesn't restart the page
 % numbering---it continues where it left off in the front matter.
-\ifthenelse{\boolean{@caesar@book}}{\renewcommand\mainmatter{%
-  \cleardoublepage%
-%  \@mainmattertrue%
-  \fancyhf{}%
-      \renewcommand{\chaptermark}[1]{\markboth{##1}{}}%
-      \fancyfoot[LE]{\thepage\newlinetospace}
-      \fancyfoot[RO]{\newlinetospace\thepage}
-}}{\newcommand\mainmatter{}}
+\ifthenelse{\boolean{@caesar@book}}%
+   {%
+   \renewcommand\mainmatter{%
+   \cleardoublepage%
+   \fancyhf{}%
+   \renewcommand{\chaptermark}[1]{\markboth{##1}{}}%
+   \fancyfoot[LE]{\thepage\newlinetospace}%
+   \fancyfoot[RO]{\newlinetospace\thepage}}%
+   }{%
+   \ifthenelse{\boolean{@caesar@kindle}}%
+   {%
+   \renewcommand\mainmatter{}}%
+   {\newcommand\mainmatter{}}%
+   }%
 
 %%
 % The back matter contains appendices, indices, glossaries, endnotes,
 % biliographies, list of contributors, illustration credits, etc.
-\ifthenelse{\boolean{@caesar@book}}{\renewcommand\backmatter{}}{\newcommand\backmatter{}}
+\ifthenelse{\boolean{@caesar@book}}%
+   {%
+   \renewcommand\backmatter{}%
+   }{%
+   \ifthenelse{\boolean{@caesar@kindle}}%
+      {%
+      \renewcommand\backmatter{}
+      }{%
+      \newcommand\backmatter{}}%
+      }%
 
 % swallow the abstract
-\ifthenelse{\boolean{@caesar@book}}{\newsavebox{\abstractbox}
+\ifthenelse{\boolean{@caesar@book}\or\boolean{@caesar@kindle}}{\newsavebox{\abstractbox}
 \newenvironment{abstract}
 {\begin{lrbox}{\abstractbox}}
 {\end{lrbox}}}{}
@@ -309,7 +330,7 @@
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 
-\pagestyle{fancy}
+\ifthenelse{\boolean{@caesar@kindle}}{\pagestyle{empty}}{\pagestyle{fancy}}
 
 \fancyhf{}%
 {\fancyfoot[LE,RO]{\thepage}}
@@ -357,7 +378,10 @@
 
 \DeclareCaptionJustification{raggedouter}{\raggedouter}
 %\renewcommand{\marginnotevadjust}{2pt}
-\captionsetup{width=\marginparwidth, justification=raggedouter, font=footnotesize, skip = 0pt}
+\ifthenelse{\boolean{@caesar@kindle}}%
+{\captionsetup{width=110pt, justification=RaggedRight, font=footnotesize, skip = 0pt}}%
+{\captionsetup{width=\marginparwidth, justification=raggedouter, font=footnotesize, skip = 0pt}}
+%
 \renewcommand{\sidestyle}{\footnotesize\raggedouter}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -367,9 +391,11 @@
 \RequirePackage{xifthen}
 \RequirePackage{color}
 \definecolor{darkgray}{rgb}{0.25,0.25,0.25}
-\newcommand{\publisher}{}
 
-
+\newcommand{\@publisher}{}
+\newcommand{\publisher}[1]{%
+  \gdef\@publisher{#1}%
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % designing the titlepage \maketitlepage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -387,7 +413,7 @@
    \let\@@date\@empty%
       \gdef\@@title{\Huge\lsstyle\textcolor{darkgray}{\allcaps{\@title}}\par}%
       \gdef\@@author{\LARGE\textcolor{darkgray}{\lsstyle\allcaps{\@author}}\par}%
-      \gdef\@@publisher{\Large\selectfont\par\noindent\lsstyle\allcaps{\publisher}\par}%
+      \gdef\@@publisher{\Large\selectfont\par\noindent\lsstyle\allcaps{\@publisher}\par}%
       \gdef\@@date{\large\@date\par}%
   \cleardoublepage%
   \begingroup%
@@ -454,7 +480,76 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Things to do
+% Things to tune
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ifthenelse{\boolean{@caesar@handout}}{\newcommand{\chapter}{}}{}
 \ifthenelse{\boolean{@caesar@handout}}{\newcounter{chapter}\renewcommand\chapter[1]{}}{}
+
+%%
+% Kindle stuff
+\ifthenelse{\boolean{@caesar@kindle}}%
+{\newcommand{\normalfigure}[2]{%
+\begin{figure}[ht!]%
+	\includegraphics[width=235pt]{#1}
+	\captionsetup{width=\textwidth, justification=justified}
+	\caption{#2\label{#1}}%
+\end{figure}%
+}
+
+%graphics in the margin, #1 filename=label, #2 caption
+\newcommand{\smallfigure}[2]{%
+\begin{figure}[ht!]
+\begin{minipage}[b]{110pt}
+\centering
+\includegraphics[width=110pt]{#1}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{110pt}
+\centering
+	\captionsetup{width=110pt, justification=RaggedRight}
+	\caption{#2\label{#1}}%
+\end{minipage}
+\end{figure}
+}
+
+% table in the margin, #1 label, #2 caption, #3 code
+\newcommand{\smalltable}[3]{%
+\begin{figure}[ht!]
+\begin{minipage}[b]{110pt}
+\centering
+#3
+\end{minipage}
+\hfill
+\begin{minipage}[b]{110pt}
+\centering
+	\captionsetup{width=110pt, justification=RaggedRight}
+	\caption{#2\label{#1}}%
+\end{minipage}
+\end{figure}
+}
+
+\newcommand{\normaltable}[3]{%
+\begin{table}[ht!]%
+	#3
+	\captionsetup{width=\textwidth, justification=justified}
+	\caption{#2\label{#1}}%
+\end{table}%
+}
+
+\newcommand{\tinyfigure}[1]{\includegraphics{#1}}
+
+\newcommand{\reference}[3]{%
+\footnote{\fullcite[#1][#2]{#3}}%
+}
+
+\newcommand{\annotation}[1]{%
+\footnote{#1}%
+}
+
+% quoted text
+\newcommand{\quotetext}{\textit}
+}%
+{}%
+
+%%
+% To do \addtocounter{\thechapter}{1}
