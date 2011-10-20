@@ -302,6 +302,13 @@
 }
 
 %%
+% redefine the equation, table and figure counter when giving an explicit chapter number
+% if other counters are encountered at farpoint, the can be changed the same way
+\renewcommand{\thefigure}{\arabic{figure}}
+\renewcommand{\thetable}{\arabic{table}}
+\renewcommand{\theequation}{\arabic{equation}}
+
+%%
 % Turns newlines into spaces.  Based on code from the `titlesec' package.
 
 \DeclareRobustCommand{\@caesar@newlinetospace}{%
@@ -399,8 +406,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % designing the titlepage \maketitlepage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%\DeclareTextFontCommand{\textsmallcaps}{\scshape}  % Wozu ist das nötig?
  
 \RequirePackage{textcase} % provides \MakeTextUppercase and \MakeTextLowercase
 \newcommand{\allcaps}{\MakeTextUppercase}
@@ -411,8 +416,8 @@
    \let\@@author\@empty%
    \let\@@publisher\@empty%
    \let\@@date\@empty%
-      \gdef\@@title{\Huge\lsstyle\textcolor{darkgray}{\allcaps{\@title}}\par}%
-      \gdef\@@author{\LARGE\textcolor{darkgray}{\lsstyle\allcaps{\@author}}\par}%
+      \gdef\@@title{\fontsize{38}{50}\selectfont\textcolor{darkgray}{\textls[125]{\allcaps{\@title}}}\par}%
+      \gdef\@@author{\LARGE\lsstyle\allcaps{\@author}\par}%
       \gdef\@@publisher{\Large\selectfont\par\noindent\lsstyle\allcaps{\@publisher}\par}%
       \gdef\@@date{\large\@date\par}%
   \cleardoublepage%
@@ -420,13 +425,10 @@
   {%
   \sffamily%
   \begin{fullwidth}%
-%  \LARGE\par\noindent\textcolor{darkgray}{\lsstyle\allcaps{\author}}%
   \@@author
   \vspace{6em}%
-%  \Huge\par\noindent\textcolor{darkgray}{\lsstyle\allcaps{\title}}%
   \noindent\@@title
   \vfill%
-%  \Large\selectfont\par\noindent\lsstyle\allcaps{\publisher}%
   \@@publisher
   \end{fullwidth}%
   }%
@@ -461,32 +463,19 @@
 \renewcommand{\maketitle}{\maketitlepage}}{}
 
 %%
-% When \cleardoublepage is called, produce a blank (empty) page -- i.e.,
-% without headers and footers
+% When \cleardoublepage is called, produce a blank (empty) page -- i.e., without headers and footers
 \def\cleardoublepage{\clearpage\if@twoside\ifodd\c@page\else
   \hbox{}
-  %\vspace*{\fill}
-  %\begin{center}
-  %  This page intentionally contains only this sentence.
-  %\end{center}
-  %\vspace{\fill}
   \thispagestyle{empty}
   \newpage
   \if@twocolumn\hbox{}\newpage\fi\fi\fi}
 
-\newcommand{\CaesarInfoNL}[1]{\ClassInfo{\@caesar@pkgname}{#1\@gobble}}
-\newcommand{\CaesarDebugInfoNL}[1]{\ifthenelse{\boolean{@caesar@debug}}{\CaesarInfoNL{#1}}{}}
-\newcommand{\CaesarError}[2]{\ClassError{\@caesar@pkgname}{#1}{#2}}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Things to tune
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\ifthenelse{\boolean{@caesar@handout}}{\newcommand{\chapter}{}}{}
-\ifthenelse{\boolean{@caesar@handout}}{\newcounter{chapter}\renewcommand\chapter[1]{}}{}
+%\newcommand{\CaesarInfoNL}[1]{\ClassInfo{\@caesar@pkgname}{#1\@gobble}}
+%\newcommand{\CaesarDebugInfoNL}[1]{\ifthenelse{\boolean{@caesar@debug}}{\CaesarInfoNL{#1}}{}}
+%\newcommand{\CaesarError}[2]{\ClassError{\@caesar@pkgname}{#1}{#2}}
 
 %%
-% Kindle stuff
+% High level macro set for kindle and the rest of the options
 \ifthenelse{\boolean{@caesar@kindle}}%
 {\newcommand{\normalfigure}[2]{%
 \begin{figure}[ht!]%
@@ -549,7 +538,56 @@
 % quoted text
 \newcommand{\quotetext}{\textit}
 }%
-{}%
+{% graphics in text, #1 filename=label, #2 caption
+\newcommand{\normalfigure}[2]{%
+\begin{figure}[htbp]%
+	\includegraphics[width=\textwidth]{#1}
+	\vspace{-0.7\baselineskip}
+	\captionsetup{width=\textwidth, justification=justified}
+	\caption{#2\label{#1}}%
+\end{figure}%
+}
 
-%%
-% To do \addtocounter{\thechapter}{1}
+%graphics in the margin, #1 filename=label, #2 caption
+\newcommand{\smallfigure}[2]{%
+\begin{sidefigure}%
+	\includegraphics[width=\marginparwidth]{#1}%
+	\vspace{2pt}%
+	\caption{#2\label{#1}}%
+\end{sidefigure}%
+}
+
+% table in the margin, #1 label, #2 caption, #3 code
+\newcommand{\smalltable}[3]{%
+\begin{sidetable}%
+	#3
+	 \vspace{2pt}
+	\caption{#2\label{#1}}%
+\end{sidetable}%
+}
+
+\newcommand{\normaltable}[3]{%
+\begin{table}[htbp]%
+	#3
+	\vspace{2pt}
+	\captionsetup{width=\textwidth, justification=justified}
+	\caption{#2\label{#1}}%
+\end{table}%
+}
+
+% quoted text
+\newcommand{\quotetext}{\textit}
+
+\newcommand{\tinyfigure}[1]{\includegraphics{#1}}
+
+\newcommand{\reference}[3]{%
+\sidecite[#1][#2]{#3}}%
+
+\newcommand{\annotation}[1]{\sidenote{#1}}%
+}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Things to tune
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ifthenelse{\boolean{@caesar@handout}}{\newcommand{\chapter}{}}{}
+\ifthenelse{\boolean{@caesar@handout}}{\newcounter{chapter}\renewcommand\chapter[1]{}}{}
