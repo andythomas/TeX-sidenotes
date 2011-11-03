@@ -5,6 +5,11 @@
 \ProvidesFile{caesar.cls}[2011/10/16 v0.2 Grand Unified Caesar Class]
 
 %%
+% Load the amsmath and the mhchem package before loading microtype
+\RequirePackage{amsmath}
+\RequirePackage[version=3]{mhchem}
+
+%%
 % The `keyval' package simplifies the user interface for the document class options
 \RequirePackage{keyval}
 
@@ -77,18 +82,6 @@
 		\RaggedLeft%
     	\fi%
 }}{\newcommand{\raggedouter}{\RaggedRight}}
-
-% figure across the whole page including the margin	 	
-\renewenvironment{figure*}[1][] 	
-{\begin{figure}[#1]	 	
-\checkoddpage%	
-\ifoddpage% 	
-\hspace{0pt}%	
-\else%
-\hspace{-120pt}%
-\fi%
-}
-{\end{figure}}
 
 %%
 % Changepage package for symmetric twoside handling
@@ -476,6 +469,21 @@
 
 %%
 % High level macro set for kindle and the rest of the options
+
+% figure across the whole page including the margin	 	
+\renewenvironment{figure*}[1][] 	
+{\begin{figure}[#1]	 	
+\checkoddpage%	
+\ifoddpage% 	
+\hspace{0pt}%	
+\else%
+\hspace{-120pt}%
+\fi%
+}
+{\end{figure}}
+
+
+
 \ifthenelse{\boolean{@caesar@kindle}}%
 {\newcommand{\normalfigure}[2]{%
 \begin{figure}[ht!]%
@@ -503,7 +511,7 @@
 
 % table in the margin, #1 label, #2 caption, #3 code
 \newcommand{\smalltable}[3]{%
-\begin{figure}[ht!]
+\begin{table}[ht!]
 \begin{minipage}[b]{110pt}
 \centering
 #3
@@ -514,7 +522,7 @@
 	\captionsetup{width=110pt, justification=RaggedRight}
 	\caption{#2\label{#1}}%
 \end{minipage}
-\end{figure}
+\end{table}
 }
 
 \newcommand{\normaltable}[3]{%
@@ -539,6 +547,16 @@
 \newcommand{\quotetext}{\textit}
 }%
 {% graphics in text, #1 filename=label, #2 caption
+\newcommand{\largefigure}[2]{%
+\begin{figure*}[htbp]%
+ \includegraphics[width=400pt]{#1}
+ \begin{fullwidth}
+ \captionsetup{width=400pt, justification=justified}
+ \caption{#2\label{#1}}%
+ \end{fullwidth}
+\end{figure*}%
+}
+
 \newcommand{\normalfigure}[2]{%
 \begin{figure}[htbp]%
 	\includegraphics[width=\textwidth]{#1}
