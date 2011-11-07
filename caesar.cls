@@ -114,13 +114,13 @@
 
 % Use Neo Euler as math font
 \RequirePackage[math-style=upright, vargreek-shape=TeX]{unicode-math}% 
-\setmathfont{Neo Euler}%
+\setmathfont{Asana Math}%
 % Use the Palatino-Clone Tex Gyre Pagella as main font
 \setmainfont[Ligatures=TeX, Numbers=OldStyle]{Tex Gyre Pagella}%
 % Use Tex Gyre Cursor as Monospace Font
 \setmonofont{Tex Gyre Cursor}%
 % Use Tex Gyre Heros Cn as Sans Serif Font
-\setsansfont{Tex Gyre Heros Cn}%
+\setsansfont{Tex Gyre Heros}%
 % fontsize is 10pt, 13pt for book and 12pt, 15pt for handout
 \ifthenelse{\boolean{@caesar@handout}}{\renewcommand{\normalsize}{\fontsize{12pt}{15pt}\selectfont}}{\renewcommand{\normalsize}{\fontsize{10pt}{13pt}\selectfont}}%
 % fontsize is 10pt, 13pt for book and 9pt, 11pt for kindle
