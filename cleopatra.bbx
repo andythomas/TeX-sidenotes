@@ -1,4 +1,4 @@
-%$Id: cleopatra.bbx,v 0.3 2011/10/17 thomasa $
+%$Id: cleopatra.bbx,v 0.3 2011/09/30 13:14:46 iimort stable $
 
 \ProvidesFile{cleopatra.bbx}
 [\abx@bbxid $Id: cleopatra.bbx,v 0.3 2011/09/30 13:14:46 iimort stable $]
@@ -9,8 +9,7 @@
 \DeclareFieldFormat[article]{title}{\mkbibemph{#1\isdot}}
 \DeclareFieldFormat[journal]{title}{\mkbibemph{#1\isdot}}
 \DeclareFieldFormat[books]{title}{\mkbibemph{#1\isdot}}
-\DeclareFieldFormat[thesis]{title}{\mkbibemph{#1\isdot}}
-\DeclareFieldFormat{booktitle}{#1\isdot}
+\DeclareFieldFormat[thesis]{title}{\mkbibemph{#1\isdot}}\DeclareFieldFormat{booktitle}{#1\isdot}
 \DeclareFieldFormat{journaltitle}{#1\isdot}
 \DeclareFieldFormat{thesistitle}{#1\isdot}
 %\DeclareFieldFormat{postnote}{#1}
@@ -27,9 +26,6 @@
 \renewcommand*{\newunitpunct}{\addcomma\space}
 \renewcommand{\postnotedelim}{\addspace} 
 
-\newbibmacro{string+url}[1]{%
-  \iffieldundef{url}{#1}{\href{\thefield{url}}{#1}}}
-  
 \DeclareFieldFormat{pages}{#1}
 
 \renewbibmacro*{journal+issuetitle}{% 
@@ -57,43 +53,71 @@
 \printfield{extrayear}}}}
 
 
-\renewbibmacro*{in:}{%
-}
-
-
 \DeclareBibliographyDriver{article}{%
-\usebibmacro{string+url}{%
+\ifhyperref
+{\href{\thefield{url}}{%with hyperref
   \usebibmacro{bibindex}%
   \usebibmacro{begentry}%
   \usebibmacro{author/translator+others}%
   \setunit{\labelnamepunct}\newblock
   \usebibmacro{title}%
- % \newunit
-%  \printlist{language}%
-%  \newunit\newblock
-%  \usebibmacro{byauthor}%
-%  \newunit\newblock
- % \usebibmacro{bytranslator+others}%
-%  \newunit\newblock
-%  \printfield{version}%
+  \newunit
+  \printlist{language}%
   \newunit\newblock
-  \usebibmacro{in:}%
+  \usebibmacro{byauthor}%
+  \newunit\newblock
+  \usebibmacro{bytranslator+others}%
+  \newunit\newblock
+  \printfield{version}%
+  \newunit\newblock
+  %\usebibmacro{in:}%
   \usebibmacro{journal+issuetitle}%
-%  \newunit
- % \usebibmacro{byeditor+others}%
+  \newunit
+  \usebibmacro{byeditor+others}%
   \newunit
   \usebibmacro{note+pages}%
   \newunit\newblock
   \iftoggle{bbx:isbn}
     {\printfield{issn}}
     {}%
- % \newunit\newblock
- % \usebibmacro{doi+eprint+url}%
- % \newunit\newblock
- % \usebibmacro{addendum+pubstate}%
+  \newunit\newblock
+  %\usebibmacro{doi+eprint+url}%
+  %\newunit\newblock
+  \usebibmacro{addendum+pubstate}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
-  \usebibmacro{finentry}
-  }}
+  \usebibmacro{finentry}}}
+% no hyperref
+{\usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author/translator+others}%
+  \setunit{\labelnamepunct}\newblock
+  \usebibmacro{title}%
+  \newunit
+  \printlist{language}%
+  \newunit\newblock
+  \usebibmacro{byauthor}%
+  \newunit\newblock
+  \usebibmacro{bytranslator+others}%
+  \newunit\newblock
+  \printfield{version}%
+  \newunit\newblock
+  %\usebibmacro{in:}%
+  \usebibmacro{journal+issuetitle}%
+  \newunit
+  \usebibmacro{byeditor+others}%
+  \newunit
+  \usebibmacro{note+pages}%
+  \newunit\newblock
+  \iftoggle{bbx:isbn}
+    {\printfield{issn}}
+    {}%
+  \newunit\newblock
+  \usebibmacro{doi+eprint+url}%
+  \newunit\newblock
+  \usebibmacro{addendum+pubstate}%
+  \setunit{\bibpagerefpunct}\newblock
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}}}
 
 \endinput
