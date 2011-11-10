@@ -8,18 +8,8 @@
 \captionsetup{width=\marginparwidth, font=footnotesize, skip = 0pt}
 \renewcommand{\thefootnote}{\fnsymbol{footnote}}
 
-% provide one reference and use biblatex
-\usepackage{filecontents}
-\begin{filecontents}{\jobname.bib}
-@book{nobel:bcs,
-  title     = {Nobel Lectures, Physics 1971-1980},
-  year      = {1992},
-  publisher = {World Scientific Publishing Co., Singapore},
-  editor={Stig Lundqvist}
-}
-\end{filecontents}
 \usepackage[backend = biber, citestyle = numeric]{biblatex}
-\addbibresource{\jobname.bib}
+\addbibresource{sn.bib}
 
 \begin{document}
 %
@@ -44,7 +34,7 @@ The default value is \verb+\footnotesize+, \verb+\sidestyle+ is the prefix for a
 \sidenote{Back to default behavior.}
 
 \section{\texttt{\textbackslash sidecite[prefix][postfix]\{citekey\}}}
-The macro \verb+\sidecite+ puts a citation in the margin. It uses the biblatex package, so you have to go with biblatex instead of bibtex to use it. Therefore, the macro has the same set of parameters. We add a citation of the \textsc{bcs}-theory here as an example.\sidecite[see:][Nobel prize 1972]{nobel:bcs} The behavior is the same as in \verb+\sidenote+ and auto floating. For post- and prenote please refer to the biblatex manual, the parameters are directly passed to biblatex.
+The macro \verb+\sidecite+ puts a citation in the margin. The macro has the same set of parameters as biblatex. We add a citation here as an example.\sidecite[see:][Nobel prize 1972]{nobel:bcs} The behavior is the same as in \verb+\sidenote+ and auto floating. For post- and prenote please refer to the biblatex manual, the parameters are directly passed to biblatex.
 
 \section{\texttt{\textbackslash sidecaption\{captiontext\}}}
 The \verb+\sidecaption+ macro can be used if the caption of a figure or table is supposed to be in the margin. Please note, that the formatting is done by the caption package. 

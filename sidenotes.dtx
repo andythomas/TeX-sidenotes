@@ -19,11 +19,16 @@
 %</driver>
 %<package>\ProvidesPackage{sidenotes}[%
 %<*driver|package>
-  2011/11/09 v0.70 rich text in the margin for LaTeX]
+  2011/11/10 v0.80 rich text in the margin for LaTeX]
 %</driver|package>
 %<package>\RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
 %<package>\RequirePackage{caption} % handles the figure caption (in the margin)
 %<package>\RequirePackage{xifthen} % provide an if command 
+%<package>\newboolean{@sidenotes@bibtex}%
+%<package>\setboolean{@sidenotes@bibtex}{false}%
+%<package>\DeclareOption{bibtex}{\setboolean{@sidenotes@bibtex}{true}}%
+%<package>\ProcessOptions
+%<package>\ifthenelse{\boolean{@sidenotes@bibtex}}{\RequirePackage{bibentry}}{}
 %<*driver>
 \documentclass{ltxdoc}
 \CodelineIndex
@@ -66,7 +71,7 @@
 % \changes{v0.51}{2011/10/05}{Extent the documentation of the macros.}
 % \begin{abstract}
 % This package tries to allow typesetting of rich content in the margin. 
-% This includes text, but also figures, captions, tables and citations (only with biblatex).
+% This includes text, but also figures, captions, tables and citations.
 % This is common in science textbooks such as Feyman's \textit{Lectures on Physics}.
 % \end{abstract}
 %
@@ -105,10 +110,10 @@
 % It it initialized with \verb+\footnotesize+. It is used as a prefix of the sidenotetext and sidetext.
 %
 % \DescribeMacro{\sidecite}
-% The macro \verb+\sidecite+ puts a citation in the margin. It uses the biblatex package
-% so you have to go with biblatex instead of bibtex to use \verb+\sidecite+. Therefore, the
-% macro has the same set of parameters plus the additional offset: 
-% \verb+\sidecite[prenote][postnote]{key}+.
+% The macro \verb+\sidecite+ puts a citation in the margin. It uses the biblatex package or bibtex,
+% load sidecite with the option [bibtex] for the latter.
+% The macro has the same set of parameters.
+% \verb+\sidecite[prenote][postnote]{key}+ for biblatex and \verb+\sidecite{key}+ for bibtex.
 % The behavior is the same as in \verb+\sidenote+ and auto floating. 
 % For post- and prenote please refer to the biblatex manual, the parameters are directly passed
 % to biblatex.
@@ -176,8 +181,9 @@
 % \begin{macro}{\sidenote}
 % Introduce the sidenote macro with an additional optional argument postfix to set the offset.
 % \changes{v0.53}{2011/10/07}{bugfix, now optional number and offset possible}
+% \changes{v0.80}{2011/11/10}{unstar the newcommand.}
 %    \begin{macrocode}
-\newcommand*{\sidenote}[2][]{%
+\newcommand{\sidenote}[2][]{%
 \ifthenelse{\isempty{#1}}%
 {\sidenotemark%
 \sidenotetext{#2}}%
@@ -206,8 +212,9 @@
 %
 % \begin{macro}{\sidenotetext}
 % Sidenotetext is supposed to work similarly to footnotetext. The additional, optional argument postfix sets the offset.
+% \changes{v0.80}{2011/11/10}{unstar the newcommand.}
 %    \begin{macrocode}
-\newcommand*{\sidenotetext}[2][]{%
+\newcommand{\sidenotetext}[2][]{%
 \ifthenelse{\isempty{#1}}{% sitenotemark given?
 \addtocounter{sidenote}{-1}%
 \marginpar{\textsuperscript{\thesidenote}{} \sidestyle#2}%
@@ -221,10 +228,15 @@
 %
 % \begin{macro}{\sidecite}
 % \changes{v0.5}{2011/10/05}{define the sidecite macro without the twoopt package}
+% \changes{v0.80}{2011/11/10}{allow the use of bibtex}
 % Sidecite puts the citation in the margin. The additional, optional argument postfix sets the offset. 
 % Please note, that it only works with biblatex and uses its syntax.
 %    \begin{macrocode}
-\newcommand{\sidecite}[1][]{%
+\ifthenelse{\boolean{@sidenotes@bibtex}}
+{\newcommand{\sidecite}[1]{%
+\sidenote{\bibentry{#1}}%
+}}
+{\newcommand{\sidecite}[1][]{%
   \@ifnextchar[{%
     \expandafter\@sidenotes@sidecitedo\@sidenotes@getnextopt{#1}%
   }{%
@@ -235,7 +247,7 @@
 \long\def\@sidenotes@getnextopt#1[#2]{{#1}{#2}}
 \newcommand{\@sidenotes@sidecitedo}[3]{%
 \sidenote{\fullcite[#1][#2]{#3}}%
-}%
+}}%
 %    \end{macrocode}
 % \end{macro}
 %
