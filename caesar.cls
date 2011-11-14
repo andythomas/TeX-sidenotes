@@ -548,20 +548,24 @@
 }%
 {% graphics in text, #1 filename=label, #2 caption
 \newcommand{\largefigure}[2]{%
-\begin{figure*}[htbp]%
- \includegraphics[width=400pt]{#1}
- \begin{fullwidth}
- \captionsetup{width=400pt, justification=justified}
- \caption{#2\label{#1}}%
- \end{fullwidth}
-\end{figure*}%
+\begin{figure}[htbp]%
+ \checkoddpage%
+    	\ifoddpage%
+		%
+    	\else%
+		\hspace{-120pt}%
+    	\fi%
+ \includegraphics[width=400pt]{#1}%
+ \captionsetup{margin={0pt,-120pt}, justification=justified}%
+ \caption{#2}%
+ \label{#1}%
+\end{figure}%
 }
 
 \newcommand{\normalfigure}[2]{%
 \begin{figure}[htbp]%
-	\includegraphics[width=\textwidth]{#1}
-	\vspace{-0.7\baselineskip}
-	\captionsetup{width=\textwidth, justification=justified}
+	\includegraphics[width=\textwidth]{#1}%
+	\captionsetup{width=\textwidth, justification=justified}%
 	\caption{#2\label{#1}}%
 \end{figure}%
 }
