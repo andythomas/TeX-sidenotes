@@ -19,7 +19,7 @@
 %</driver>
 %<package>\ProvidesPackage{sidenotes}[%
 %<*driver|package>
-  2011/11/10 v0.80 rich text in the margin for LaTeX]
+  2011/11/29 v0.81 rich text in the margin for LaTeX]
 %</driver|package>
 %<package>\RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
 %<package>\RequirePackage{caption} % handles the figure caption (in the margin)
@@ -182,6 +182,7 @@
 % Introduce the sidenote macro with an additional optional argument postfix to set the offset.
 % \changes{v0.53}{2011/10/07}{bugfix, now optional number and offset possible}
 % \changes{v0.80}{2011/11/10}{unstar the newcommand.}
+% \changes{v0.81}{2011/11/29}{added a comma between subsequent sidenotes} 
 %    \begin{macrocode}
 \newcommand{\sidenote}[2][]{%
 \ifthenelse{\isempty{#1}}%
@@ -189,6 +190,7 @@
 \sidenotetext{#2}}%
 {\sidenotemark[#1]%
 \sidenotetext[#1]{#2}}%
+\@ifnextchar\sidenote{\kern-0.07em\textsuperscript{,}}{\@ifnextchar\sidecite{\kern-0.07em\textsuperscript{,}}{}}%
 }
 %    \end{macrocode}
 % \end{macro}
@@ -205,6 +207,7 @@
 \setcounter{sidenote}{#1}%
 \textsuperscript{\thesidenote}% print out the argument otherwise
 \setcounter{sidenote}{\value{@sidenotes@buffer}}}%
+\@ifnextchar\sidenote{\textsuperscript{,}}{}%
 \ignorespaces%
 }%
 %    \end{macrocode}
