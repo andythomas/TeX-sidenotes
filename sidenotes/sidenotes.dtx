@@ -207,7 +207,7 @@
 \setcounter{sidenote}{#1}%
 \textsuperscript{\thesidenote}% print out the argument otherwise
 \setcounter{sidenote}{\value{@sidenotes@buffer}}}%
-\@ifnextchar\sidenote{\textsuperscript{,}}{}%
+\@ifnextchar\sidenote{\textsuperscript{,}}{ }%
 \ignorespaces%
 }%
 %    \end{macrocode}
