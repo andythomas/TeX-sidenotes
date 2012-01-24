@@ -66,24 +66,25 @@
 \renewcommand{\normalsize}{\fontsize{10pt}{13pt}\selectfont}%
 % fontsize is 10pt, 13pt for book and 9pt, 11pt for kindle
 \renewcommand{\footnotesize}{\fontsize{8pt}{10pt}\selectfont}%
-% chapter has numbers
-\setcounter{secnumdepth}{0}
+
+\setcounter{tocdepth}{0}
+\setcounter{secnumdepth}{-1}
 %
 
 % chapter format
-   \titleformat{\chapter}%
-   [hang]% shape
-   {\relax}% format applied to label+text
+\titleformat{\chapter}%
+   [display]% shape
+   {\relax\itshape\huge}% format applied to label+text
    {}% label
    {0pt}% horizontal separation between label and title body
-   {\rmfamily\MakeUppercase}% before the title body
-   [\titlerule\marginpar{\centering\fontsize{56}{0}\selectfont{\thechapter}\normalfont\vspace{10pt}}]% after the title body
+   {\huge\rmfamily\itshape}% before the title body
+   []% after the title body
 % section format
 \titleformat{\section}%
   [hang]% shape
-  {\normalfont\scshape}% format applied to label+text
+  {\normalfont\Large\itshape}% format applied to label+text
   {}% label
-  {}% horizontal separation between label and title body
+  {1em}% horizontal separation between label and title body
   {}% before the title body
   []% after the title body
 
@@ -105,7 +106,7 @@
 % The Table of Contents
 \titlecontents{chapter}%
    [0em] % distance from left margin
-   {\vspace{1.5\baselineskip}\begin{fullwidth}\rmfamily} % above (global formatting of entry)
+   {\vspace{1.5\baselineskip}\begin{fullwidth}\LARGE\rmfamily\itshape} % above (global formatting of entry)
    {\hspace*{0em}\contentslabel{2em}} % before w/label (label = ``2'')
    {\hspace*{0em}} % before w/o label
    {\rmfamily\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
@@ -208,3 +209,53 @@
 
 \newcommand{\annotation}[1]{\sidenote{#1}}%
 %
+
+%% compatibility options
+
+\newcommand\newthought[1]{%
+   \addvspace{1.0\baselineskip plus 0.5ex minus 0.2ex}%
+   \noindent\textsc{#1}%
+}%
+
+\RequirePackage{color}
+\definecolor{darkgray}{rgb}{0.25,0.25,0.25}
+
+\RequirePackage{textcase} % provides \MakeTextUppercase and \MakeTextLowercase
+\newcommand{\allcaps}{\MakeTextUppercase}
+\newcommand{\smallcaps}{\MakeTextLowercase}
+
+% fullwidth environment
+\newlength{\overhang}
+\setlength{\overhang}{\marginparwidth}
+\addtolength{\overhang}{\marginparsep}
+
+\newenvironment{fullwidth}
+  {\ifthenelse{\boolean{@twoside}}%
+     {\begin{adjustwidth*}{}{-\overhang}}%
+     {\begin{adjustwidth}{}{-\overhang}}%
+  }%
+  {\ifthenelse{\boolean{@twoside}}%
+    {\end{adjustwidth*}}%
+    {\end{adjustwidth}}%
+  }
+
+\newcommand{\maketitlepage}[0]{%
+  \cleardoublepage%
+  \begingroup%
+  {%
+  \sffamily%
+  \begin{fullwidth}%
+  \LARGE\lsstyle\allcaps{\@author}\par
+  \vspace{6em}%
+  \noindent\fontsize{38}{50}\selectfont\textcolor{darkgray}{\textls[125]{\allcaps{\@title}}}\par
+  \vfill%
+  \Large\selectfont\par\noindent\lsstyle\allcaps{\publisher}\par
+  \end{fullwidth}%
+  }%
+  \endgroup%
+  \thispagestyle{empty}%
+  \clearpage%
+}
+
+\renewcommand{\frontmatter}{\pagestyle{empty}}
+\renewcommand{\mainmatter}{\thispagestyle{empty}\pagestyle{fancy}}
