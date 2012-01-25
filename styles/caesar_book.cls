@@ -54,7 +54,7 @@
 \RequirePackage{fontspec}
 
 % Use Neo Euler as math font
-\RequirePackage[math-style=upright, vargreek-shape=TeX]{unicode-math}% 
+\RequirePackage[vargreek-shape=TeX]{unicode-math}% 
 \setmathfont{Asana Math}%
 % Use the Palatino-Clone Tex Gyre Pagella as main font
 \setmainfont[Ligatures=TeX, Numbers=OldStyle]{Tex Gyre Pagella}%
