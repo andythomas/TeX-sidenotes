@@ -87,7 +87,14 @@
   {1em}% horizontal separation between label and title body
   {}% before the title body
   []% after the title body
-
+% subsection format
+\titleformat{\subsection}%
+  [hang]% shape
+  {\normalfont\large\itshape}% format applied to label+text
+  {}% label
+  {1em}% horizontal separation between label and title body
+  {}% before the title body
+  []% after the title body
 % paragraph format
 \titleformat{\paragraph}%
   [runin]% shape
@@ -96,7 +103,7 @@
   {1em}% horizontal separation between label and title body
   {}% before the title body
   []% after the title body
-
+  
 %%
 % The Table of Contents
 \titlecontents{chapter}%
