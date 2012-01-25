@@ -98,11 +98,6 @@
   []% after the title body
 
 %%
-% spaces before and after the headings
-\titlespacing*{\chapter}{0pt}{\baselineskip}{\baselineskip}
-\titlespacing*{\section}{0pt}{\baselineskip}{\baselineskip}
-
-%%
 % The Table of Contents
 \titlecontents{chapter}%
    [0em] % distance from left margin
@@ -258,4 +253,4 @@
 }
 
 \renewcommand{\frontmatter}{\pagestyle{empty}}
-\renewcommand{\mainmatter}{\thispagestyle{empty}\pagestyle{fancy}}
+\renewcommand{\mainmatter}{\cleardoublepage\pagestyle{fancy}}
