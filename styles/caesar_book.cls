@@ -153,6 +153,9 @@
 %%
 % High level macro set for kindle and the rest of the options
 
+% text in the correct size in the margin without numbers
+\newcommand{\margintext}[1]{\marginpar{\sidestyle#1}}
+
 % graphics in text, #1 filename=label, #2 caption
 \newcommand{\largefigure}[2]{%
 \begin{figure}[htbp]%
