@@ -180,7 +180,6 @@
 \end{figure}%
 }
 
-%graphics in the margin, #1 filename=label, #2 caption
 \newcommand{\smallfigure}[2]{%
 \begin{sidefigure}%
 \includegraphics[width=\marginparwidth]{#1}%
@@ -203,6 +202,21 @@
 	\vspace{2pt}
 	\captionsetup{width=\textwidth, justification=justified}
 	\caption{#2\label{#1}}%
+\end{table}%
+}
+
+\newcommand{\largetable}[3]{%
+\begin{table}[htbp]%
+ \checkoddpage%
+    	\ifoddpage%
+		%
+    	\else%
+		\hspace{-120pt}%
+    	\fi%
+	#3
+	\vspace{2pt}
+ 	\captionsetup{margin={0pt,-120pt}, justification=justified}%
+	\caption{#2 \label{#1}}%
 \end{table}%
 }
 
