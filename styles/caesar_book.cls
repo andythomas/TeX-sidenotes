@@ -231,6 +231,10 @@
 \newcommand{\annotation}[1]{\sidenote{#1}}%
 %
 
+% italic description instead of bold)
+
+\renewcommand*\descriptionlabel[1]{\hspace\labelsep\normalfont\em #1}
+
 %% compatibility options
 
 \newcommand\newthought[1]{%
