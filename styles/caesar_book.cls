@@ -7,6 +7,8 @@
 % Load the amsmath and the mhchem package before loading microtype
 \RequirePackage{amsmath}
 \RequirePackage[version=3]{mhchem}
+% use lining numbers for chemical formulas
+\mhchemoptions{textfontcommand=\addfontfeature{Numbers=Lining}} 
 
 %%
 % We use the `ifthen' package to handle our package option switches
