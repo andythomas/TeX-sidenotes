@@ -166,8 +166,10 @@
 		\hspace{-120pt}%
     	\fi%
  \includegraphics[width=400pt]{#1}%
- \captionsetup{margin={0pt,-120pt}, justification=justified}%
- \caption{#2}%
+ \ifthenelse{\isempty{#2}}%
+{}%
+{\captionsetup{margin={0pt,-120pt}, justification=justified}%
+ \caption{#2}}%
  \label{#1}%
 \end{figure}%
 }
