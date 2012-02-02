@@ -157,35 +157,35 @@
 \newcommand{\margintext}[1]{\marginpar{\sidestyle#1}}
 
 % graphics in text, #1 filename=label, #2 caption
-\newcommand{\largefigure}[2]{%
-\begin{figure}[htbp]%
+\newcommand{\largefigure}[3][htpd]{%
+\begin{figure}[#1]%
  \checkoddpage%
     	\ifoddpage%
 		%
     	\else%
 		\hspace{-120pt}%
     	\fi%
- \includegraphics[width=400pt]{#1}%
- \ifthenelse{\isempty{#2}}%
+ \includegraphics[width=400pt]{#2}%
+ \ifthenelse{\isempty{#3}}%
 {}%
 {\captionsetup{margin={0pt,-120pt}, justification=justified}%
- \caption{#2}}%
- \label{#1}%
+ \caption{#3}}%
+ \label{#2}%
 \end{figure}%
 }
 
-\newcommand{\normalfigure}[2]{%
-\begin{figure}[htbp]%
-	\includegraphics[width=\textwidth]{#1}%
+\newcommand{\normalfigure}[3][htbp]{%
+\begin{figure}[#1]%
+	\includegraphics[width=\textwidth]{#2}%
 	\captionsetup{width=\textwidth, justification=justified}%
-	\caption{#2\label{#1}}%
+	\caption{#3\label{#2}}%
 \end{figure}%
 }
 
-\newcommand{\smallfigure}[2]{%
-\begin{sidefigure}%
-\includegraphics[width=\marginparwidth]{#1}%
-\caption{#2\label{#1}}%
+\newcommand{\smallfigure}[3][htbp]{%
+\begin{sidefigure}[#1]%
+\includegraphics[width=\marginparwidth]{#2}%
+\caption{#3\label{#2}}%
 \end{sidefigure}%
 }
 
