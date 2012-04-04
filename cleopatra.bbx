@@ -1,9 +1,21 @@
-%$Id: cleopatra.bbx,v 0.3 2011/09/30 13:14:46 iimort stable $
-
-\ProvidesFile{cleopatra.bbx}
-[\abx@bbxid $Id: cleopatra.bbx,v 0.3 2011/09/30 13:14:46 iimort stable $]
-
-\RequireBibliographyStyle{numeric-comp}
+\ProvidesFile{cleopatra.bbx}[2012/04/02 v0.4 (imi, at)]
+\RequireBibliographyStyle{philosophy-classic}
+% this style needs hyperref
+\RequirePackage{hyperref}
+%\hypersetup{pdfencoding=auto} % fixes the broken non ASCII chars in the toc pulldown in pdf documents
+%
+\renewcommand*{\multicitedelim}{\addsemicolon\space}
+\DeclareFieldFormat{citetitle}{\mkbibemph{#1\isdot}}
+\DeclareFieldFormat[article]{citetitle}{\mkbibemph{#1\isdot}}
+\DeclareFieldFormat[books]{citetitle}{\mkbibemph{#1\isdot}}
+\DeclareFieldFormat[thesis]{citetitle}{\mkbibemph{#1\isdot}}
+\DeclareFieldFormat{postnote}{#1}
+\DeclareFieldFormat{multipostnote}{#1}
+\DeclareFieldFormat{citevolume}{\mkbibbold{#1\isdot}}
+\DeclareFieldFormat[article]{citevolume}{\mkbibbold{#1\isdot}}
+\DeclareFieldFormat{postnote}{#1}
+\DeclareFieldFormat{multipostnote}{#1}
+\DeclareFieldFormat{citetitle}{false}
 
 \DeclareFieldFormat{title}{\mkbibemph{#1\isdot}}
 \DeclareFieldFormat[article]{title}{\mkbibemph{#1\isdot}}
@@ -12,8 +24,6 @@
 \DeclareFieldFormat[thesis]{title}{\mkbibemph{#1\isdot}}\DeclareFieldFormat{booktitle}{#1\isdot}
 \DeclareFieldFormat{journaltitle}{#1\isdot}
 \DeclareFieldFormat{thesistitle}{#1\isdot}
-%\DeclareFieldFormat{postnote}{#1}
-%\DeclareFieldFormat{multipostnote}{#1}
 \DeclareFieldFormat{volume}{\mkbibbold{#1\isdot}}
 \DeclareFieldFormat[article]{volume}{\mkbibbold{#1\isdot}}
 
@@ -52,10 +62,8 @@
 \printfield{year}%
 \printfield{extrayear}}}}
 
-
 \DeclareBibliographyDriver{article}{%
-\ifhyperref
-{\href{\thefield{url}}{%with hyperref
+\href{\thefield{url}}{%with hyperref
   \usebibmacro{bibindex}%
   \usebibmacro{begentry}%
   \usebibmacro{author/translator+others}%
@@ -86,38 +94,8 @@
   \usebibmacro{addendum+pubstate}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
-  \usebibmacro{finentry}}}
-% no hyperref
-{\usebibmacro{bibindex}%
-  \usebibmacro{begentry}%
-  \usebibmacro{author/translator+others}%
-  \setunit{\labelnamepunct}\newblock
-  \usebibmacro{title}%
-  \newunit
-  \printlist{language}%
-  \newunit\newblock
-  \usebibmacro{byauthor}%
-  \newunit\newblock
-  \usebibmacro{bytranslator+others}%
-  \newunit\newblock
-  \printfield{version}%
-  \newunit\newblock
-  %\usebibmacro{in:}%
-  \usebibmacro{journal+issuetitle}%
-  \newunit
-  \usebibmacro{byeditor+others}%
-  \newunit
-  \usebibmacro{note+pages}%
-  \newunit\newblock
-  \iftoggle{bbx:isbn}
-    {\printfield{issn}}
-    {}%
-  \newunit\newblock
-  \usebibmacro{doi+eprint+url}%
-  \newunit\newblock
-  \usebibmacro{addendum+pubstate}%
-  \setunit{\bibpagerefpunct}\newblock
-  \usebibmacro{pageref}%
-  \usebibmacro{finentry}}}
+  \usebibmacro{finentry}}
+}
+
 
 \endinput

@@ -1,7 +1,7 @@
 %%
 \NeedsTeXFormat{LaTeX2e}
 
-\ProvidesFile{caesar_book.cls}[2011/11/16 v0.3 Caesar book]
+\ProvidesFile{caesar_book.cls}[2012/04/02 v0.4 Caesar book]
 
 %%
 % Load the amsmath and the mhchem package before loading microtype
@@ -39,6 +39,8 @@
 \RequirePackage{ragged2e}
 \RequirePackage{caption}
 \RequirePackage{sidenotes}
+\usepackage[maxfloats=45]{morefloats}
+\usepackage{marginfix}
 
 % -- microtypography
 \RequirePackage[babel]{microtype}
@@ -156,6 +158,7 @@
 % text in the correct size in the margin without numbers
 \newcommand{\margintext}[1]{\marginpar{\sidestyle#1}}
 
+\RequirePackage{graphicx} 
 % graphics in text, #1 filename=label, #2 caption
 \newcommand{\largefigure}[3][htpd]{%
 \begin{figure}[#1]%
