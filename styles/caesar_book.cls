@@ -251,8 +251,6 @@
 \definecolor{darkgray}{rgb}{0.25,0.25,0.25}
 
 \RequirePackage{textcase} % provides \MakeTextUppercase and \MakeTextLowercase
-\newcommand{\allcaps}{\MakeTextUppercase}
-\newcommand{\smallcaps}{\MakeTextLowercase}
 
 % fullwidth environment
 \newlength{\overhang}
@@ -275,11 +273,11 @@
   {%
   \sffamily%
   \begin{fullwidth}%
-  \LARGE\lsstyle\allcaps{\@author}\par
+  \LARGE\lsstyle\MakeTextUppercase{\@author}\par
   \vspace{6em}%
-  \noindent\fontsize{38}{50}\selectfont\textcolor{darkgray}{\textls[125]{\allcaps{\@title}}}\par
+  \noindent\fontsize{38}{50}\selectfont\textcolor{darkgray}{\textls[125]{\MakeTextUppercase{\@title}}}\par
   \vfill%
-  \Large\selectfont\par\noindent\lsstyle\allcaps{\publisher}\par
+  \Large\selectfont\par\noindent\lsstyle\MakeTextUppercase{\publisher}\par
   \end{fullwidth}%
   }%
   \endgroup%
