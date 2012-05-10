@@ -51,24 +51,23 @@
 
 %%
 % Set page layout geometry -- default is epubli science-book format
-\RequirePackage[paperwidth=170mm, paperheight=240mm, left=40pt, top=40pt, textwidth=280pt, marginparsep=20pt, marginparwidth=100pt, textheight=560pt, footskip=40pt]{geometry}%
+\RequirePackage[paperwidth=170mm, paperheight=240mm, left=42pt, top=40pt, textwidth=280pt, marginparsep=20pt, marginparwidth=100pt, textheight=560pt, footskip=40pt]{geometry}%
 
 %%
 % set the fonts
 \RequirePackage{fontspec}
 
-% Use Neo Euler as math font
+% Use Asana math as math font, it matches Palatino
 \RequirePackage[vargreek-shape=TeX]{unicode-math}% 
 \setmathfont{Asana Math}%
 % Use the Palatino-Clone Tex Gyre Pagella as main font
 \setmainfont[Ligatures=TeX, Numbers=OldStyle]{Tex Gyre Pagella}%
 % Use Tex Gyre Cursor as Monospace Font
 \setmonofont{Tex Gyre Cursor}%
-% Use Tex Gyre Heros Cn as Sans Serif Font
+% Use Tex Gyre Heros as Sans Serif Font
 \setsansfont{Tex Gyre Heros}%
-% fontsize is 10pt, 13pt for book and 12pt, 15pt for handout
-\renewcommand{\normalsize}{\fontsize{10pt}{13pt}\selectfont}%
 % fontsize is 10pt, 13pt for book and 9pt, 11pt for kindle
+\renewcommand{\normalsize}{\fontsize{10pt}{13pt}\selectfont}%
 \renewcommand{\footnotesize}{\fontsize{8pt}{10pt}\selectfont}%
 
 \setcounter{tocdepth}{0}
