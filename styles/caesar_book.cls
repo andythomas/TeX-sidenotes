@@ -1,23 +1,30 @@
 %%
 \NeedsTeXFormat{LaTeX2e}
+%
+\ProvidesFile{caesar_book.cls}[2012/05/16 v0.5 Caesar book]
 
-\ProvidesFile{caesar_book.cls}[2012/04/02 v0.4 Caesar book]
-
-%%
 % Load the amsmath and the mhchem package before loading microtype
+%
+% better math handling
 \RequirePackage{amsmath}
+% chemical formulas
 \RequirePackage[version=3]{mhchem}
 % use lining numbers for chemical formulas
 \mhchemoptions{textfontcommand=\addfontfeature{Numbers=Lining}} 
 
-%%
 % We use the `ifthen' package to handle our package option switches
 \RequirePackage{ifthen}
 
-%% this is derived from the book class
+% this is derived from the book class
 \LoadClassWithOptions{book}
 
 % provide the ragged outer option
+%
+% ragged2e helps
+\RequirePackage{ragged2e}
+% Changepage package for symmetric twoside handling
+\RequirePackage[strict]{changepage}
+%
 \newcommand{\raggedouter}{%
 	\checkoddpage%
     	\ifoddpage%
@@ -27,36 +34,45 @@
     	\fi%
 }
 
-%%
-% Changepage package for symmetric twoside handling
-\RequirePackage[strict]{changepage}
-
-%%
-% nice headings and TOC
-\RequirePackage{titlesec,titletoc}
-
 % we need a couple of packages for the formatting of the marginals
-\RequirePackage{ragged2e}
+%
+% allow to customize captions and initialize with decent values
 \RequirePackage{caption}
-\RequirePackage{sidenotes}
-\usepackage[maxfloats=45]{morefloats}
-\usepackage{marginfix}
-
-% -- microtypography
-\RequirePackage[babel]{microtype}
-
-% set up the captions
 \DeclareCaptionJustification{raggedouter}{\raggedouter}
 \captionsetup{font=footnotesize,justification=raggedouter, skip=4pt}
+% put annotations, tables and figures in the margin and also initialize with decent values
+\RequirePackage{sidenotes}
+\renewcommand{\sidestyle}{\footnotesize\raggedouter}
+% a lot of marginals need more float 'memory'
+\usepackage[maxfloats=45]{morefloats}
+% automatically adjust the side-floats nicely 
+\usepackage{marginfix}
 
-%%
+% microtypography
+\RequirePackage[babel]{microtype}
+
 % Set page layout geometry -- default is epubli science-book format
-\RequirePackage[paperwidth=170mm, paperheight=240mm, left=42pt, top=40pt, textwidth=280pt, marginparsep=20pt, marginparwidth=100pt, textheight=560pt, footskip=40pt]{geometry}%
+\RequirePackage[paperwidth=170mm, paperheight=240mm, left=42pt, top=40pt, textwidth=280pt, marginparsep=20pt, marginparwidth=100pt, textheight=560pt, footskip=40pt]{geometry}
+% fullwidth environment, text across textwidth+marginparsep+marginparwidth
+\newlength{\overhang}
+\setlength{\overhang}{\marginparwidth}
+\addtolength{\overhang}{\marginparsep}
 
-%%
+\newenvironment{fullwidth}
+  {\ifthenelse{\boolean{@twoside}}%
+     {\begin{adjustwidth*}{}{-\overhang}}%
+     {\begin{adjustwidth}{}{-\overhang}}%
+  }%
+  {\ifthenelse{\boolean{@twoside}}%
+    {\end{adjustwidth*}}%
+    {\end{adjustwidth}}%
+  }
+
 % set the fonts
+%
+% we need fontspec with LuaLaTeX
 \RequirePackage{fontspec}
-
+%
 % Use Asana math as math font, it matches Palatino
 \RequirePackage[vargreek-shape=TeX]{unicode-math}% 
 \setmathfont{Asana Math}%
@@ -70,10 +86,12 @@
 \renewcommand{\normalsize}{\fontsize{10pt}{13pt}\selectfont}%
 \renewcommand{\footnotesize}{\fontsize{8pt}{10pt}\selectfont}%
 
-\setcounter{tocdepth}{0}
-\setcounter{secnumdepth}{-1}
+% nice headings and TOC
 %
-
+% load the helper package
+\RequirePackage{titlesec,titletoc}
+% no numbering at all
+\setcounter{secnumdepth}{-1}
 % chapter format
 \titleformat{\chapter}%
    [display]% shape
@@ -106,9 +124,10 @@
   {1em}% horizontal separation between label and title body
   {}% before the title body
   []% after the title body
-  
-%%
-% The Table of Contents
+% italic description instead of bold)
+\renewcommand*\descriptionlabel[1]{\hspace\labelsep\normalfont\em #1}
+% The Table of Contents, only chapters 
+\setcounter{tocdepth}{0}
 \titlecontents{chapter}%
    [0em] % distance from left margin
    {\vspace{1.5\baselineskip}\begin{fullwidth}\LARGE\rmfamily\itshape} % above (global formatting of entry)
@@ -117,155 +136,35 @@
    {\rmfamily\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
    [\end{fullwidth}] % after
 
-%%
-% display only the highest sections in the TOC
-\setcounter{tocdepth}{0}
-
-%%
-% redefine the equation, table and figure counter when giving an explicit chapter number
-% if other counters are encountered at farpoint, the can be changed the same way
-\renewcommand{\thefigure}{\arabic{figure}}
-\renewcommand{\thetable}{\arabic{table}}
-\renewcommand{\theequation}{\arabic{equation}}
-
-
-%%
-% From here on: Header and Footer
-
+%set up header, footer and page numbering
+%
+% helper package
 \RequirePackage{fancyhdr}
-
-% The running heads/feet don't have rules
+% The running heads and feet do not have rules
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
-
-\pagestyle{fancy}
-
+% set up the page numbering 
 \fancyhf{}%
 {\fancyfoot[LE,RO]{\thepage}}
-
 \fancypagestyle{plain}{%
 	\fancyhf{}
 }
+% the frontmatter is empty, mainmatter with page numbering
+\renewcommand{\frontmatter}{\pagestyle{empty}}
+\renewcommand{\mainmatter}{\cleardoublepage\pagestyle{fancy}}
 
-%%
-% custom environments
-\renewcommand{\sidestyle}{\footnotesize\raggedouter}
+% ------------------------------------------------------------------------------------
+% the custom high-level macros start here
+% -------------------------------------------------------------------------------------
 
-%%
-% High level macro set for kindle and the rest of the options
-
-% text in the correct size in the margin without numbers
-\newcommand{\margintext}[1]{\marginpar{\sidestyle#1}}
-
-\RequirePackage{graphicx} 
-% graphics in text, #1 filename=label, #2 caption
-\newcommand{\largefigure}[3][htpd]{%
-\begin{figure}[#1]%
- \checkoddpage%
-    	\ifoddpage%
-		%
-    	\else%
-		\hspace{-120pt}%
-    	\fi%
- \includegraphics[width=400pt]{#2}%
- \ifthenelse{\isempty{#3}}%
-{}%
-{\captionsetup{margin={0pt,-120pt}, justification=justified}%
- \caption{#3}}%
- \label{#2}%
-\end{figure}%
-}
-
-\newcommand{\normalfigure}[3][htbp]{%
-\begin{figure}[#1]%
-	\includegraphics[width=\textwidth]{#2}%
-	\captionsetup{width=\textwidth, justification=justified}%
-	\caption{#3\label{#2}}%
-\end{figure}%
-}
-
-\newcommand{\smallfigure}[3][htbp]{%
-\begin{sidefigure}[#1]%
-\includegraphics[width=\marginparwidth]{#2}%
-\caption{#3\label{#2}}%
-\end{sidefigure}%
-}
-
-% table in the margin, #1 label, #2 caption, #3 code
-\newcommand{\smalltable}[3]{%
-\begin{sidetable}%
-	#3
-	 \vspace{2pt}
-	\caption{#2\label{#1}}%
-\end{sidetable}%
-}
-
-\newcommand{\normaltable}[3]{%
-\begin{table}[htbp]%
-	#3
-	\vspace{2pt}
-	\captionsetup{width=\textwidth, justification=justified}
-	\caption{#2\label{#1}}%
-\end{table}%
-}
-
-\newcommand{\largetable}[3]{%
-\begin{table}[htbp]%
- \checkoddpage%
-    	\ifoddpage%
-		%
-    	\else%
-		\hspace{-120pt}%
-    	\fi%
-	#3
-	\vspace{2pt}
- 	\captionsetup{margin={0pt,-120pt}, justification=justified}%
-	\caption{#2 \label{#1}}%
-\end{table}%
-}
-
-% quoted text
-\newcommand{\quotetext}{\textit}
-
-\newcommand{\tinyfigure}[1]{\includegraphics{#1}}
-
-\newcommand{\reference}[3]{%
-\sidecite[#1][#2]{#3}}%
-
-\newcommand{\annotation}[1]{\sidenote{#1}}%
+% the title page is generated here
 %
-
-% italic description instead of bold)
-
-\renewcommand*\descriptionlabel[1]{\hspace\labelsep\normalfont\em #1}
-
-%% compatibility options
-
-\newcommand\newthought[1]{%
-   \addvspace{1.0\baselineskip plus 0.5ex minus 0.2ex}%
-   \noindent\textsc{#1}%
-}%
-
+% provides \MakeTextUppercase and \MakeTextLowercase
+\RequirePackage{textcase} 
+% the title is too black, define gray
 \RequirePackage{color}
 \definecolor{darkgray}{rgb}{0.25,0.25,0.25}
-
-\RequirePackage{textcase} % provides \MakeTextUppercase and \MakeTextLowercase
-
-% fullwidth environment
-\newlength{\overhang}
-\setlength{\overhang}{\marginparwidth}
-\addtolength{\overhang}{\marginparsep}
-
-\newenvironment{fullwidth}
-  {\ifthenelse{\boolean{@twoside}}%
-     {\begin{adjustwidth*}{}{-\overhang}}%
-     {\begin{adjustwidth}{}{-\overhang}}%
-  }%
-  {\ifthenelse{\boolean{@twoside}}%
-    {\end{adjustwidth*}}%
-    {\end{adjustwidth}}%
-  }
-
+% generate the page with \maketitlepage
 \newcommand{\maketitlepage}[0]{%
   \cleardoublepage%
   \begingroup%
@@ -284,5 +183,89 @@
   \clearpage%
 }
 
-\renewcommand{\frontmatter}{\pagestyle{empty}}
-\renewcommand{\mainmatter}{\cleardoublepage\pagestyle{fancy}}
+% the figure sizes
+%
+% helper package
+\RequirePackage{graphicx} 
+% largefigure across the page, #1 optional placement, #2 filename=label, #3 caption
+\newcommand{\largefigure}[3][htpd]{%
+\begin{figure}[#1]%
+ \checkoddpage%
+    	\ifoddpage%
+		%
+    	\else%
+		\hspace{-120pt}%
+    	\fi%
+ \includegraphics[width=400pt]{#2}%
+ \ifthenelse{\isempty{#3}}%
+{}%
+% if the figure is on the verso page, shift left edge to the left
+{\captionsetup{margin={0pt,-120pt}, justification=justified}%
+ \caption{#3}}%
+ \label{#2}%
+\end{figure}%
+}
+%
+% normalfigure in the text frame, #1 optional placement, #2 filename=label, #3 caption
+\newcommand{\normalfigure}[3][htbp]{%
+\begin{figure}[#1]%
+	\includegraphics[width=\textwidth]{#2}%
+	\captionsetup{width=\textwidth, justification=justified}%
+	\caption{#3\label{#2}}%
+\end{figure}%
+}
+%
+% smallfigure in the margin, #1 filename=label, #2 caption
+\newcommand{\smallfigure}[2]{%
+\begin{sidefigure}%
+\includegraphics[width=\marginparwidth]{#1}%
+\caption{#2\label{#1}}%
+\end{sidefigure}%
+}
+
+% the table sizes
+%
+% largetable across the page, #1 optional placement, #2 label, #3 caption, #4 code
+\newcommand{\largetable}[4][htbp]{%
+\begin{table}[#1]%
+% if the table is on the verso page, shift left edge to the left
+ \checkoddpage%
+    	\ifoddpage%
+		%
+    	\else%
+		\hspace{-120pt}%
+    	\fi%
+	#4
+	\vspace{2pt}
+ 	\captionsetup{margin={0pt,-120pt}, justification=justified}%
+	\caption{#3 \label{#2}}%
+\end{table}%
+}
+%
+% normaltable (text width), #1 optional placement, #2 label, #3 caption, #4 code
+\newcommand{\normaltable}[4][htbp]{%
+\begin{table}[#1]%
+	#4
+	\vspace{2pt}%
+	\captionsetup{width=\textwidth, justification=justified}%
+	\caption{#3\label{#2}}%
+\end{table}%
+}
+%
+% smalltable in the margin, #1 label, #2 caption, #3 code
+\newcommand{\smalltable}[3]{%
+\begin{sidetable}%
+	#3
+	 \vspace{2pt}
+	\caption{#2\label{#1}}%
+\end{sidetable}%
+}
+
+%
+% sidenote without a mark in the text
+\newcommand{\comment}[1]{\marginpar{\sidestyle#1}}
+% sidenote with textmark 
+\newcommand{\annotation}[1]{\sidenote{#1}}%
+% citation with textmark
+\newcommand{\reference}[3]{\sidecite[#1][#2]{#3}}%
+
