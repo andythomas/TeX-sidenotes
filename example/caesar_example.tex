@@ -1,0 +1,88 @@
+\documentclass[]{caesar_book}
+
+% -- language: English --
+%
+\usepackage[english]{babel}
+
+% -- biblatex --
+\usepackage[backend=biber,style=philosophy-classic]{biblatex} % xxx
+% the .bib file with the references
+\addbibresource{caesar_library.bib} 
+
+% Information about the book
+% to be put on the title page
+\title{Caesar\\examples}
+\author{Andy Thomas}
+\newcommand{\publisher}{Bielefeld University}
+
+\begin{document}
+% no page numbering in front matter
+\frontmatter
+% generate the title page
+\maketitlepage
+% show the table of contents
+\tableofcontents
+% start to number the pages
+\mainmatter
+% The first chapter with annotation and citations
+\chapter{Examples}
+The first thing to do is to type some plain text in the document. No surprises here.
+The layout has ample margins to allow annotations on the page.\annotation{All information is on the same page, no turning of pages is necessary.} 
+For more information about this concept compare e.g.\ the books of Edward Tufte.\reference{}{}{Tufte1990,Tufte2006}
+% A section with a couple of figures
+\section{Figures}
+There are a couple of options to include figures in the document.The first one is a figure in the margin.%
+%
+\smallfigure{rectangle}{A small rectangle put in the margin.}%
+%
+Figure \ref{rectangle} shows that with a small rectangle. The next alternative is a figure in the text frame. %
+%
+\normalfigure{rectangle2}{A larger rectangle in the main area of the text, i.e.\ it does not span into the margin.}%
+%
+This larger rectangle is displayed in figure \ref{rectangle2}. In case that an even wider figure is needed, the third option spans over the text as well as the margin area.%
+%
+\largefigure{rectangle3}{An even larger rectangle. This is the widest figure option. Both, the text as well as the margin width are used for the diagram.}%
+%
+The three options make it easy to choose the appropriate size for a given input file. 
+% Next section with a variety of tables
+\section{Tables}
+The same options are also available for tables.%
+%
+\smalltable{table1}{A couple of numbers in a table in the margin.}{%
+ \begin{tabular}{lll}%
+     A&B&C\\%
+    0.50&0.47&0.48\\%
+  \end{tabular}%
+}%
+The first one is again a small one in the margin, this is shown in table \ref{table1}. The next option is a table across the text width. %
+%
+\normaltable[t]{table2}{A couple of numbers in a larger table. This table spans the usual text width.}{%
+ \begin{tabular}{lllllllll}%
+     A&B&C&D&E&F&G&H&I\\%
+    0.50&0.47&0.48&0.50&0.47&0.48&0.60&0.39&1.00\\%
+  \end{tabular}%
+}%
+Table \ref{table2} displays the larger table with a couple of numbers. The last choice is again a table over the full width of the page. This is demonstrated in table \ref{table3}.
+%
+\largetable{table3}{Even more numbers in a big table are shown here. This table spans across the full page, text width plus margin.}{%
+ \begin{tabular}{lllllllllllll}%
+     A&B&C&D&E&F&G&H&I&J&K&L&M\\%
+    0.50&0.47&0.48&0.50&0.47&0.48&0.60&0.39&1.00&0.50&0.47&0.48&0.60\\%
+  \end{tabular}%
+}%
+%
+\section{Text across the full page}
+Sometimes it can be useful to put some text across the whole page, which is similar to \texttt{largefigure} and \texttt{largetable}. This can be done as well, but it does not necessary work across page breaks.
+
+\begin{fullwidth}
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit, vestibulum ut, placerat ac, adipiscing vitae, felis. Curabitur dictum gravida mauris. Nam arcu libero, nonummy eget, consectetuer id, vulputate a, magna. Donec vehicula augue eu neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris ut leo. Cras viverra metus rhoncus sem. Nulla et lectus vestibulum urna fringilla ultrices. Phasellus eu tellus sit amet tortor gravida placerat. Integer sapien est, iaculis in, pretium quis, viverra ac, nunc. Praesent eget sem vel leo ultrices bibendum. Aenean faucibus. 
+\end{fullwidth}
+%
+It might also overlap with the marginals, the sidenotes are not pushed up or down.\comment{It is also possible to put a remark in the margin without a corresponding mark in the text.}
+%
+\section{More information}
+This is a short example file to show the features of the caesar class. More information is available in the caesar manual. The chapter \textit{Quick start} discusses and comments the source of this example file. 
+%
+ \printbibliography[heading=bibintoc]
+ %
+\end{document}
