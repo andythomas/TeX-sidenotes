@@ -94,11 +94,11 @@ The first pages of the book (the frontmatter) are not numbered, the numbering st
 \verb+24 \mainmatter+\\
 It is time for the first chapter. This in done in the usual way.\\
 \verb+26 \chapter{Examples}+\\
-A sidenote – a footnote in the margin – can be placed with the \texttt{annotation} macro.\\
-\verb+31 \annotation{All ... necessary.}+
-The citations are also placed in the margin of the document. This is done with the \texttt{reference} macro. The parameters mimic Biblatex's three parameters for citations.\\
-\verb+33 \reference{Please see:}{and more +\\
-\verb+       work by Tufte.}{Tufte1990,Tufte2006}+\\
+A sidenote – a footnote in the margin – can be placed with the \texttt{sidenote} macro.\\
+\verb+31 \sidenote{All ... necessary.}+
+The citations are also placed in the margin of the document. This is done with the \texttt{sidecite} macro. The parameters mimic Biblatex's three parameters (2 optional) for citations.\\
+\verb+33 \sidecite[Please see:][and more +\\
+\verb+       work by Tufte.]{Tufte1990,Tufte2006}+\\
 The sections are also started the common way.\\
 \verb+34 \section{Figures}+\\
 There are 3 different macros to place figures in the document.
@@ -119,7 +119,7 @@ Addtionally, there is a fullwidth environment that allows to fill text across th
 \verb+81 \end{fullwidth}+\\
 It might also overlap with the marginals, the sidenotes are not pushed up or down by \texttt{fullwidth}. 
 The last macro allows a comment in the margin without a number. That can be achieved using
-\verb+84 \comment{It is also possible ... in the text.}+\\
+\verb+84 \margintext{It is also possible ... in the text.}+\\
 Finally, the bibliography is placed using the \texttt{biblatex} syntax.
 \verb+89 \printbibliography[heading=bibintoc]+\\
 \end{document}

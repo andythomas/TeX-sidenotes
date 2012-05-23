@@ -1,7 +1,7 @@
 %%
 \NeedsTeXFormat{LaTeX2e}
 
-\ProvidesFile{caesar_kindle.cls}[2012/05/16 v0.5 Caesar kindle]
+\ProvidesFile{caesar_kindle.cls}[2012/05/23 v0.55 Caesar kindle]
 
 % Load the amsmath and the mhchem package before loading microtype
 %
@@ -236,9 +236,5 @@
 
 %
 % sidenote without a mark in the text
-\newcommand{\comment}[1]{\footnote{#1}}
-% sidenote with textmark 
-\newcommand{\annotation}[1]{\footnote{#1}}%
-% citation with textmark
-\newcommand{\reference}[3]{\footfullcite[#1][#2]{#3}}%
+\newcommand{\margintext}[1]{\footnote{#1}}
 
