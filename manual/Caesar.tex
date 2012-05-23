@@ -33,6 +33,8 @@
 {\endgraf\verbatim}%
 {\endverbatim}
 
+%\renewcommand{\sidestyle}{\raggedouter}
+
 %%
 %% -- jetzt gehts los --
 %%
@@ -122,7 +124,78 @@ The last macro allows a comment in the margin without a number. That can be achi
 \verb+84 \margintext{It is also possible ... in the text.}+\\
 Finally, the bibliography is placed using the \texttt{biblatex} syntax.
 \verb+89 \printbibliography[heading=bibintoc]+\\
+%
+\chapter{Sidenotes package}
+%
+The \texttt{sidenotes} package contains the low level macros that do the actual typesetting
+and figure placement in the margin. The package tries to allow typesetting of rich content in the margin.\sidenote{This is based on v0.81, dated 2011/11/29}
+This includes text, but also figures, captions, tables and citations and is common in science textbooks such as Feyman's \textit{Lectures on Physics}.
+%
+\section{Usage}
+%
+The\margintext{sidenote} \texttt{sidenote} macro is very similar to
+the footnote macro and tries to emulate its behavior. But like the name
+says, the note is put in the margin, hence the name sidenote. It has the
+same parameters as footnote:
+\verb+\sidenote[number]{text}+. The sidenote moves up or down (floats)
+to not overlap with other floats in the margin. All the sidenotes are subsequently numbered. The
+first, optional parameter will manually change the numbering of the sidenote.
+
+Sidenote tries to mimic the footnote behavior and tries to provide the same solutions. 
+Sometimes it is not possible to directly call a sidenote macro, e.g. in particular environments. Then, 
+you can also use\margintext{sidenotemark}  \verb+\sidenotemark[number]+ and\margintext{sidenotetext}
+ \verb+\sidenotetext+ \verb+[number]{text}+ 
+commands. \verb+\sidenotemark+ puts a mark at the current position. Then, outside of the environment 
+that causes the trouble, it is possible the call \verb+\sidenotetext{text}+ to actually make the sidenote.
+The first, optional parameter will manually change the numbering of the sidenotes.
+
+You can use\margintext{sidestyle} \verb+\renewcommand{\sidestyle}{something}+ 
+if you want to change the font, text size, text color or something else of the sidenotes.
+It it initialized with \verb+\footnotesize+. It is used as a prefix of the sidenotetext and sidetext.
+
+The macro\margintext{sidecite} \verb+\sidecite+ puts a citation in the margin. It uses the biblatex package or bibtex,
+load sidecite with the option [bibtex] for the latter.
+The macro has the same set of parameters.
+\verb+\sidecite[prenote][postnote]{key}+ for biblatex and \verb+\sidecite{key}+ for bibtex.
+The behavior is the same as in \verb+\sidenote+ and auto floating. 
+For post- and prenote please refer to the biblatex manual, the parameters are directly passed
+to biblatex.
+
+The\margintext{sidecaption} \verb+\sidecaption+ macro can be used if the caption of a figure or table 
+is supposed to be in the margin. Please note, that the formatting is done by the 
+caption package. 
+
+The\margintext{sidefigure} sidefigure environment puts a figure and its caption in the margin. Instead of  
+\verb+\begin{figure}+ use \verb+\begin{sidefigure}+. Please note, that 
+the use of caption before \verb+\includegraphics+ puts the caption in line with the
+top of the figure
+and the use after \verb+\includegraphics+ puts it in line with the bottom of the actual figure.
+
+The sidetable\margintext{sidetable} environment works similarly, but with table environments. Use \verb+\begin{sidetable}+ instead
+of \verb+\begin{table}+.
+
+\section{Technical notes and further macros}
+%
+Sometimes it is useful to put text in the margin without a mark in the text. However, this in not formatted by \texttt{sidestyle} and can be achieved
+with\margintext{marginpar} \verb+\marginpar{text}+. The \verb+\sidecaption+ macro relies on the
+marginnote\margintext{marginnote} package by Markus Kohm. 
+ 
+When writing the package, we tried to be as general as possible. Someone can e.g.\ use sidenotes mixed with
+footnotes. Also, the package tries to provide only functionality and does not know anything about formatting
+such as margin text size, color or anything else. Only \verb+\sidestyle+ was added for convenience. If you are
+looking for a package that provides formatting defaults as well you might want to look into caesar style that accompanies this package.
+
+\section{Required packages}
+\begin{description}
+     \item[marginnote]
+        supports another command to create notes in the margin. The notes are not floats , but can be manually shifted up or down. 
+     \item[caption]
+        is used to set figure and table captions in the margin and to allow formatting of these captions.
+	\item[xifthen] is used to test for empty, optional arguments.  
+\end{description}%
+
 \end{document}
+
 \chapter{Shaping the page}
 %
 The page layout utilizes one of the suggestions made by Robert Bringhurst in his typography book.\cite{xxx} One main text column and an ample margin column are used. The margin can hold sidenotes, small figures, the references and any other additional information. 
