@@ -1,0 +1,75 @@
+%% content from here
+\usemodule[caesar]
+%text is in English
+\mainlanguage[en]
+\language[en]
+
+%the bibliography
+\setupbibtex[database={library},sort=author]
+\setuppublications[alternative=apa]
+
+\starttext
+\maketitlepage{Andy Thomas}{Caesar\\Examples}{Bielefeld University}
+%
+\title{Contents} 
+\placelist[chapter]
+%
+\chapter{Examples}
+The first thing to do is to type some plain text in the document. No surprises here.
+The layout has ample margins to allow annotations on the page.\annotation{All information is on the same page, no turning of pages is necessary.} 
+For more information about this concept compare e.g.\ the books of Edward Tufte.\sidecite[See e.g.\ ][ And other Tufte books.]{Tufte1990,Tufte2006}
+% A section with a couple of figures
+\section{Figures}
+\smallfigure{rectangle}{A small rectangle put in the margin.}%
+There are a couple of options to include figures in the document. The first one is a figure in the margin.
+Figure \in[rectangle] shows that with a small rectangle. The next alternative is a figure in the text frame. %
+%
+\normalfigure{rectangle2}{A larger rectangle in the main area of the text, i.e.\ it does not span into the margin.}%
+%
+This larger rectangle is displayed in figure \in[rectangle2]. In case that an even wider figure is needed, the third option spans over the text as well as the margin area. The three options make it easy to choose the appropriate size for a given input file. 
+%
+\largefigure{rectangle3}{An even larger rectangle. This is the widest figure option. Both, the text as well as the margin width are used for the diagram.}%
+% Next section with a variety of tables
+\section{Tables}
+%
+\smalltable{table1}{A couple of numbers in a table in the margin.}{%
+\starttable[|c|c|c|]
+  \NC A \NC B \NC C\NC\SR
+\NC 0.50 \NC 0.47 \NC 0.48  \NC \FR
+\stoptable
+}
+The same options are also available for tables.
+The first one is again a small one in the margin, this is shown in table \in[table1]. The next option is a table across the text width. %
+%
+\normaltable{table2}{A couple of numbers in a larger table. This table spans the usual text width.}{%
+\starttable[|c|c|c|c|c|c|c|c|]
+  \NC  A \NC  B \NC C \NC D \NC E \NC F \NC G \NC H \NC \SR
+\NC 0.21	\NC 0.23 \NC 0.34 \NC 0.42 \NC 0.53 \NC 0.64 \NC 0.72	\NC 0.33 \NC\FR
+\stoptable
+}%
+Table \in[table2] displays the larger table with a couple of numbers. The last choice is again a table over the full width of the page. This is demonstrated in table \in[table3].
+%
+\largetable{table3}{Even more numbers in a big table are shown here. This table spans across the full page, text width plus margin.}{%
+\starttable[|c|c|c|c|c|c|c|c|c|c|c|c|]
+  \NC  A \NC  B \NC C \NC D \NC E \NC F \NC G \NC H \NC I \NC J \NC K \NC \ L \NC  \SR
+\NC 0.21	\NC 0.23 \NC 0.34 \NC 0.42 \NC 0.53 \NC 0.64 \NC 0.72	\NC 0.33 \NC 0.22\NC 0.04 \NC 0.93 \NC 0.81 \NC\FR
+\stoptable
+}%
+%
+\section{Text across the full page}
+Sometimes it can be useful to put some text across the whole page, which is similar to {\tt largefigure} and {\tt largetable}. This can be done as well, but it does not necessary work across page breaks.
+
+\startfullwidth
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit, vestibulum ut, placerat ac, adipiscing vitae, felis. Curabitur dictum gravida mauris. Nam arcu libero, nonummy eget, consectetuer id, vulputate a, magna. Donec vehicula augue eu neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris ut leo. Cras viverra metus rhoncus sem. Nulla et lectus vestibulum urna fringilla ultrices. Phasellus eu tellus sit amet tortor gravida placerat. Integer sapien est, iaculis in, pretium quis, viverra ac, nunc. Praesent eget sem vel leo ultrices bibendum. Aenean faucibus. 
+\stopfullwidth
+
+%
+It might also overlap with the marginals, the sidenotes are not pushed up or down.\margintext{It is also possible to put a remark in the margin without a corresponding mark in the text.}
+%
+\section{More information}
+This is a short example file to show the features of the caesar class. More information is available in the caesar manual. The chapter {\it Quick start} discusses and comments the source of this example file. 
+%
+\chapter{References}
+\placepublications[criterium=text]
+ %
+\stoptext
