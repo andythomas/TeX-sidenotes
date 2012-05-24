@@ -76,18 +76,32 @@
 
 % set the fonts
 %
-% we need fontspec with LuaLaTeX
-\RequirePackage{fontspec}
-%
-% Use Asana math as math font, it matches Palatino
-\RequirePackage[vargreek-shape=TeX]{unicode-math}% 
-\setmathfont{Asana Math}%
-% Use the Palatino-Clone Tex Gyre Pagella as main font
-\setmainfont[Ligatures=TeX, Numbers=OldStyle]{Tex Gyre Pagella}%
-% Use Tex Gyre Cursor as Monospace Font
-\setmonofont{Tex Gyre Cursor}%
-% Use Tex Gyre Heros as Sans Serif Font
-\setsansfont{Tex Gyre Heros}%
+\RequirePackage{ifluatex}
+\ifluatex
+	% in LuaLateX we use fontspec
+	\RequirePackage{fontspec}
+	%
+	% Use Asana math as math font, it matches Palatino
+	\RequirePackage[vargreek-shape=TeX]{unicode-math}% 
+	\setmathfont{Asana Math}%
+	% Use the Palatino-Clone Tex Gyre Pagella as main font
+	\setmainfont[Ligatures=TeX, Numbers=OldStyle]{Tex Gyre Pagella}%
+	% Use Tex Gyre Cursor as Monospace Font
+	\setmonofont{Tex Gyre Cursor}%
+	% Use Tex Gyre Heros as Sans Serif Font
+	\setsansfont{Tex Gyre Heros}%
+\else
+	% in LaTeX we load fonts differently
+	% mathpazo matches Palatino 
+	\IfFileExists{mathpazo.sty}{\RequirePackage[osf,sc]{mathpazo}}{}
+	% helvetica is sans serif font
+  	\IfFileExists{helvet.sty}{\RequirePackage{helvet}}{}
+	% beramono is tt font
+  	\IfFileExists{beramono.sty}{\RequirePackage{beramono}}{}
+	% finally load fontenc
+  	\RequirePackage[T1]{fontenc}
+\fi
+
 % fontsize is 10pt, 13pt for book and 9pt, 11pt for kindle
 \renewcommand{\normalsize}{\fontsize{10pt}{13pt}\selectfont}%
 \renewcommand{\footnotesize}{\fontsize{8pt}{10pt}\selectfont}%
