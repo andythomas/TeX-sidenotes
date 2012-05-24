@@ -50,6 +50,7 @@
 
 % microtypography
 \RequirePackage[babel]{microtype}
+\newcommand{\caesar@letterspace}[1]{\textls{#1}}
 
 % Set page layout geometry -- default is epubli science-book format
 \RequirePackage[paperwidth=170mm, paperheight=240mm, left=42pt, top=40pt, textwidth=280pt, marginparsep=20pt, marginparwidth=100pt, textheight=560pt, footskip=40pt]{geometry}
@@ -171,11 +172,11 @@
   {%
   \sffamily%
   \begin{fullwidth}%
-  \LARGE\lsstyle\MakeTextUppercase{\@author}\par
+  \LARGE\caesar@letterspace{\MakeTextUppercase{\@author}}\par
   \vspace{6em}%
-  \noindent\fontsize{38}{50}\selectfont\textcolor{darkgray}{\textls[125]{\MakeTextUppercase{\@title}}}\par
+  \noindent\fontsize{38}{50}\selectfont\textcolor{darkgray}{\caesar@letterspace{\MakeTextUppercase{\@title}}}\par
   \vfill%
-  \Large\selectfont\par\noindent\lsstyle\MakeTextUppercase{\publisher}\par
+  \Large\noindent\caesar@letterspace{\MakeTextUppercase{\publisher}}\par
   \end{fullwidth}%
   }%
   \endgroup%
