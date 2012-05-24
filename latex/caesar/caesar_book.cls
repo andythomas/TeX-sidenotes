@@ -44,13 +44,18 @@
 \RequirePackage{sidenotes}
 \renewcommand{\sidestyle}{\footnotesize\raggedouter}
 % a lot of marginals need more float 'memory'
-\usepackage[maxfloats=45]{morefloats}
+\RequirePackage[maxfloats=45]{morefloats}
 % automatically adjust the side-floats nicely 
-\usepackage{marginfix}
+\RequirePackage{marginfix}
 
 % microtypography
-\RequirePackage[babel]{microtype}
-\newcommand{\caesar@letterspace}[1]{\textls{#1}}
+\newcommand{\caesar@letterspace}[1]{#1}
+\RequirePackage{microtype}
+\@ifpackagelater{microtype}{2011/08/18}{%
+    \renewcommand{\caesar@letterspace}[1]{\textls{#1}}%
+}{%
+   \AtEndDocument{\ClassWarningNoLine{caesar_book}{Need newest microtype (beta) for letterspacing.}}
+}
 
 % Set page layout geometry -- default is epubli science-book format
 \RequirePackage[paperwidth=170mm, paperheight=240mm, left=42pt, top=40pt, textwidth=280pt, marginparsep=20pt, marginparwidth=100pt, textheight=560pt, footskip=40pt]{geometry}
