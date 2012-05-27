@@ -113,13 +113,22 @@ command=\FullwidthCommand]
 \def\sidecite{\dodoubleempty\doSidecite}
 \def\doSidecite[#1][#2]#3{\margintext{#1\cite[data][#3]#2}}
 
-%title page
-\define[3]\maketitlepage{%
-{\ss\tfc\noindent\kerncharacters[0.125]\uppercase{#1}}\par%
-\blank[100pt]%
-{\setupbodyfont[sansserif,38pt]\setupinterlinespace[line=50pt]\noindent\kerncharacters[0.15]\uppercase{#2}}\par%
-\vfill%
-{\ss\tfc\kerncharacters[0.125]\uppercase{#3}}%
-}
+\setvariables
+  [titlepage]
+  [
+    title=,
+    author=,
+    publisher=,
+    set={\setups{caesar:titlepage}},
+  ]
+
+\startsetups caesar:titlepage
+    {\ssc\noindent\kerncharacters[0.125]\WORD{\getvariable{titlepage}{author}}\endgraf}
+    \blank[100pt]
+    {\setupbodyfont[sansserif,38pt]\setupinterlinespace[line=50pt]
+     \noindentation\kerncharacters[0.15]\WORD{\getvariable{titlepage}{title}}\endgraf}
+    \vfill
+    {\ss\tfc\kerncharacters[0.125]\WORD{\getvariable{titlepage}{publisher}}\endgraf}
+\stopsetups
 
 \protect \endinput

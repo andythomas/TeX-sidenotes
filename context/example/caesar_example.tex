@@ -9,8 +9,13 @@
 \setuppublications[alternative=apa]
 
 \starttext
-\maketitlepage{Andy Thomas}{Caesar\\Examples}{Bielefeld University}
-%
+\setvariables
+  [titlepage]
+  [title={Caesar\\Examples},
+   author={Andy Thomas},
+   publisher={Bielefeld University}]
+
+
 \title{Contents} 
 \placelist[chapter]
 %
