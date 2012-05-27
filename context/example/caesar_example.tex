@@ -7,7 +7,7 @@
 \useMPlibrary[dum] % To get dummy figures
 
 %the bibliography
-\setupbibtex[database={library},sort=author]
+\setupbibtex[database={library.bib},sort=author]
 \setuppublications[alternative=apa]
 
 \starttext
@@ -17,7 +17,6 @@
    author={Andy Thomas},
    publisher={Bielefeld University}]
 
-
 \title{Contents} 
 \placelist[chapter]
 
@@ -26,23 +25,25 @@
 %
 \chapter{Examples}
 The first thing to do is to type some plain text in the document. No surprises here.
-The layout has ample margins to allow annotations on the page.\sidenote{All information is on the same page, no turning of pages is necessary.} 
-For more information about this concept compare e.g.\ the books of Edward Tufte.\sidecite[left={See e.g.\ }, right={ And other Tufte books.}][Tufte1990,Tufte2006]
+The layout has ample margins to allow annotations on the page.%
+\sidenote{All information is on the same page, no turning of pages is necessary.} 
+For more information about this concept compare e.g.\ the books of Edward Tufte.%
+\sidecite[left={See e.g.\ }, right={ And other Tufte books.}][Tufte1990,Tufte2006]
 % A section with a couple of figures
 \section{Figures}
-\startplacemarginfigure[ title={A small rectangle put in the margin.}, reference=rectangle]
+\startplacemarginfigure[ title={A small rectangle put in the margin.}, reference=fig1]
   \externalfigure[dummy][marginwidth]
 \stopplacemarginfigure
 
 There are a couple of options to include figures in the document. The first one is a figure in the margin.
-\in{Figure}[rectangle] shows that with a small rectangle. The next alternative is a figure in the text frame. %
+\in{Figure}[fig1] shows that with a small rectangle. The next alternative is a figure in the text frame. %
 %
 \startplacefigure[title={A larger rectangle in the main area of the text, i.e.\ it does not span into the margin.},
-  reference=rectangle2]
+  reference=fig2]
   \externalfigure[dummy][textwidth]
 \stopplacefigure
 %
-This larger rectangle is displayed in \in{figure}[rectangle2]. In case that an even wider figure is needed, the third option spans over the text as well as the margin area. The three options make it easy to choose the appropriate size for a given input file. 
+This larger rectangle is displayed in \in{figure}[fig2]. In case that an even wider figure is needed, the third option spans over the text as well as the margin area. The three options make it easy to choose the appropriate size for a given input file. 
 %
 \startplacefigure[title={An even larger rectangle. This is the widest figure option. Both, the text as well as the margin width are used for the diagram.}]
   \externalfigure[dummy][fullwidth]
@@ -82,7 +83,8 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit, vestibu
 \stopfullwidth
 
 %
-It might also overlap with the marginals, the sidenotes are not pushed up or down.\margintext{It is also possible to put a remark in the margin without a corresponding mark in the text.}
+It might also overlap with the marginals, the sidenotes are not pushed up or down.%
+\margintext{It is also possible to put a remark in the margin without a corresponding mark in the text.}
 %
 \section{More information}
 This is a short example file to show the features of the caesar class. More information is available in the caesar manual. The chapter {\it Quick start} discusses and comments the source of this example file. 
