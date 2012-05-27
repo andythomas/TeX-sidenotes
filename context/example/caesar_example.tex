@@ -4,6 +4,8 @@
 \mainlanguage[en]
 \language[en]
 
+\useMPlibrary[dum] % To get dummy figures
+
 %the bibliography
 \setupbibtex[database={library},sort=author]
 \setuppublications[alternative=apa]
@@ -24,12 +26,12 @@
 %
 \chapter{Examples}
 The first thing to do is to type some plain text in the document. No surprises here.
-The layout has ample margins to allow annotations on the page.\annotation{All information is on the same page, no turning of pages is necessary.} 
+The layout has ample margins to allow annotations on the page.\sidenote{All information is on the same page, no turning of pages is necessary.} 
 For more information about this concept compare e.g.\ the books of Edward Tufte.\sidecite[left={See e.g.\ }, right={ And other Tufte books.}][Tufte1990,Tufte2006]
 % A section with a couple of figures
 \section{Figures}
 \startplacemarginfigure[ title={A small rectangle put in the margin.}, reference=rectangle]
-  \externalfigure[rectangle][marginwidth]
+  \externalfigure[dummy][marginwidth]
 \stopplacemarginfigure
 
 There are a couple of options to include figures in the document. The first one is a figure in the margin.
@@ -37,13 +39,13 @@ There are a couple of options to include figures in the document. The first one 
 %
 \startplacefigure[title={A larger rectangle in the main area of the text, i.e.\ it does not span into the margin.},
   reference=rectangle2]
-  \externalfigure[rectangle2][textwidth]
+  \externalfigure[dummy][textwidth]
 \stopplacefigure
 %
 This larger rectangle is displayed in \in{figure}[rectangle2]. In case that an even wider figure is needed, the third option spans over the text as well as the margin area. The three options make it easy to choose the appropriate size for a given input file. 
 %
 \startplacefigure[title={An even larger rectangle. This is the widest figure option. Both, the text as well as the margin width are used for the diagram.}]
-  \externalfigure[rectangle3][fullwidth]
+  \externalfigure[dummy][fullwidth]
 \stopplacefigure
 % Next section with a variety of tables
 \section{Tables}
