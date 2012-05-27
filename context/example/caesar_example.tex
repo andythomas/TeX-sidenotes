@@ -4,6 +4,8 @@
 \mainlanguage[en]
 \language[en]
 
+\useMPlibrary[dum] % To get dummy figures
+
 %the bibliography
 \setupbibtex[database={library},sort=author]
 \setuppublications[alternative=apa]
@@ -29,7 +31,7 @@ For more information about this concept compare e.g.\ the books of Edward Tufte.
 % A section with a couple of figures
 \section{Figures}
 \startplacemarginfigure[ title={A small rectangle put in the margin.}, reference=rectangle]
-  \externalfigure[rectangle][marginwidth]
+  \externalfigure[dummy][marginwidth]
 \stopplacemarginfigure
 
 There are a couple of options to include figures in the document. The first one is a figure in the margin.
@@ -37,13 +39,13 @@ There are a couple of options to include figures in the document. The first one 
 %
 \startplacefigure[title={A larger rectangle in the main area of the text, i.e.\ it does not span into the margin.},
   reference=rectangle2]
-  \externalfigure[rectangle2][textwidth]
+  \externalfigure[dummy][textwidth]
 \stopplacefigure
 %
 This larger rectangle is displayed in \in{figure}[rectangle2]. In case that an even wider figure is needed, the third option spans over the text as well as the margin area. The three options make it easy to choose the appropriate size for a given input file. 
 %
 \startplacefigure[title={An even larger rectangle. This is the widest figure option. Both, the text as well as the margin width are used for the diagram.}]
-  \externalfigure[rectangle3][fullwidth]
+  \externalfigure[dummy][fullwidth]
 \stopplacefigure
 % Next section with a variety of tables
 \section{Tables}
