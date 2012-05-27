@@ -1,36 +1,38 @@
 %D \module
-%D   [     file=caesar.tex, 
+%D   [     file=t-caesar.tex, 
 %D      version=0.55,
 %D        title=caesar, 
 %D     subtitle=sidenotes,
 %D       author=Andy Thomas,
-%D         date=120523, 
+%D         date=2012.05.27, 
 %D    copyright=Andy Thomas, 
 %D      license=Public Domain]
 
 \unprotect
 
-% module code
-% setup the page format
-\definepapersize[wissenschaft][width=170mm,height=240mm]
-% use the new page format
-\setuppapersize[wissenschaft]
-% shape the page layout
+\definepapersize[wissenschaft][width=170mm, height=240mm]
+\setuppapersize [wissenschaft]
+
 \setuplayout[topspace=40pt,
-			header=0pt,
-			headerdistance=0pt,
-			backspace=42pt,
-			leftmargin=0pt,
-			width=280pt,
-			height=560pt,
-			rightmargindistance=20pt,
-			rightmargin=100pt,
-			footer=0pt]
-% distinguish between verso and recto pages
+             header=0pt,
+             headerdistance=0pt,
+             height=560pt,
+             footer=0pt,
+             %
+             backspace=42pt,
+             leftmargin=0pt,
+             width=280pt,
+             rightmargindistance=20pt,
+             rightmargin=100pt]
+
+% doublesided layout to get different verso and recto pages
 \setuppagenumbering[alternative=doublesided]
 
 % setup the side notes
-\setupmargindata [margintext]
+\setupmargindata[stack=continue]
+
+\setupmargindata
+    [margintext]
     [location=outer,
      width=100pt,
      align=flushouter,
@@ -40,90 +42,155 @@
 \usemodule[annotation]
 
 % setup the numbering of the side notes
-\define[2]\AnnotationCommand 
-{\high{\rawnumber[annotation]}% 
-\margintext{\high{#1} #2\vskip4pt}} 
+\define[2]\caesar_annotation_command 
+    {\high{\rawnumber[annotation]}% 
+     \margintext{\high{#1} #2\vskip4pt}} 
 
 \defineannotation 
-[annotation] 
-[alternative=command, 
-command=\AnnotationCommand, 
-number=yes] 
+    [annotation] 
+    [alternative=command, 
+     command=\caesar_annotation_command, 
+     number=yes] 
 
-%text across the full width of the page
-\define[2]\FullwidthCommand 
-{\doifoddpageelse 
-{\doadaptrightskip{-120pt}} 
-{\doadaptleftskip {-120pt}}% 
-#2} 
+% text across the full width of the page
+\define[1]\caesar_fullwidth_command 
+    {\doifoddpageelse 
+        {\doadaptrightskip{-120pt}} 
+        {\doadaptleftskip {-120pt}}} %#2 
 
 \defineannotation 
-[fullwidth] 
-[alternative=command, 
-command=\FullwidthCommand] 
-
-%setup the fonts
-\definefontfeature[default][default][onum=yes]
-\starttypescript[me]
-    \definetypeface [me] [rm] [serif] [pagella] [default]
-    \definetypeface [me] [ss] [sans]  [heros]   [default]
-    \definetypeface [me] [tt] [mono]  [cursor]  [default]
-    \definetypeface [me] [mm] [math]  [pagella] [default]
-\stoptypescript
-
-% use protrusion
-\definefontfeature
-  [default]
-  [default]
-  [protrusion=quality,expansion=quality]
-\setupalign[hz,hanging]
-
-% std is 10pt font
-\setupbodyfont[me,10pt]
-\setupindenting[10pt, yes]
-
-%setup the headings
-\setuphead[chapter][style=\tfd\it,
-				    number=no,
-				    before={\blank[5*big,force]},
-				    after={\blank[4*big,force]}]
-\setuphead[section][style=\tfb\it,
-				    number=no]
-\setuphead[subsection][style=\tfa\it,
-				    number=no]
-%the table of contents
-\setuplist[chapter][style=\tfc\it,width=0pt,margin=0pt,before={\blank[2*big]}]
-
-%setup the captions
-\setupcaption[style={\tfx\setupinterlinespace[line=10pt]},headstyle=\rm,suffix={:}]
-
-%use backspace as location anchor 
-\setupfloats[indentnext=no,location=inner]
-
-%
-% High level macros start here
-
-%setup the figures in 3 sizes
-\define[2]\largefigure{\placefigure[here,top,bottom,page][#1]{#2}{\externalfigure[#1][width=400pt]}}%
-\define[2]\normalfigure{\placefigure[here,top,bottom,page][#1]{#2}{\externalfigure[#1][width=280pt]}}%
-\define[2]\smallfigure{\margintext{\placefigure[here][#1]{#2}{\externalfigure[#1][width=100pt]}}}%
-
-%setup the tables in 3 sizes
-\define[3]\largetable{\setupcaption[width=400pt]\placetable[here][#1]{#2}#3\setupcaption[width=fit]}
-\define[3]\normaltable{\setupcaption[width=280pt]\placetable[here][#1]{#2}#3\setupcaption[width=fit]}
-\define[3]\smalltable{\setupcaption[width=100pt]\margintext{\placetable[here][#1]{#2}#3}\setupcaption[width=fit]}
+    [fullwidth] 
+    [alternative=command, 
+     command=\caesar_fullwidth_command] 
 
 % put citations in the margin
-\def\sidecite{\dodoubleempty\doSidecite}
-\def\doSidecite[#1][#2]#3{\margintext{#1\cite[data][#3]#2}}
+\unexpanded\def\sidecite{\dodoubleargument\sidecite_indeed}
+\def\sidecite_indeed[#1][#2]%
+    {\getparameters[caesar_sidecite_][left=,right=,#1]%
+      \margintext
+          {\caesar_sidecite_left
+           \cite[data][#2]%
+           \caesar_sidecite_right}}
 
-%title page
-\define[3]\maketitlepage{%
-{\ss\tfc\noindent\kerncharacters[0.125]\uppercase{#1}}\par%
-\blank[100pt]%
-{\setupbodyfont[sansserif,38pt]\setupinterlinespace[line=50pt]\noindent\kerncharacters[0.15]\uppercase{#2}}\par%
-\vfill%
-{\ss\tfc\kerncharacters[0.125]\uppercase{#3}}%
-}
+% Enable old style numbers and protrusion
+\definefontfeature[default][default][onum=yes, protrusion=quality, expansion=quality]
+
+\starttypescript[mainface]
+    \definetypeface [mainface] [rm] [serif] [pagella] [default]
+    \definetypeface [mainface] [ss] [sans]  [heros]   [default]
+    \definetypeface [mainface] [tt] [mono]  [cursor]  [default]
+    \definetypeface [mainface] [mm] [math]  [pagella] [default]
+\stoptypescript
+\setupbodyfont[mainface,10pt]
+
+% Enable protrusion
+\setupalign[hz,hanging]
+
+\setupindenting[10pt, yes]
+
+% setup the headings
+\setuphead[chapter]
+          [
+            style=\itd,
+            number=no,
+            before={\blank[5*big,force]},
+            after={\blank[4*big,force]},
+          ]
+
+\setuphead[section]
+          [style=\itb,
+           number=no]
+
+\setuphead[subsection]
+          [style=\ita,
+           number=no]
+
+%the table of contents
+\setuplist
+  [chapter]
+  [
+    style=\itc,
+    width=0pt, 
+    margin=0pt, 
+    before={\blank[2*big]},
+  ]
+
+% setup the captions
+\setupcaption[style={\tfx\setupinterlinespace[line=10pt]}, headstyle=\rm, suffix={:}]
+\setupcaption[table][minwidth=\hsize, width=\hsize]
+
+\defineexternalfigure[marginwidth] [width=\layoutparameter\c!rightmargin]
+\defineexternalfigure[textwidth]   [width=\textwidth]
+\defineexternalfigure[fullwidth]   [width=\the\dimexpr\textwidth+\measure{fullwidth_extra}\relax]
+
+\setupfloat[figure][indentnext=no, location=inner, default={here,top,bottom,page}]
+\setupfloat[table] [indentnext=no, location=inner, default={here,top,bottom,page}]
+
+% \placefigure[outermargin] does not play nice with margintext.
+% We need \margintext{\palcefigure[...]{...}}
+% So we define wrappers with the same interface as default ConTeXt commands
+
+\unexpanded\def\placemarginfigure
+    {\dodoubleargument\caesar_placemarginfigure_indeed}
+
+% Beware, we override the figure location!
+\def\caesar_placemarginfigure_indeed[#1][#2]#3#4%
+    {\ifsecondargument
+       \margintext{\placefigure[here][#2]{#3}{#4}}%
+     \else
+       \margintext{\placefigure[here][#1]{#3}{#4}}%
+     \fi}
+
+\unexpanded\def\startplacemarginfigure
+    {\dosingleargument\caesar_start_place_margin_figure}
+
+\def\caesar_start_place_margin_figure[#1]#2\stopplacemarginfigure
+    {\margintext
+      {\startplacefigure[#1, location=here]% Beware, we override location!
+       #2%
+      \stopplacefigure}}
+
+\definefloat [widetable][widetables][table]
+\setupcaption[widetable][width=\the\dimexpr\textwidth+\measure{fullwidth_extra}\relax]
+
+% Margin table is same as margin figure but 
+% the following does not work if | in used in the table
+\unexpanded\def\placemargintable
+    {\dodoubleargument\caesar_placemargintable_indeed}
+
+% Beware, we override the table location!
+\def\caesar_placemargintable_indeed[#1][#2]#3#4%
+    {\ifsecondargument
+       \margintext{\placetable[here][#2]{#3}{#4}}%
+     \else
+       \margintext{\placetable[here][#1]{#3}{#4}}%
+     \fi}
+
+\unexpanded\def\startplacemargintable
+    {\dosingleargument\caesar_start_place_margin_table}
+
+\def\caesar_start_place_margin_table[#1]#2\stopplacemargintable
+    {\margintext
+      {\startplacetable[#1, location=here]% Beware, we override location!
+        #2%
+      \stopplacetable}}
+
+\setvariables
+  [titlepage]
+  [
+    title=,
+    author=,
+    publisher=,
+    set={\setups{caesar:titlepage}},
+  ]
+
+\startsetups caesar:titlepage
+    {\ssc\noindent\kerncharacters[0.125]\WORD{\getvariable{titlepage}{author}}\endgraf}
+    \blank[100pt]
+    {\setupbodyfont[sansserif,38pt]\setupinterlinespace[line=50pt]
+     \noindentation\kerncharacters[0.15]\WORD{\getvariable{titlepage}{title}}\endgraf}
+    \vfill
+    {\ss\tfc\kerncharacters[0.125]\WORD{\getvariable{titlepage}{publisher}}\endgraf}
+\stopsetups
 
 \protect \endinput
