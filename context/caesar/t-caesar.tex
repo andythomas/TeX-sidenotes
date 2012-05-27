@@ -119,7 +119,9 @@
 \setupcaption[style={\tfx\setupinterlinespace[line=10pt]}, headstyle=\rm, suffix={:}]
 \setupcaption[table][minwidth=\hsize, width=\hsize]
 
-\defineexternalfigure[marginwidth] [width=\layoutparameter\c!rightmargin]
+\definemeasure[fullwidth_extra][\the\dimexpr\rightmargindistance+\rightmarginwidth]
+
+\defineexternalfigure[marginwidth] [width=\rightmarginwidth]
 \defineexternalfigure[textwidth]   [width=\textwidth]
 \defineexternalfigure[fullwidth]   [width=\the\dimexpr\textwidth+\measure{fullwidth_extra}\relax]
 
