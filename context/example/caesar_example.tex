@@ -18,48 +18,59 @@
 
 \title{Contents} 
 \placelist[chapter]
+
+\title{Tables}
+\placelist[table,widetable]
 %
 \chapter{Examples}
 The first thing to do is to type some plain text in the document. No surprises here.
 The layout has ample margins to allow annotations on the page.\annotation{All information is on the same page, no turning of pages is necessary.} 
-For more information about this concept compare e.g.\ the books of Edward Tufte.\sidecite[See e.g.\ ][ And other Tufte books.]{Tufte1990,Tufte2006}
+For more information about this concept compare e.g.\ the books of Edward Tufte.\sidecite[left={See e.g.\ }, right={ And other Tufte books.}][Tufte1990,Tufte2006]
 % A section with a couple of figures
 \section{Figures}
-\smallfigure{rectangle}{A small rectangle put in the margin.}%
+\startplacemarginfigure[ title={A small rectangle put in the margin.}, reference=rectangle]
+  \externalfigure[rectangle][marginwidth]
+\stopplacemarginfigure
+
 There are a couple of options to include figures in the document. The first one is a figure in the margin.
-Figure \in[rectangle] shows that with a small rectangle. The next alternative is a figure in the text frame. %
+\in{Figure}[rectangle] shows that with a small rectangle. The next alternative is a figure in the text frame. %
 %
-\normalfigure{rectangle2}{A larger rectangle in the main area of the text, i.e.\ it does not span into the margin.}%
+\startplacefigure[title={A larger rectangle in the main area of the text, i.e.\ it does not span into the margin.},
+  reference=rectangle2]
+  \externalfigure[rectangle2][textwidth]
+\stopplacefigure
 %
-This larger rectangle is displayed in figure \in[rectangle2]. In case that an even wider figure is needed, the third option spans over the text as well as the margin area. The three options make it easy to choose the appropriate size for a given input file. 
+This larger rectangle is displayed in \in{figure}[rectangle2]. In case that an even wider figure is needed, the third option spans over the text as well as the margin area. The three options make it easy to choose the appropriate size for a given input file. 
 %
-\largefigure{rectangle3}{An even larger rectangle. This is the widest figure option. Both, the text as well as the margin width are used for the diagram.}%
+\startplacefigure[title={An even larger rectangle. This is the widest figure option. Both, the text as well as the margin width are used for the diagram.}]
+  \externalfigure[rectangle3][fullwidth]
+\stopplacefigure
 % Next section with a variety of tables
 \section{Tables}
 %
-\smalltable{table1}{A couple of numbers in a table in the margin.}{%
+\placemargintable[table1]{A couple of numbers in a table in the margin.}{%
 \starttable[|c|c|c|]
   \NC A \NC B \NC C\NC\SR
-\NC 0.50 \NC 0.47 \NC 0.48  \NC \FR
+  \NC 0.50 \NC 0.47 \NC 0.48  \NC \FR
 \stoptable
 }
 The same options are also available for tables.
 The first one is again a small one in the margin, this is shown in table \in[table1]. The next option is a table across the text width. %
 %
-\normaltable{table2}{A couple of numbers in a larger table. This table spans the usual text width.}{%
+\startplacetable[reference=table2, title={A couple of numbers in a larger table. This table spans the usual text width.}]
 \starttable[|c|c|c|c|c|c|c|c|]
   \NC  A \NC  B \NC C \NC D \NC E \NC F \NC G \NC H \NC \SR
 \NC 0.21	\NC 0.23 \NC 0.34 \NC 0.42 \NC 0.53 \NC 0.64 \NC 0.72	\NC 0.33 \NC\FR
 \stoptable
-}%
+\stopplacetable
 Table \in[table2] displays the larger table with a couple of numbers. The last choice is again a table over the full width of the page. This is demonstrated in table \in[table3].
 %
-\largetable{table3}{Even more numbers in a big table are shown here. This table spans across the full page, text width plus margin.}{%
+\startplacewidetable[reference={table3}, title={Even more numbers in a big table are shown here. This table spans across the full page, text width plus margin.}]
 \starttable[|c|c|c|c|c|c|c|c|c|c|c|c|]
   \NC  A \NC  B \NC C \NC D \NC E \NC F \NC G \NC H \NC I \NC J \NC K \NC \ L \NC  \SR
 \NC 0.21	\NC 0.23 \NC 0.34 \NC 0.42 \NC 0.53 \NC 0.64 \NC 0.72	\NC 0.33 \NC 0.22\NC 0.04 \NC 0.93 \NC 0.81 \NC\FR
 \stoptable
-}%
+\stopplacewidetable
 %
 \section{Text across the full page}
 Sometimes it can be useful to put some text across the whole page, which is similar to {\tt largefigure} and {\tt largetable}. This can be done as well, but it does not necessary work across page breaks.

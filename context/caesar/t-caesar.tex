@@ -1,10 +1,10 @@
 %D \module
-%D   [     file=caesar.tex, 
+%D   [     file=t-caesar.tex, 
 %D      version=0.55,
 %D        title=caesar, 
 %D     subtitle=sidenotes,
 %D       author=Andy Thomas,
-%D         date=120523, 
+%D         date=2012.05.27, 
 %D    copyright=Andy Thomas, 
 %D      license=Public Domain]
 
@@ -29,6 +29,8 @@
 \setuppagenumbering[alternative=doublesided]
 
 % setup the side notes
+\setupmargindata[stack=continue]
+
 \setupmargindata
     [margintext]
     [location=outer,
@@ -60,6 +62,15 @@
     [fullwidth] 
     [alternative=command, 
      command=\caesar_fullwidth_command] 
+
+% put citations in the margin
+\unexpanded\def\sidecite{\dodoubleargument\sidecite_indeed}
+\def\sidecite_indeed[#1][#2]%
+    {\getparameters[caesar_sidecite_][left=,right=,#1]%
+      \margintext
+          {\caesar_sidecite_left
+           \cite[data][#2]%
+           \caesar_sidecite_right}}
 
 % Enable old style numbers and protrusion
 \definefontfeature[default][default][onum=yes, protrusion=quality, expansion=quality]
@@ -104,28 +115,65 @@
     before={\blank[2*big]},
   ]
 
-% use backspace as location anchor 
-\setupfloats[indentnext=no, location=inner]
-
 % setup the captions
 \setupcaption[style={\tfx\setupinterlinespace[line=10pt]}, headstyle=\rm, suffix={:}]
+\setupcaption[table][minwidth=\hsize, width=\hsize]
 
-%
-% High level macros start here
+\defineexternalfigure[marginwidth] [width=\layoutparameter\c!rightmargin]
+\defineexternalfigure[textwidth]   [width=\textwidth]
+\defineexternalfigure[fullwidth]   [width=\the\dimexpr\textwidth+\measure{fullwidth_extra}\relax]
 
-%setup the figures in 3 sizes
-\define[2]\largefigure{\placefigure[here,top,bottom,page][#1]{#2}{\externalfigure[#1][width=400pt]}}%
-\define[2]\normalfigure{\placefigure[here,top,bottom,page][#1]{#2}{\externalfigure[#1][width=280pt]}}%
-\define[2]\smallfigure{\margintext{\placefigure[here][#1]{#2}{\externalfigure[#1][width=100pt]}}}%
+\setupfloat[figure][indentnext=no, location=inner, default={here,top,bottom,page}]
+\setupfloat[table] [indentnext=no, location=inner, default={here,top,bottom,page}]
 
-%setup the tables in 3 sizes
-\define[3]\largetable{\setupcaption[width=400pt]\placetable[here][#1]{#2}#3\setupcaption[width=fit]}
-\define[3]\normaltable{\setupcaption[width=280pt]\placetable[here][#1]{#2}#3\setupcaption[width=fit]}
-\define[3]\smalltable{\setupcaption[width=100pt]\margintext{\placetable[here][#1]{#2}#3}\setupcaption[width=fit]}
+% \placefigure[outermargin] does not play nice with margintext.
+% We need \margintext{\palcefigure[...]{...}}
+% So we define wrappers with the same interface as default ConTeXt commands
 
-% put citations in the margin
-\def\sidecite{\dodoubleempty\doSidecite}
-\def\doSidecite[#1][#2]#3{\margintext{#1\cite[data][#3]#2}}
+\unexpanded\def\placemarginfigure
+    {\dodoubleargument\caesar_placemarginfigure_indeed}
+
+% Beware, we override the figure location!
+\def\caesar_placemarginfigure_indeed[#1][#2]#3#4%
+    {\ifsecondargument
+       \margintext{\placefigure[here][#2]{#3}{#4}}%
+     \else
+       \margintext{\placefigure[here][#1]{#3}{#4}}%
+     \fi}
+
+\unexpanded\def\startplacemarginfigure
+    {\dosingleargument\caesar_start_place_margin_figure}
+
+\def\caesar_start_place_margin_figure[#1]#2\stopplacemarginfigure
+    {\margintext
+      {\startplacefigure[#1, location=here]% Beware, we override location!
+       #2%
+      \stopplacefigure}}
+
+\definefloat [widetable][widetables][table]
+\setupcaption[widetable][width=\the\dimexpr\textwidth+\measure{fullwidth_extra}\relax]
+
+% Margin table is same as margin figure but 
+% the following does not work if | in used in the table
+\unexpanded\def\placemargintable
+    {\dodoubleargument\caesar_placemargintable_indeed}
+
+% Beware, we override the table location!
+\def\caesar_placemargintable_indeed[#1][#2]#3#4%
+    {\ifsecondargument
+       \margintext{\placetable[here][#2]{#3}{#4}}%
+     \else
+       \margintext{\placetable[here][#1]{#3}{#4}}%
+     \fi}
+
+\unexpanded\def\startplacemargintable
+    {\dosingleargument\caesar_start_place_margin_table}
+
+\def\caesar_start_place_margin_table[#1]#2\stopplacemargintable
+    {\margintext
+      {\startplacetable[#1, location=here]% Beware, we override location!
+        #2%
+      \stopplacetable}}
 
 \setvariables
   [titlepage]
