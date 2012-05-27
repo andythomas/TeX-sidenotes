@@ -55,8 +55,8 @@
 % text across the full width of the page
 \define[1]\caesar_fullwidth_command 
     {\doifoddpageelse 
-        {\doadaptrightskip{-120pt}} 
-        {\doadaptleftskip {-120pt}}} %#2 
+        {\doadaptrightskip{-\measure{fullwidth_extra}}} 
+        {\doadaptleftskip {-\measure{fullwidth_extra}}}} %#2 
 
 \defineannotation 
     [fullwidth] 
