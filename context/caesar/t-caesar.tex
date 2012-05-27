@@ -62,24 +62,20 @@ number=yes]
 [alternative=command, 
 command=\FullwidthCommand] 
 
-%setup the fonts
-\definefontfeature[default][default][onum=yes]
-\starttypescript[me]
-    \definetypeface [me] [rm] [serif] [pagella] [default]
-    \definetypeface [me] [ss] [sans]  [heros]   [default]
-    \definetypeface [me] [tt] [mono]  [cursor]  [default]
-    \definetypeface [me] [mm] [math]  [pagella] [default]
-\stoptypescript
+% Enable old style numbers and protrusion
+\definefontfeature[default][default][onum=yes, protrusion=quality, expansion=quality]
 
-% use protrusion
-\definefontfeature
-  [default]
-  [default]
-  [protrusion=quality,expansion=quality]
+\starttypescript[mainface]
+    \definetypeface [mainface] [rm] [serif] [pagella] [default]
+    \definetypeface [mainface] [ss] [sans]  [heros]   [default]
+    \definetypeface [mainface] [tt] [mono]  [cursor]  [default]
+    \definetypeface [mainface] [mm] [math]  [pagella] [default]
+\stoptypescript
+\setupbodyfont[mainface,10pt]
+
+% Enable protrusion
 \setupalign[hz,hanging]
 
-% std is 10pt font
-\setupbodyfont[me,10pt]
 \setupindenting[10pt, yes]
 
 %setup the headings
