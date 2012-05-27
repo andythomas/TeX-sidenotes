@@ -42,14 +42,14 @@
 \usemodule[annotation]
 
 % setup the numbering of the side notes
-\define[2]\caesar_annotation_command 
-    {\high{\rawnumber[annotation]}% 
+\define[2]\caesar_sidenote_command 
+    {\high{\rawnumber[sidenote]}% 
      \margintext{\high{#1} #2\vskip4pt}} 
 
 \defineannotation 
-    [annotation] 
+    [sidenote] 
     [alternative=command, 
-     command=\caesar_annotation_command, 
+     command=\caesar_sidenote_command, 
      number=yes] 
 
 % text across the full width of the page
