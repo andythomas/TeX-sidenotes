@@ -42,21 +42,21 @@
 \usemodule[annotation]
 
 % setup the numbering of the side notes
-\define[2]\caesar_annotation_command 
-    {\high{\rawnumber[annotation]}% 
+\define[2]\caesar_sidenote_command 
+    {\high{\rawnumber[sidenote]}% 
      \margintext{\high{#1} #2\vskip4pt}} 
 
 \defineannotation 
-    [annotation] 
+    [sidenote] 
     [alternative=command, 
-     command=\caesar_annotation_command, 
+     command=\caesar_sidenote_command, 
      number=yes] 
 
 % text across the full width of the page
 \define[1]\caesar_fullwidth_command 
     {\doifoddpageelse 
-        {\doadaptrightskip{-120pt}} 
-        {\doadaptleftskip {-120pt}}} %#2 
+        {\doadaptrightskip{-\measure{fullwidth_extra}}} 
+        {\doadaptleftskip {-\measure{fullwidth_extra}}}} %#2 
 
 \defineannotation 
     [fullwidth] 
@@ -119,7 +119,9 @@
 \setupcaption[style={\tfx\setupinterlinespace[line=10pt]}, headstyle=\rm, suffix={:}]
 \setupcaption[table][minwidth=\hsize, width=\hsize]
 
-\defineexternalfigure[marginwidth] [width=\layoutparameter\c!rightmargin]
+\definemeasure[fullwidth_extra][\the\dimexpr\rightmargindistance+\rightmarginwidth]
+
+\defineexternalfigure[marginwidth] [width=\rightmarginwidth]
 \defineexternalfigure[textwidth]   [width=\textwidth]
 \defineexternalfigure[fullwidth]   [width=\the\dimexpr\textwidth+\measure{fullwidth_extra}\relax]
 
