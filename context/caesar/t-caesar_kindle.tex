@@ -1,0 +1,128 @@
+%D \module
+%D   [     file=t-caesar_kindle.tex, 
+%D      version=0.55,
+%D        title=caesar_kindle, 
+%D     subtitle=sidenotes,
+%D       author=Andy Thomas,
+%D         date=2012.05.28, 
+%D    copyright=Andy Thomas, 
+%D      license=Public Domain]
+
+\unprotect
+
+\definepapersize[kindle][width=255pt, height=340pt]
+\setuppapersize [kindle]
+
+\setuplayout[topspace=10pt,
+             header=0pt,
+             headerdistance=0pt,
+             height=310pt,
+             footer=0pt,
+             %
+             backspace=10pt,
+             leftmargin=0pt,
+             width=235pt,
+             rightmargindistance=0pt,
+             rightmargin=0pt]
+
+\def\sidenote#1{\footnote{#1}}
+\def\margintext#1{\footnote{#1}}
+
+\usemodule[annotation]
+
+\defineannotation 
+    [fullwidth] 
+    [alternative=command, 
+     command=] 
+
+% put citations in the margin
+\unexpanded\def\sidecite{\dodoubleargument\sidecite_indeed}
+
+\def\sidecite_indeed[#1][#2]%
+         {\getparameters[caesar_sidecite_][left=,right=,#1]%
+           \footnote
+               {\getvalue{caesar_sidecite_left}%
+                \cite[data][#2]%
+                \getvalue{caesar_sidecite_right}}}
+                
+% Enable old style numbers and protrusion
+\definefontfeature[default][default][onum=yes, protrusion=quality, expansion=quality]
+
+\starttypescript[mainface]
+    \definetypeface [mainface] [rm] [serif] [pagella] [default]
+    \definetypeface [mainface] [ss] [sans]  [heros]   [default]
+    \definetypeface [mainface] [tt] [mono]  [cursor]  [default]
+    \definetypeface [mainface] [mm] [math]  [pagella] [default]
+\stoptypescript
+\setupbodyfont[mainface,9pt]
+
+% Enable protrusion
+\setupalign[hz,hanging]
+
+\setupindenting[9pt, yes]
+
+% setup the headings
+\setuphead[chapter]
+          [
+            style=\WORD,
+            number=no,
+            before={\blank[line,force]},
+            after={\blank[line,force]},
+          ]
+
+\setuphead[section]
+          [style=\WORD\tfx,
+           number=no]
+
+\setuphead[subsection]
+          [style=\ita,
+           number=no]
+
+%the table of contents
+\setuplist
+  [chapter]
+  [
+    width=0pt, 
+    margin=0pt, 
+    before={\blank[big]},
+  ]
+
+% setup the captions
+\setupcaption[style={\tfx\setupinterlinespace[line=10pt]}, headstyle=\rm, suffix={:}, width=\textwidth]
+\setupcaption[table][minwidth=\hsize, width=\hsize]
+
+
+\defineexternalfigure[marginwidth] [width=\the\dimexpr\textwidth/2]
+\defineexternalfigure[textwidth]   [width=\textwidth]
+\defineexternalfigure[fullwidth]   [width=\textwidth]
+
+\setupfloat[figure][indentnext=no, location=inner, default={here,top,bottom,page}]
+\setupfloat[table] [indentnext=no, location=inner, default={here,top,bottom,page}]
+
+\definefloat [marginfigure][marginfigures][figure]
+\setupcaption[marginfigure][width=\the\dimexpr\textwidth/2]
+
+\definefloat [widetable][widetables][table]
+\setupcaption[widetable][width=\textwidth]
+
+\definefloat [margintable][margintables][table]
+\setupcaption[margintable][width=\the\dimexpr\textwidth/2]
+
+\setvariables
+  [titlepage]
+  [
+    title=,
+    author=,
+    publisher=,
+    set={\setups{caesar:titlepage}},
+  ]
+
+\startsetups caesar:titlepage
+    {\ssa\noindent\kerncharacters[0.125]\WORD{\getvariable{titlepage}{author}}\endgraf}
+    \blank[6em]
+    {\ssd\noindentation\kerncharacters[0.15]\WORD{\getvariable{titlepage}{title}}\endgraf}
+    \vfill
+    {\ssa\noindentation\kerncharacters[0.125]\WORD{\getvariable{titlepage}{publisher}}\endgraf}
+\stopsetups
+
+\protect \endinput
