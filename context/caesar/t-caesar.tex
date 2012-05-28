@@ -65,13 +65,14 @@
 
 % put citations in the margin
 \unexpanded\def\sidecite{\dodoubleargument\sidecite_indeed}
-\def\sidecite_indeed[#1][#2]%
-    {\getparameters[caesar_sidecite_][left=,right=,#1]%
-      \margintext
-          {\caesar_sidecite_left
-           \cite[data][#2]%
-           \caesar_sidecite_right}}
 
+\def\sidecite_indeed[#1][#2]%
+         {\getparameters[caesar_sidecite_][left=,right=,#1]%
+           \sidenote
+               {\getvalue{caesar_sidecite_left}%
+                \cite[data][#2]%
+                \getvalue{caesar_sidecite_right}}}
+                
 % Enable old style numbers and protrusion
 \definefontfeature[default][default][onum=yes, protrusion=quality, expansion=quality]
 
