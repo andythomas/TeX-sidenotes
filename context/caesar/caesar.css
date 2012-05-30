@@ -1,0 +1,39 @@
+/* the caesar css file to go with the caesar context module */
+
+
+document {
+  font-family  : serif ;
+  font-size    : 10pt ;
+  line-height  : 12pt ;
+  padding      : 1em ;
+}
+
+sectioncontent {
+  display       : block ;
+  margin-top    : 1em ;
+  margin-bottom : 1em ;
+}
+
+section[detail="chapter"], section[detail="title"] {
+  margin-top    : 12pt ;
+  margin-bottom : 12pt ;
+}
+
+section[detail="chapter"]>sectiontitle, section[detail="title"]>sectiontitle {
+  font-size      : 10pt;
+  text-transform : uppercase ;
+}
+
+section[detail="section"], section[detail="subject"] {
+  margin-top    : 12pt ;
+  margin-bottom : 12pt ;
+}
+
+section[detail="section"]>sectiontitle, section[detail="subject"]>sectiontitle {
+  font-size   : 10pt ;
+  font-variant: small-caps;
+}
+
+margintext[detail="margintext"] {
+  font-size   : 12pt ;
+}
