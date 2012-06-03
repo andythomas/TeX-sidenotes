@@ -53,12 +53,13 @@
 {\marginnote{\textsuperscript{#1} #3}[#2]}}
 }%
 \DeclareCaptionStyle{sidecaption}{font=footnotesize}
-\newcommandtwoopt{\sidecaption}[3][][]{%
+\newcommand{\sidecaption}{\@ifstar\@sidenotes@sidecaption@starred\@sidenotes@sidecaption@unstarred}
+\newcommandtwoopt{\@sidenotes@sidecaption@unstarred}[3][][]{%
 \captionsetup{style=sidecaption}%
-\marginnote{\caption[#1]{#3}[#2]}}%
-\newcommandtwoopt{\sidecaption*}[2][]{%
+\ifthenelse{\isempty{#2}}{\marginnote{\caption[#1]{#3}}}{\marginnote{\caption[#1]{#3}}[#2]}}%
+\newcommand{\@sidenotes@sidecaption@starred}[2][]{%
 \captionsetup{style=sidecaption}%
-\marginnote{\caption*{#2}[#1]}}%
+\ifthenelse{\isempty{#1}}{\marginnote{\caption*{#2}}}{\marginnote{\caption*{#2}}[#1]}}%
 \newsavebox{\@sidenotes@sidefigurebox}
 \newboolean{@sidenotes@sidefigure@skip}
 \newcommand{\@sidenotes@sidefigure@skiplength}{}

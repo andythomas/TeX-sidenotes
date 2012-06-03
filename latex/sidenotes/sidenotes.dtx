@@ -219,23 +219,20 @@
 % \end{macro}
 %
 % \begin{macro}{\sidecaption}
+% \changes{v0.91}{2012/06/03}{sidecaption* accompanies sidecaption}
 % Sidecaption puts the caption in the margin.  
 % It never floats with the other text in the margin, since it has to be next to the figure.
+% Sidecaption* works similarly to sidecaption, but without an entry.
 %    \begin{macrocode}
 \DeclareCaptionStyle{sidecaption}{font=footnotesize}
-\newcommandtwoopt{\sidecaption}[3][][]{%
+\newcommand{\sidecaption}{\@ifstar\@sidenotes@sidecaption@starred\@sidenotes@sidecaption@unstarred}
+\newcommandtwoopt{\@sidenotes@sidecaption@unstarred}[3][][]{%
 \captionsetup{style=sidecaption}%
-\marginnote{\caption[#1]{#3}[#2]}}%
-%    \end{macrocode}
-% \end{macro}
+\ifthenelse{\isempty{#2}}{\marginnote{\caption[#1]{#3}}}{\marginnote{\caption[#1]{#3}}[#2]}}%
+\newcommand{\@sidenotes@sidecaption@starred}[2][]{%
+\captionsetup{style=sidecaption}%
+\ifthenelse{\isempty{#1}}{\marginnote{\caption*{#2}}}{\marginnote{\caption*{#2}}[#1]}}%
 %
-% \begin{macro}{\sidecaption*}
-% \changes{v0.91}{2012/06/03}{sidecaption* accompanies sidecaption}
-% Sidecaption* works similar to sidecaption, but without an entry.
-%    \begin{macrocode}
-\newcommandtwoopt{\sidecaption*}[2][]{%
-\captionsetup{style=sidecaption}%
-\marginnote{\caption*{#2}[#1]}}%
 %    \end{macrocode}
 % \end{macro}
 %
