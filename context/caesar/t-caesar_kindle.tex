@@ -100,7 +100,7 @@
 \setupfloat[table] [indentnext=no, location=inner, default={here,top,bottom,page}]
 
 \definefloat [marginfigure][marginfigures][figure]
-\setupcaption[marginfigure][width=\the\dimexpr\textwidth/2]
+\setupcaption[marginfigure][width=\the\dimexpr\textwidth/2-10pt,location={right,low}]
 
 \definefloat [widetable][widetables][table]
 \setupcaption[widetable][width=\textwidth]
