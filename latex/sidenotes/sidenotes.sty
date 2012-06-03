@@ -13,18 +13,12 @@
 %% about the files the work consists of.
 %% 
 \ProvidesPackage{sidenotes}[%
-  2012/06/02 v0.90 rich text in the margin for LaTeX]
+  2012/06/03 v0.91 rich text in the margin for LaTeX]
 \RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
 \RequirePackage{caption} % handles the figure caption (in the margin)
 \RequirePackage{xifthen} % provide an if command
 \RequirePackage{twoopt} % two optional arguments possible
 \RequirePackage[strict]{changepage} % Changepage package for symmetric twoside handling
-\newboolean{@sidenotes@bibtex}%
-\setboolean{@sidenotes@bibtex}{false}%
-\DeclareOption{bibtex}{\setboolean{@sidenotes@bibtex}{true}}% allow to use bibtex with option
-\ProcessOptions
-\ifthenelse{\boolean{@sidenotes@bibtex}}{\RequirePackage{bibentry}}{}
-\newcommand*{\sidenotetextstyle}{\footnotesize}
 \newcounter{sidenote} % make counter
 \newcounter{@sidenotes@buffer}
 \setcounter{sidenote}{1} % init counter
@@ -32,7 +26,8 @@
 \newcommandtwoopt{\sidenote}[3][][]{%
 \sidenotemark[#1]%
 \sidenotetext[#1][#2]{#3}%
-\@ifnextchar\sidenote{\kern-0.07em\textsuperscript{,}}{\@ifnextchar\sidecite{\kern-0.07em\textsuperscript{,}}{ }}%
+\@ifnextchar\sidenote{\kern-0.07em\textsuperscript{,}}%
+{\@ifnextchar\sidecite{\kern-0.07em\textsuperscript{,}}{ }}%
 }
 \newcommand{\sidenotemark}[1][]{%
 \nobreak\hspace{0.1pt}\nobreak%
@@ -50,20 +45,20 @@
 \ifthenelse{\isempty{#1}}{% sitenotemark given?
 \addtocounter{sidenote}{-1}%
 \ifthenelse{\isempty{#2}}% offset given?
-{\marginpar{\textsuperscript{\thesidenote}{} \sidenotetextstyle#3}}%
-{\marginnote{\textsuperscript{\thesidenote}{} \sidenotetextstyle#3}[#2]}%
+{\marginpar{\textsuperscript{\thesidenote}{} #3}}%
+{\marginnote{\textsuperscript{\thesidenote}{} #3}[#2]}%
 \addtocounter{sidenote}{1}}%
 {\ifthenelse{\isempty{#2}}% offset given?
-{\marginpar{\textsuperscript{#1} \sidenotetextstyle#3}}
-{\marginnote{\textsuperscript{#1} \sidenotetextstyle#3}[#2]}}
+{\marginpar{\textsuperscript{#1} #3}}
+{\marginnote{\textsuperscript{#1} #3}[#2]}}
 }%
-\ifthenelse{\boolean{@sidenotes@bibtex}}
-{\newcommandtwoopt{\sidecite}[3][][]{\sidenote{#1\bibentry{#3}#2}}}
-{\newcommandtwoopt{\sidecite}[3][][]{\sidenote{\fullcite[#1][#2]{#3}}}}
 \DeclareCaptionStyle{sidecaption}{font=footnotesize}
 \newcommandtwoopt{\sidecaption}[3][][]{%
 \captionsetup{style=sidecaption}%
 \marginnote{\caption[#1]{#3}[#2]}}%
+\newcommandtwoopt{\sidecaption*}[2][]{%
+\captionsetup{style=sidecaption}%
+\marginnote{\caption*{#2}[#1]}}%
 \newsavebox{\@sidenotes@sidefigurebox}
 \newboolean{@sidenotes@sidefigure@skip}
 \newcommand{\@sidenotes@sidefigure@skiplength}{}
@@ -71,14 +66,15 @@
 \newenvironment{marginfigure}[1][]%
 {\ifthenelse{\isempty{#1}}% offset?
 {\setboolean{@sidenotes@sidefigure@skip}{false}}%
-{\setboolean{@sidenotes@sidefigure@skip}{true}\renewcommand{\@sidenotes@sidefigure@skiplength}{#1}}%
+{\setboolean{@sidenotes@sidefigure@skip}{true}%
+\renewcommand{\@sidenotes@sidefigure@skiplength}{#1}}%
 \begin{lrbox}{\@sidenotes@sidefigurebox}%
 \begin{minipage}{\marginparwidth}%
 \captionsetup{type=figure,style=marginfigure}}%
 {\end{minipage}%
 \end{lrbox}%
 \ifthenelse{\boolean{@sidenotes@sidefigure@skip}}% offset?
-{\marginnote{\usebox{\@sidenotes@sidefigurebox}}[\@sidenotes@sidefigure@skiplength]}% with offset
+{\marginnote{\usebox{\@sidenotes@sidefigurebox}}[\@sidenotes@sidefigure@skiplength]}% offset
 {\marginpar{\usebox{\@sidenotes@sidefigurebox}}}% no offset
 }
 \newsavebox{\@sidenotes@margintablebox}
@@ -88,7 +84,8 @@
 \newenvironment{margintable}[1][]%
 {\ifthenelse{\isempty{#1}}%
 {\setboolean{@sidenotes@margintable@skip}{false}}%
-{\setboolean{@sidenotes@margintable@skip}{true}\renewcommand{\@sidenotes@margintable@skiplength}{#1}}%
+{\setboolean{@sidenotes@margintable@skip}{true}%
+\renewcommand{\@sidenotes@margintable@skiplength}{#1}}%
 \begin{lrbox}{\@sidenotes@margintablebox}%
 \begin{minipage}{\marginparwidth}%
 \captionsetup{type=table,style=margintable}}%
