@@ -1,17 +1,15 @@
-\documentclass[]{caesar_book}
-
+\documentclass{caesar_book}
 % -- language: English --
 %
 \usepackage[english]{babel}
-
 % -- biblatex --
 \usepackage[backend=biber,style=philosophy-classic]{biblatex} % xxx
 % the .bib file with the references
-\addbibresource{caesar_library.bib} 
+\addbibresource{library.bib} 
 
 % Information about the book
 % to be put on the title page
-\title{Caesar\\examples}
+\title{Sidenotes\\Caesar}
 \author{Andy Thomas}
 \newcommand{\publisher}{Bielefeld University}
 
@@ -25,66 +23,144 @@
 % start to number the pages
 \mainmatter
 % The first chapter with annotation and citations
-\chapter{Examples}
-The first thing to do is to type some plain text in the document. No surprises here.
-The layout has ample margins to allow annotations on the page.%
-\sidenote{All information is on the same page, no turning of pages is necessary.} 
-For more information about this concept compare e.g.\ the books of Edward Tufte.%
-\sidecite[Please see:][and more work by Tufte.]{Tufte1990,Tufte2006}
+\chapter{Quick start}
+On the one hand, the following examples describe the use of the sidenotes package. On the other hand, the caesar class is utilized to give sensible default values for page margins, chapter formatting and such. The formatting can easily be changed and is independent of the functionality of the additional macros provided by the sidenotes package. First, the class is loaded with\\
+\verb+\documentclass[]{caesar_book}+\\
+The class is derived from the standard \LaTeX-book class and the square brackets allow the same parameters. The next task is to set the main language of the manuscript. \texttt{Babel} is used to set English (or any other language)\\
+\verb+\usepackage[english]{babel}+\\
+For German, \texttt{csquotes} is needed as well. Next, is the configuration of the references. \texttt{biblatex} is used in this case, it allows a lot of options to configure the exact look of the bibliography as well as the references in the text.\\
+\verb+\usepackage[backend=biber,+\\
+\verb+       style=philosophy-classic]{biblatex}+\\
+\texttt{biber} is the natural companion of \texttt{biblatex}. Any style file can be used instead of \texttt{philosophy-classic}. Now, \texttt{biblatex} needs at east one resource file with the references.\\
+\verb+\addbibresource{library.bib}+\\
+In the example set, the name of the file is \texttt{library.bib}. Now, information about the book has to be added. The name of the author, the title and the publisher is automatically used to generate the title page.\\
+\verb+\title{Caesar\\examples}+\\
+\verb+\author{Andy Thomas}+\\
+\verb+\newcommand{\publisher}{Bielefeld University}+\\
+The document can start now with\\
+\verb+\begin{document}+\\
+The first pages of the book (the frontmatter) are not numbered, the numbering starts after the \texttt{mainmatter} macro, which is called after the generation of the title page.\\
+\verb+\frontmatter+\\
+\verb+\maketitlepage+\\
+\verb+\mainmatter+\\
+It is time for the first chapter. This in done in the usual way.\\
+\verb+\chapter{Quick start}+\\
+Now, the first thing to do is to type some plain text in the document. No surprises here.
+The layout has ample margins to allow annotations. 
+One main feature and the package is the sidenote, which is a footnote in the margin and can be placed with the \texttt{sidenote} macro.\sidenote{All information is on the same page, no turning of pages is necessary.}\\
+\verb+\sidenote{All ... necessary.}+\\
+It is very similar to \verb+\footnote+ and tries to emulate its behavior. It has the same number parameter as footnote plus an additional, optional offset. The sidenote moves up or down (floats) to not overlap with other floats in the margin if not offset is given. All the sidenotes are subsequently numbered. The first, optional parameter will manually change the numbering of the sidenote.\sidenote{Technically, the note is placed using marginnote if an offset is given and is placed using marginpar otherwise.}\\
+\verb+\sidenote[number][offset]{text}+\\
+Sometimes it is not possible to directly call a sidenote macro, e.g. in particular environments. Then, you can also use \texttt{sidenotemark} macro. If a number is given, that number is used. This puts a mark at the current position.\\
+\verb+\sidenotemark[number]+\\
+Afterwards, outside of the environment that causes the trouble, it is possible the call \texttt{sidenotetext} to actually make the sidenote. The optional parameters will again manually change the numbering of the sidenote and define the offset.\\
+\verb+\sidenotetext[number][offset]{text}+\\
+\texttt{marginparstyle} can be used if you want to change the font, text size, text color or something else of the sidenotes.\\
+\verb+\newcommand{\marginparstyle}+\\
+\verb+     {\footnotesize\RaggedRight}+\\
+It is the prefix for all \texttt{marginpar} macros. Please note, that this breaks the original definition of \texttt{marginpar} and is defined in the caesar class for convenience. References can be put in the margin as well. A lot of times, it is more convenient to simply use the existing \texttt{cite} macro and redefine it in a proper way. Since this also breaks a common macro, it is put in the caesar class instead of the package.\sidecite[Please see:][and more work by Tufte.]{Tufte1990,Tufte2006} It is defined with two optional parameters (prefix and postfix) taken from the biblatex package. Therefore, the full macro is\\
+\verb+\sidecite[prefix][postfix]{citekey}+\\
 % A section with a couple of figures
 \section{Figures}
-There are a couple of options to include figures in the document.The first one is a figure in the margin.%
 %
-\smallfigure{rectangle}{A small rectangle put in the margin.}%
+\begin{marginfigure}%
+    \includegraphics[width=\marginparwidth]{rectangle}%
+    \caption{A small rectangle put in the margin.\label{rectangle}}%
+\end{marginfigure}
 %
-Figure \ref{rectangle} shows that with a small rectangle. The next alternative is a figure in the text frame. %
+There are a couple of options to include figures in the document. The first one is a figure in the margin. Figure \ref{rectangle} shows that with a small rectangle. The environment provided by the package is:\\
+\verb+\begin{marginfigure}[offset]+\\
+\verb+...+\\
+\verb+\end{marginfigure}+\\
+The formatting is done by the \texttt{caption} package, just define a style called \textit{marginfigure}. Please refer to the caption manual for more information. As always, an offset fixes the figure at a given position, if no offset is given it floats. The next alternative is a figure in the text frame. %
 %
-\normalfigure{rectangle2}{A larger rectangle in the main area of the text, i.e.\ it does not span into the margin.}%
+\begin{figure}[htbp]%
+	\includegraphics[width=\textwidth]{rectangle2}%
+	\caption{A larger rectangle in the main area of the text, i.e.\ it does not span into the margin.}%
+	\label{rectangle2}%
+\end{figure}%
 %
-This larger rectangle is displayed in figure \ref{rectangle2}. In case that an even wider figure is needed, the third option spans over the text as well as the margin area.%
+This figure is placed using the regular \LaTeX-figure environment and the usual caption. This is displayed in figure~\ref{rectangle2}. 
 %
-\largefigure{rectangle3}{An even larger rectangle. This is the widest figure option. Both, the text as well as the margin width are used for the diagram.}%
+\begin{figure}[htbp]%
+	\sidecaption[][-20pt]{This caption of a regular figure is put in the margin.\label{rectangle2b}}%
+	\includegraphics[width=\textwidth]{rectangle2}%
+\end{figure}%
 %
-The three options make it easy to choose the appropriate size for a given input file. 
+Another option is a caption in the margin (fig. \ref{rectangle2b}). Just replace the \texttt{caption} macro with \texttt{sidecaption}. It has an additional offset parameter and can be used in a starred or unstarred version.\\
+\verb+\sidecaption[shortentry][offset]{text}+\\
+\verb+\sidecaption*[offset]{text}+\\
+Define a style called \textit{sidecaption} to change the formatting. In case that a wider figure is needed, the third option spans over the text as well as the margin area.%
+%
+\begin{figure*}[htbp]
+    \includegraphics[width=400pt]{rectangle3}%
+    \caption{An even larger rectangle. This is the widest figure option. Both, the text as well as the margin width are used for the diagram.}
+    \label{rectangle3}
+\end{figure*}
+%
+Here, the common \texttt{figure*} environment can be used. The formatting style is called \textit{widefigure} in this case. 
+The figure options make it easy to choose the appropriate size for a given input file. 
 % Next section with a variety of tables
 \section{Tables}
-The same options are also available for tables.%
+The same set of options are also available for tables.%
 %
-\smalltable{table1}{A couple of numbers in a table in the margin.}{%
- \begin{tabular}{lll}%
+\begin{margintable}%
+	\begin{tabular}{lll}%
      A&B&C\\%
      0.50&0.47&0.48\\%
-  \end{tabular}%
-}%
-The first one is again a small one in the margin, this is shown in table \ref{table1}. The next option is a table across the text width. %
+    \end{tabular}%
+	\vspace{2pt}
+	\caption{A couple of numbers in a table in the margin.\label{table1}}%
+\end{margintable}%
+The first one is again a small one in the margin, this is shown in table \ref{table1}.\\
+\verb+\begin{margintable}[offset]+\\
+\verb+...+\\
+\verb+\end{marginfigure}+\\
+The caption style is called \textit{margintable}. The next option is a table across the text width. %
 %
-\normaltable[t]{table2}{A couple of numbers in a larger table. This table spans the usual text width.}{%
- \begin{tabular}{lllllllll}%
+\begin{table}[htbp]%
+	 \begin{tabular}{lllllllll}%
      A&B&C&D&E&F&G&H&I\\%
     0.50&0.47&0.48&0.50&0.47&0.48&0.60&0.39&1.00\\%
-  \end{tabular}%
-}%
-Table \ref{table2} displays the larger table with a couple of numbers. The last choice is again a table over the full width of the page. This is demonstrated in table \ref{table3}.
+    \end{tabular}%
+	\vspace{2pt}%
+	\captionsetup{width=\textwidth, justification=justified}%
+	\caption{A couple of numbers in a larger table. This table spans the usual text width.\label{table2}}%
+\end{table}%
 %
-\largetable{table3}{Even more numbers in a big table are shown here. This table spans across the full page, text width plus margin.}{%
+Table \ref{table2} displays the larger table with a couple of numbers. This is done using regular \LaTeX-macros. A side caption is also %
+%
+\begin{table}[htbp]%
+	 \sidecaption[][-20pt]{This is a regular table with its caption in the margin.\label{table2b}}%
+	 \begin{tabular}{lllllllll}%
+     A&B&C&D&E&F&G&H&I\\%
+    0.50&0.47&0.48&0.50&0.47&0.48&0.60&0.39&1.00\\%
+    \end{tabular}%
+\end{table}%
+%
+possible for tables and shown in table \ref{table2b}. The usage was already explained in the figure section. The \texttt{table*} environment is also defined in analogy to \texttt{figure*} and is demonstrated in table \ref{table3}.
+%
+\begin{table*}[htbp]
  \begin{tabular}{lllllllllllll}%
      A&B&C&D&E&F&G&H&I&J&K&L&M\\%
     0.50&0.47&0.48&0.50&0.47&0.48&0.60&0.39&1.00&0.50&0.47&0.48&0.60\\%
   \end{tabular}%
-}%
+  \vspace{2pt}
+  \caption{Even more numbers in a big table are shown here. This table spans across the full page, text width plus margin.\label{table3}}%
+\end{table*}
 %
 \section{Text across the full page}
-Sometimes it can be useful to put some text across the whole page, which is similar to \texttt{largefigure} and \texttt{largetable}. This can be done as well, but it does not necessary work across page breaks.
-
 \begin{fullwidth}
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit, vestibulum ut, placerat ac, adipiscing vitae, felis. Curabitur dictum gravida mauris. Nam arcu libero, nonummy eget, consectetuer id, vulputate a, magna. Donec vehicula augue eu neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris ut leo. Cras viverra metus rhoncus sem. Nulla et lectus vestibulum urna fringilla ultrices. Phasellus eu tellus sit amet tortor gravida placerat. Integer sapien est, iaculis in, pretium quis, viverra ac, nunc. Praesent eget sem vel leo ultrices bibendum. Aenean faucibus. 
+Sometimes it can be useful to put some text across the whole page, which is similar to \texttt{largefigure} and \texttt{largetable}. This can be done as well, but it does not necessary work across page breaks. It might also overlap with the marginals, the sidenotes are not pushed up or down by the text. It is defined the the caesar class.
 \end{fullwidth}
-%
-It might also overlap with the marginals, the sidenotes are not pushed up or down.
-\margintext{It is also possible to put a remark in the margin without a corresponding mark in the text.}
+\verb+\begin{fullwidth}+\\
+\verb+...+\\
+\verb+\end{fullwidth}+\\
 %
 \section{More information}
-This is a short example file to show the features of the caesar class. More information is available in the caesar manual. The chapter \textit{Quick start} discusses and comments the source of this example file. 
+This is a short example file to show the features of the caesar class together with the sidenotes package.\marginpar{It is always possible to put a remark in the margin without a corresponding mark in the text with \texttt{marginpar}.} Finally, the bibliography can be printed using bib latex's\\
+\verb+\printbibliography[heading=bibintoc]+\\
+Sometimes it is necessary to compile the document up to 3 times in order to get the alignment of all object correctly.
 %
 \printbibliography[heading=bibintoc]
  %
