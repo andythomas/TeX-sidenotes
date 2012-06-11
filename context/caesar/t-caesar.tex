@@ -10,6 +10,9 @@
 
 \unprotect
 
+\def\caesarmarginwidth{100pt}
+\def\caesarmargindistance{20pt}
+
 \definepapersize[wissenschaft][width=170mm, height=240mm]
 \setuppapersize [wissenschaft]
 
@@ -22,20 +25,18 @@
              backspace=42pt,
              leftmargin=0pt,
              width=280pt,
-             rightmargindistance=20pt,
-             rightmargin=100pt]
+             rightmargindistance=\caesarmargindistance,
+             rightmargin=\caesarmarginwidth]
 
 % doublesided layout to get different verso and recto pages
 \setuppagenumbering[alternative=doublesided]
 
 % setup the side notes
-\setupmargindata[stack=continue]
-
 \setupmargindata
     [margintext]
     [location=outer,
-     width=100pt,
-     align=flushouter,
+     width=\caesarmarginwidth,
+     align=flushleft,
      stack=continue,
      style={\tfx\setupinterlinespace[line=10pt]}]
 
@@ -44,7 +45,7 @@
 % setup the numbering of the side notes
 \define[2]\caesar_sidenote_command 
     {\high{\rawnumber[sidenote]}% 
-     \margintext{\high{#1} #2\vskip4pt}} 
+     \margintext{\high{#1}\,#2\vskip4pt}} 
 
 \defineannotation 
     [sidenote] 
@@ -64,14 +65,18 @@
      command=\caesar_fullwidth_command] 
 
 % put citations in the margin
-\unexpanded\def\sidecite{\dodoubleargument\sidecite_indeed}
+\unexpanded\def\sidecite{\dodoubleempty\sidecite_indeed}
 
 \def\sidecite_indeed[#1][#2]%
-         {\getparameters[caesar_sidecite_][left=,right=,#1]%
-           \sidenote
+          { \ifsecondargument
+            \getparameters[caesar_sidecite_][left=,right=,#1]%
+            \sidenote
                {\getvalue{caesar_sidecite_left}%
                 \cite[data][#2]%
-                \getvalue{caesar_sidecite_right}}}
+                \getvalue{caesar_sidecite_right}}
+            \else
+            \sidenote{\cite[data][#1]}
+            \fi}
                 
 % Enable old style numbers and protrusion
 \definefontfeature[default][default][onum=yes, protrusion=quality, expansion=quality]
@@ -120,9 +125,9 @@
 \setupcaption[style={\tfx\setupinterlinespace[line=10pt]}, headstyle=\rm, suffix={:}]
 \setupcaption[table][minwidth=\hsize, width=\hsize]
 
-\definemeasure[fullwidth_extra][\the\dimexpr\rightmargindistance+\rightmarginwidth]
+\definemeasure[fullwidth_extra][\the\dimexpr\caesarmargindistance+\caesarmarginwidth]
 
-\defineexternalfigure[marginwidth] [width=\rightmarginwidth]
+\defineexternalfigure[marginwidth] [width=\caesarmarginwidth]
 \defineexternalfigure[textwidth]   [width=\textwidth]
 \defineexternalfigure[fullwidth]   [width=\the\dimexpr\textwidth+\measure{fullwidth_extra}\relax]
 
