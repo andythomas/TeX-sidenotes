@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesFile{caesar_book.cls}[2012/06/03 v0.91 Caesar book]
+\ProvidesFile{caesar_book.cls}[2012/11/07 v0.91a Caesar book]
 % Load the amsmath and the mhchem package before loading microtype
 \RequirePackage{amsmath}% better math handling
 \RequirePackage[version=3]{mhchem}% chemical formulas
@@ -83,20 +83,37 @@
   \@xympar}
 % compatibility with T-L
 %
+% titlepage
+\newcommand{\publisher}[1]{\gdef\caesar@publisher{#1}}
 \RequirePackage{textcase} % provides \MakeTextUppercase and \MakeTextLowercase
 \RequirePackage{color} % the title is too black, define gray
 \definecolor{darkgray}{rgb}{0.25,0.25,0.25}
-\newcommand{\maketitlepage}[0]{% the title page is generated here
+\newcommand{\maketitlepage}{% the title page is generated here
+  % first count the number of lines in the title
+  \setbox0\vbox{\noindent\fontsize{30}{38}\selectfont\caesar@letterspace{\MakeTextUppercase{\@title}}\par
+  \count@\z@
+  \loop
+  \unskip\unpenalty\unskip\unpenalty\unskip
+  \setbox0\lastbox
+  \ifvoid0
+  \xdef\caesar@numlines{\the\count@}%
+  \else
+  \advance\count@\@ne
+  \repeat}
+  % now adjust the vertical spaces accordingly
+  \edef\caesar@titlespace{\the\dimexpr 210pt - 15pt * \caesar@numlines \relax}% calculate the necessary space
   \cleardoublepage%
   \begingroup%
   {%
   \sffamily%
   \begin{fullwidth}%
+  \vspace*{0em}% one line extra space
   \LARGE\caesar@letterspace{\MakeTextUppercase{\@author}}\par
-  \vspace{6em}%
-  \noindent\fontsize{38}{50}\selectfont\textcolor{darkgray}{\caesar@letterspace{\MakeTextUppercase{\@title}}}\par
   \vfill%
-  \Large\noindent\caesar@letterspace{\MakeTextUppercase{\publisher}}\par
+  \noindent\fontsize{30}{38}\selectfont\textcolor{darkgray}{\caesar@letterspace{\MakeTextUppercase{\@title}}}\par
+  \vfill%
+  \vspace{\caesar@titlespace}%
+  \Large\noindent\caesar@letterspace{\MakeTextUppercase{\caesar@publisher}}\par
   \end{fullwidth}%
   }%
   \endgroup%
