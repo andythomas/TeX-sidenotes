@@ -81,6 +81,9 @@
   \@savemarbox\@marbox{\marginparstyle#1}% marginparstyle is a prefix to the marginpar text now
   \global\setbox\@currbox\copy\@marbox % the rest of the definition is taken from original LaTeX
   \@xympar}
+% setup itemize and enumerate  
+\setlength{\leftmargini}{0pt}
+\renewcommand{\labelitemi}{}
 % compatibility with T-L
 %
 % titlepage
