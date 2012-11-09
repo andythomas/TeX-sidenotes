@@ -1,1 +1,5 @@
-This package tries to allow typesetting of texts with notes, figures, citations, captions and tables in the margin, which is common in science textbooks
+This package allows the typesetting of manuscripts with notes, figures, citations, captions and tables in the margin, which is common e.g. in science textbooks or theses. 
+
+There is a LaTeX version that consists of a small package to provide the basic functionalities (sidenotes.sty) and a class that provides the necessary default values for e.g. margins and text sizes (caesar_book.cls). An example file and a quick start manual are also available. 
+
+In addition, there is a ConTeXt version as well. It consists of a single module (t-caesar.tex) and an example file as well.
