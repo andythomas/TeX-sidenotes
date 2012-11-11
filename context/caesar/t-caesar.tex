@@ -68,7 +68,7 @@
 \unexpanded\def\sidecite{\dodoubleempty\sidecite_indeed}
 
 \def\sidecite_indeed[#1][#2]%
-          { \ifsecondargument
+          {\ifsecondargument
             \getparameters[caesar_sidecite_][left=,right=,#1]%
             \sidenote
                {\getvalue{caesar_sidecite_left}%
