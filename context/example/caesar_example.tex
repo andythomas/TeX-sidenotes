@@ -13,52 +13,59 @@
 \starttext
 \setvariables
   [titlepage]
-  [title={Caesar\\Examples},
+  [title={Caesar\\Quick start},
    author={Andy Thomas},
    publisher={Bielefeld University}]
 
 \title{Contents} 
 \placelist[chapter]
 
-\title{Tables}
-\placelist[table,widetable]
 %
-\chapter{Examples}
-The first thing to do is to type some plain text in the document. No surprises here.
-The layout has ample margins to allow annotations on the page.%
-\sidenote{All information is on the same page, no turning of pages is necessary.} 
-For more information about this concept compare e.g.\ the books of Edward Tufte.%
-\sidecite[left={See e.g.\ }, right={ And other Tufte books.}][Tufte1990,Tufte2006]
+\chapter{Quick start}
+We compiled a minimal example file to show the basic use of the caesar module, which allows the typesetting of (science) text- books or theses. The module provides the additional functionality\sidenote{namely the use of marginal material such as this note or even figures or tables.} as well as sensible default values for page margins, chapter formatting and such.
+
+The layout has ample margins to allow annotations. A main feature of the module is the sidenote, which is a footnote in the margin and can be placed with the {\tt sidenote} macro.\sidenote{All information is on the same page, no turning of pages is necessary.} It is very similar to a footnote and tries to emulate its behavior. The sidenote moves up or down (floats) to not overlap with other floats in the margin. All the sidenotes are subsequently numbered.
+
+References can be put in the margin as well.\sidecite[left={For the ideas behind all this, please see: }, right={ and more work by Tufte.}][Tufte1990,Tufte2006] The macro is named {\tt sidecite} and is defined with two parameters ({\tt left} and {\tt right}). The next two sections describe the different options for the use of figures and tables in a document. We start with figures.
+
 % A section with a couple of figures
 \section{Figures}
+%
 \startplacemarginfigure[ title={A small rectangle put in the margin.}, reference=fig1]
   \externalfigure[dummy][marginwidth]
 \stopplacemarginfigure
 
-There are a couple of options to include figures in the document. The first one is a figure in the margin.
-\in{Figure}[fig1] shows that with a small rectangle. The next alternative is a figure in the text frame. %
+There are three basic options to include figures in a document. The first option is a small figure and its caption in the margin. \in{Figure}[fig1] shows that, simply place a {\tt marginfigure} instead of a {\tt figure}.
+
+The next alternative is a figure in the text frame. The figure is placed using the regular ConTeXt-figure placement with title and is displayed in \in{figure}[fig2].
 %
 \startplacefigure[title={A larger rectangle in the main area of the text, i.e.\ it does not span into the margin.},
   reference=fig2]
-  \externalfigure[dummy][textwidth]
+  \externalfigure[rectangle][textwidth]
 \stopplacefigure
 %
-This larger rectangle is displayed in \in{figure}[fig2]. In case that an even wider figure is needed, the third option spans over the text as well as the margin area. The three options make it easy to choose the appropriate size for a given input file. 
+
+In case that a wider figure is needed, the third option spans over the text as well as the margin area. Here, the figure can also be placed using the regular ConTeXt-figure with title.  
 %
 \startplacefigure[title={An even larger rectangle. This is the widest figure option. Both, the text as well as the margin width are used for the diagram.}]
-  \externalfigure[dummy][fullwidth]
+  \externalfigure[rectangle][fullwidth]
 \stopplacefigure
 % Next section with a variety of tables
+%
 \section{Tables}
 %
+The same set of options (small, normal and wide) are also available for tables. 
+
 \placemargintable[table1]{A couple of numbers in a table in the margin.}{%
-\starttable[|c|c|c|]
-  \NC A \NC B \NC C\NC\SR
-  \NC 0.50 \NC 0.47 \NC 0.48  \NC \FR
-\stoptable
-}
-The same options are also available for tables.
-The first one is again a small one in the margin, this is shown in table \in[table1]. The next option is a table across the text width. %
+\starttable[|c|c|c|]%
+  \NC A \NC B \NC C\NC\SR%
+  \NC 0.50 \NC 0.47 \NC 0.48  \NC \FR%
+\stoptable%
+}%
+
+The first one is a small table in the margin, this margintable is shown in table  \in[table1].
+
+Table \in[table2] displays the larger table with a couple of numbers. This is done using regular ConTeXt-macros for placing the table along with its title.
 %
 \startplacetable[reference=table2, title={A couple of numbers in a larger table. This table spans the usual text width.}]
 \starttable[|c|c|c|c|c|c|c|c|]
@@ -66,7 +73,8 @@ The first one is again a small one in the margin, this is shown in table \in[tab
 \NC 0.21	\NC 0.23 \NC 0.34 \NC 0.42 \NC 0.53 \NC 0.64 \NC 0.72	\NC 0.33 \NC\FR
 \stoptable
 \stopplacetable
-Table \in[table2] displays the larger table with a couple of numbers. The last choice is again a table over the full width of the page. This is demonstrated in table \in[table3].
+
+The last choice is again a table over the full width of the page. This is demonstrated in table \in[table3].
 %
 \startplacewidetable[reference={table3}, title={Even more numbers in a big table are shown here. This table spans across the full page, text width plus margin.}]
 \starttable[|c|c|c|c|c|c|c|c|c|c|c|c|]
@@ -75,19 +83,8 @@ Table \in[table2] displays the larger table with a couple of numbers. The last c
 \stoptable
 \stopplacewidetable
 %
-\section{Text across the full page}
-Sometimes it can be useful to put some text across the whole page, which is similar to {\tt largefigure} and {\tt largetable}. This can be done as well, but it does not necessary work across page breaks.
-
-\startfullwidth
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit, vestibulum ut, placerat ac, adipiscing vitae, felis. Curabitur dictum gravida mauris. Nam arcu libero, nonummy eget, consectetuer id, vulputate a, magna. Donec vehicula augue eu neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris ut leo. Cras viverra metus rhoncus sem. Nulla et lectus vestibulum urna fringilla ultrices. Phasellus eu tellus sit amet tortor gravida placerat. Integer sapien est, iaculis in, pretium quis, viverra ac, nunc. Praesent eget sem vel leo ultrices bibendum. Aenean faucibus. 
-\stopfullwidth
-
-%
-It might also overlap with the marginals, the sidenotes are not pushed up or down.%
-\margintext{It is also possible to put a remark in the margin without a corresponding mark in the text.}
-%
 \section{More information}
-This is a short example file to show the features of the caesar class. More information is available in the caesar manual. The chapter {\it Quick start} discusses and comments the source of this example file. 
+This is a short example file to show the features of the caesar module. Please use the example input file as a starting point for your own projects.
 %
 \chapter{References}
 \placepublications[criterium=text]
