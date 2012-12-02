@@ -1,4 +1,8 @@
 \documentclass{caesar_book}
+%
+% -- use dummy graphics
+\usepackage{mwe}
+
 % -- language: English --
 %
 \usepackage[english]{babel}
@@ -29,21 +33,21 @@ We compiled a minimal example file to show the basic use of the caesar class, wh
 
 The first pages of the book (the frontmatter) are not numbered, the numbering starts after the \texttt{mainmatter} macro, which is called after the generation of the title page. The layout has ample margins to allow annotations. A main feature and the package is the sidenote, which is a footnote in the margin and can be placed with the \texttt{sidenote} macro.\sidenote{All information is on the same page, no turning of pages is necessary.} It is very similar to \texttt{footnote} and tries to emulate its behavior. The sidenote moves up or down (floats) to not overlap with other floats in the margin and all the sidenotes are subsequently numbered. 
 
-References can be put in the margin as well.\sidecite[For the ideas behind all this, please see:][ and more work by Tufte.]{Tufte1990,Tufte2006} The macro was named \texttt{sidecite} and is defined with two optional parameters (prefix and postfix) similar to \texttt{cite} taken from the biblatex package. The next two sections describe the different options for the use of figures and tables in a document. We start with figures.
+References can be put in the margin as well.\sidecite[For the ideas behind all this, please see:][ and more work by Tufte.]{Tufte1990,Tufte2006} The macro was named \texttt{sidecite} and is defined with two optional parameters (prefix and postfix) similar to \texttt{cite} taken from the biblatex package. The next two sections describe the different options for the use of figures and tables in a document. We start with a couple of figures.
 % A section with a couple of figures
 \section{Figures}
 %
 \begin{marginfigure}%
-    \includegraphics[width=\marginparwidth]{rectangle}%
+    \includegraphics[width=\marginparwidth]{example-image-a}%
     \caption{A small rectangle put in the margin.\label{rectangle}}%
 \end{marginfigure}%
 %
-There are three basic options to include figures in the document. The first option is a small figure and its caption in the margin. Figure \ref{rectangle} shows that with a gray rectangle, simply use \texttt{marginfigure} instead of \texttt{figure}. 
+There are three basic options to include figures in a document. The first option is a small figure and its caption in the margin. Figure \ref{rectangle} shows that with a gray rectangle framing the letter \emph{A}. We simply use the \texttt{marginfigure} environment instead of the \texttt{figure} one. 
 
-The next alternative is a figure in the text frame. The figure is placed using the regular \LaTeX-figure environment and  caption, which is displayed in figure~\ref{rectangle2}. 
+The next alternative is a figure in the text frame. The figure is placed using the regular \LaTeX-figure environment and its  caption, which is displayed in figure~\ref{rectangle2}. 
 %
 \begin{figure}[htbp]%
-	\includegraphics[width=\textwidth]{rectangle}%
+	\includegraphics[height=180pt,width=\textwidth]{example-image-b}%
 	\caption{A larger rectangle in the main area of the text, i.e.\ it does not span into the margin.}%
 	\label{rectangle2}%
 \end{figure}%
@@ -52,7 +56,7 @@ The next alternative is a figure in the text frame. The figure is placed using t
 In case that a wider figure is needed, the third option spans over the text as well as the margin area. Here, the common \texttt{figure*} environment can be used. The figure options make it easy to choose the appropriate size for a given input file. 
 %
 \begin{figure*}[htbp]
-    \includegraphics[width=400pt]{rectangle}%
+    \includegraphics[height=180pt,width=400pt]{example-image-c}%
     \caption{An even larger rectangle. This is the widest figure option. Both, the text as well as the margin width are used for the diagram.}
     \label{rectangle3}
 \end{figure*}
