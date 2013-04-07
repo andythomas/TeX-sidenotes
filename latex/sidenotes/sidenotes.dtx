@@ -19,7 +19,7 @@
 %</driver>
 %<package>\ProvidesPackage{sidenotes}[%
 %<*driver|package>
-  2012/11/09 v0.92 rich text in the margin for LaTeX]
+  2012/04/07 v0.93 rich text in the margin for LaTeX]
 %</driver|package>
 %<package>\RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
 %<package>\RequirePackage{caption} % handles the figure caption (in the margin)
@@ -160,24 +160,34 @@
 % \changes{v0.91}{2012/06/03}{sidenotetextstyle is not needed any more}
 % We need a counter similar to the footnote counter and we want to 
 % have a buffer. 
-% \begin{macrocode}
+%    \begin{macrocode}
 \newcounter{sidenote} % make counter
 \newcounter{@sidenotes@buffer}
 \setcounter{sidenote}{1} % init counter 
 %    \end{macrocode}
-
+% \changes{v0.93}{2012/04/17}{regular ifnextchar gobbles trailing whitespaces, introduce a new one that does not.}
+%    \begin{macrocode}
+\def\@sidenotes@ifnextchar#1#2#3{%
+\let\@sidenotes@buffere #1\def\@sidenotes@buffera{#2}%
+\def\@sidenotes@bufferb{#3}\futurelet\@sidenotes@bufferc\@sidenotes@ifnextchar@real}%
+\def\@sidenotes@ifnextchar@real{%
+\ifx\@sidenotes@bufferc \@sidenotes@buffere \let\@sidenotes@bufferd\@sidenotes@buffera%
+\else\let\@sidenotes@bufferd\@sidenotes@bufferb\fi\@sidenotes@bufferd}%
+%    \end{macrocode}
+%
 % \begin{macro}{\sidenote}
 % Introduce the sidenote macro with an additional optional argument to set the offset.
 % \changes{v0.53}{2011/10/07}{bugfix, now optional number and offset possible}
 % \changes{v0.80}{2011/11/10}{unstar the newcommand.}
 % \changes{v0.81}{2011/11/29}{added a comma between subsequent sidenotes} 
 % \changes{v0.90}{2012/06/02}{add optional offset for sidenote} 
+% \changes{v0.93}{2012/04/17}{removed mandatory whitespace, new ifnextchar takes care of that}
 %    \begin{macrocode}
 \newcommandtwoopt{\sidenote}[3][][]{%
 \sidenotemark[#1]%
 \sidenotetext[#1][#2]{#3}%
-\@ifnextchar\sidenote{\kern-0.07em\textsuperscript{,}}%
-{\@ifnextchar\sidecite{\kern-0.07em\textsuperscript{,}}{ }}%
+\@sidenotes@ifnextchar\sidenote{\kern-0.07em\textsuperscript{,}}%
+{\@sidenotes@ifnextchar\sidecite{\kern-0.07em\textsuperscript{,}}{}}%
 }
 %    \end{macrocode}
 % \end{macro}
@@ -194,7 +204,7 @@
 \setcounter{sidenote}{#1}%
 \textsuperscript{\thesidenote}% print out the argument otherwise
 \setcounter{sidenote}{\value{@sidenotes@buffer}}}%
-\@ifnextchar\sidenote{\textsuperscript{,}}{}%
+\@sidenotes@ifnextchar\sidenote{\textsuperscript{,}}{}%
 \ignorespaces%
 }%
 %    \end{macrocode}
@@ -204,6 +214,7 @@
 % Sidenotetext is supposed to work similarly to footnotetext. The additional, optional argument sets the offset.
 % \changes{v0.80}{2011/11/10}{unstar the newcommand.}
 % \changes{v0.90}{2012/06/02}{add optional offset for sidenotetext}
+% \changes{v0.93}{2012/04/17}{add missing comment marks}
 %    \begin{macrocode}
 \newcommandtwoopt{\sidenotetext}[3][][]{%
 \ifthenelse{\isempty{#1}}{% sitenotemark given?
@@ -213,8 +224,8 @@
 {\marginnote{\textsuperscript{\thesidenote}{} #3}[#2]}%
 \addtocounter{sidenote}{1}}%
 {\ifthenelse{\isempty{#2}}% offset given?
-{\marginpar{\textsuperscript{#1} #3}}
-{\marginnote{\textsuperscript{#1} #3}[#2]}}
+{\marginpar{\textsuperscript{#1} #3}}%
+{\marginnote{\textsuperscript{#1} #3}[#2]}}%
 }%
 %    \end{macrocode}
 % \end{macro}

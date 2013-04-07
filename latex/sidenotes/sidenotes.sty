@@ -13,7 +13,7 @@
 %% about the files the work consists of.
 %% 
 \ProvidesPackage{sidenotes}[%
-  2012/11/09 v0.92 rich text in the margin for LaTeX]
+  2012/04/07 v0.93 rich text in the margin for LaTeX]
 \RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
 \RequirePackage{caption} % handles the figure caption (in the margin)
 \RequirePackage{xifthen} % provide an if command
@@ -22,12 +22,17 @@
 \newcounter{sidenote} % make counter
 \newcounter{@sidenotes@buffer}
 \setcounter{sidenote}{1} % init counter
-
+\def\@sidenotes@ifnextchar#1#2#3{%
+\let\@sidenotes@buffere #1\def\@sidenotes@buffera{#2}%
+\def\@sidenotes@bufferb{#3}\futurelet\@sidenotes@bufferc\@sidenotes@ifnextchar@real}%
+\def\@sidenotes@ifnextchar@real{%
+\ifx\@sidenotes@bufferc \@sidenotes@buffere \let\@sidenotes@bufferd\@sidenotes@buffera%
+\else\let\@sidenotes@bufferd\@sidenotes@bufferb\fi\@sidenotes@bufferd}%
 \newcommandtwoopt{\sidenote}[3][][]{%
 \sidenotemark[#1]%
 \sidenotetext[#1][#2]{#3}%
-\@ifnextchar\sidenote{\kern-0.07em\textsuperscript{,}}%
-{\@ifnextchar\sidecite{\kern-0.07em\textsuperscript{,}}{ }}%
+\@sidenotes@ifnextchar\sidenote{\kern-0.07em\textsuperscript{,}}%
+{\@sidenotes@ifnextchar\sidecite{\kern-0.07em\textsuperscript{,}}{}}%
 }
 \newcommand{\sidenotemark}[1][]{%
 \nobreak\hspace{0.1pt}\nobreak%
@@ -38,7 +43,7 @@
 \setcounter{sidenote}{#1}%
 \textsuperscript{\thesidenote}% print out the argument otherwise
 \setcounter{sidenote}{\value{@sidenotes@buffer}}}%
-\@ifnextchar\sidenote{\textsuperscript{,}}{}%
+\@sidenotes@ifnextchar\sidenote{\textsuperscript{,}}{}%
 \ignorespaces%
 }%
 \newcommandtwoopt{\sidenotetext}[3][][]{%
@@ -49,8 +54,8 @@
 {\marginnote{\textsuperscript{\thesidenote}{} #3}[#2]}%
 \addtocounter{sidenote}{1}}%
 {\ifthenelse{\isempty{#2}}% offset given?
-{\marginpar{\textsuperscript{#1} #3}}
-{\marginnote{\textsuperscript{#1} #3}[#2]}}
+{\marginpar{\textsuperscript{#1} #3}}%
+{\marginnote{\textsuperscript{#1} #3}[#2]}}%
 }%
 \DeclareCaptionStyle{sidecaption}{font=footnotesize}
 \newcommand{\sidecaption}{\@ifstar\@sidenotes@sidecaption@starred\@sidenotes@sidecaption@unstarred}
