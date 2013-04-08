@@ -37,7 +37,7 @@
 \ifluatex% in LuaLateX we use fontspec
 	\RequirePackage{fontspec}%
 	\RequirePackage[vargreek-shape=TeX]{unicode-math}% 
-	\setmathfont{Asana Math}% asana math works well with palatino
+	\setmathfont{Asana-Math.otf}% asana math works well with palatino
 	\setmainfont[Ligatures=TeX, Numbers=OldStyle]{Tex Gyre Pagella}% free Palatino clone
 	\setmonofont{Tex Gyre Cursor}% works okay with palatino
 	\setsansfont{Tex Gyre Heros}% work okay with palatino
@@ -81,6 +81,7 @@
   \@savemarbox\@marbox{\marginparstyle#1}% marginparstyle is a prefix to the marginpar text now
   \global\setbox\@currbox\copy\@marbox % the rest of the definition is taken from original LaTeX
   \@xympar}
+\renewcommand*{\marginfont}{\marginparstyle}
 % setup itemize and enumerate  
 \setlength{\leftmargini}{0pt}
 \renewcommand{\labelitemi}{}
