@@ -83,8 +83,8 @@
   \@xympar}
 \renewcommand*{\marginfont}{\marginparstyle}
 % setup itemize and enumerate  
-\setlength{\leftmargini}{0pt}
-\renewcommand{\labelitemi}{}
+\RequirePackage{enumitem}
+\setlist[itemize]{leftmargin=*}%\renewcommand{\labelitemi}{}
 % compatibility with T-L
 %
 % titlepage
