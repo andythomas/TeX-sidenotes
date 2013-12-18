@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesFile{caesar_book.cls}[2012/11/07 v0.91a Caesar book]
+\ProvidesFile{caesar_book.cls}[2013/12/18 v0.93 Caesar book]
 % Load the amsmath and the mhchem package before loading microtype
 \RequirePackage{amsmath}% better math handling
 \RequirePackage[version=3]{mhchem}% chemical formulas
@@ -84,7 +84,8 @@
 \renewcommand*{\marginfont}{\marginparstyle}
 % setup itemize and enumerate  
 \RequirePackage{enumitem}
-\setlist[itemize]{leftmargin=*}%\renewcommand{\labelitemi}{}
+\setlist[itemize]{leftmargin=*}
+%\renewcommand{\labelitemi}{}
 % compatibility with T-L
 %
 % titlepage
