@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesFile{caesar_book.cls}[2013/12/18 v0.93 Caesar book]
+\ProvidesFile{caesar_book.cls}[2013/12/18 v0.93a Caesar book]
 % Load the amsmath and the mhchem package before loading microtype
 \RequirePackage{amsmath}% better math handling
 \RequirePackage[version=3]{mhchem}% chemical formulas
@@ -12,10 +12,10 @@
 \RequirePackage{microtype}% microtypography
 \@ifpackagelater{microtype}{2011/08/18}% xxx allow LaTeX and earlier microtype
 {\renewcommand{\caesar@letterspace}[1]{\textls{#1}}}%
-{\AtEndDocument{\ClassWarningNoLine{caesar_book}{Need newest microtype (beta) for letterspacing.}}}
+{\AtEndDocument{\ClassWarningNoLine{caesar_book}{Need newest microtype for letterspacing.}}}
 % Set page layout geometry -- default is epubli science-book format
 \RequirePackage[paperwidth=170mm, paperheight=240mm, left=42pt, top=40pt, textwidth=280pt, marginparsep=20pt, marginparwidth=100pt, textheight=560pt, footskip=40pt]{geometry}
-% fontsize is 10pt, 13pt for book 
+% fontsize is 10pt with a leading (line spacing) of 13pt for book 
 \renewcommand{\normalsize}{\fontsize{10pt}{13pt}\selectfont}%
 \renewcommand{\footnotesize}{\fontsize{8pt}{10pt}\selectfont}%
 % fullwidth environment, text across textwidth+marginparsep+marginparwidth
@@ -44,8 +44,8 @@
 	\mhchemoptions{textfontcommand=\addfontfeature{Numbers=Lining}} % use lining numbers for chemical formulas
 \else% in LaTeX we load fonts differently
 	\IfFileExists{mathpazo.sty}{\RequirePackage[osf,sc]{mathpazo}}{}% palatino clone for math
-  	\IfFileExists{helvet.sty}{\RequirePackage{helvet}}{}% helvetica is sans serif font
-  	\IfFileExists{beramono.sty}{\RequirePackage{beramono}}{}% beramono is tt font
+  	\IfFileExists{helvet.sty}{\RequirePackage[scaled=0.90]{helvet}}{}% helvetica is sans serif font
+  	\IfFileExists{beramono.sty}{\RequirePackage[scaled=0.85]{beramono}}{}% beramono is tt font
   	\RequirePackage[T1]{fontenc}% finally load fontenc
 \fi
 % nice headings and TOC
