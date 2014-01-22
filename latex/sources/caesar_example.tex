@@ -1,0 +1,130 @@
+\documentclass{caesar_book}
+%
+% !BIB TS-program = biber
+%
+% -- use dummy graphics
+\usepackage{mwe}
+
+%auto generate the bib file
+\usepackage{filecontents}
+%
+\begin{filecontents}{\jobname.bib}
+@book{Tufte2006,
+	author = {Edward R. Tufte},
+	title = {Beautiful Evidence},
+	year = {2006},
+	publisher = {Graphics Press, {LLC}},
+	isbn = {0-9613921-7-7}
+}
+
+@book{Tufte1990,
+	author = {Edward R. Tufte},
+	title = {Envisioning Information},
+	publisher = {Graphics Press},
+	year = {1990},
+	isbn = {0-9613921-1-8}
+}
+\end{filecontents}
+
+% -- language: English --
+%
+\usepackage[english]{babel}
+% -- biblatex --
+\usepackage[backend=biber,style=philosophy-classic]{biblatex} % xxx
+% the .bib file with the references
+\addbibresource{\jobname.bib} 
+
+% Information about the book
+% to be put on the title page
+\title{Caesar\\Quick start}
+\author{Andy Thomas}
+\publisher{Bielefeld University}
+
+\begin{document}
+% no page numbering in front matter
+\frontmatter
+% generate the title page
+\maketitlepage
+% show the table of contents
+\tableofcontents
+% start to number the pages
+\mainmatter
+% The first chapter with annotation and citations
+\chapter{Quick start}
+%
+We compiled a minimal example file to show the basic use of the caesar class, which allows the typesetting of (science) textbooks or theses. The class itself is a reference implementation of the \emph{sidenotes} package. The package provides the additional functionality\sidenote{namely the use of marginal material such as this note or even figures or tables.} and the class gives sensible default values for page margins, chapter formatting and such. The caesar class is derived from the standard \LaTeX-book class and a little bit of experience with the standard class might be very helpful. In this example, biblatex is used for the references.
+
+The first pages of the book (the frontmatter) are not numbered, the numbering starts after the \texttt{mainmatter} macro, which is called after the generation of the title page. The layout has ample margins to allow annotations. A main feature and the package is the sidenote, which is a footnote in the margin and can be placed with the \texttt{sidenote} macro.\sidenote{All information is on the same page, no turning of pages is necessary.} It is very similar to \texttt{footnote} and tries to emulate its behavior. The sidenote moves up or down (floats) to not overlap with other floats in the margin and all the sidenotes are subsequently numbered. 
+
+References can be put in the margin as well.\sidecite[For the ideas behind all this, please see:][ and more work by Tufte.]{Tufte1990,Tufte2006} The macro was named \texttt{sidecite} and is defined with two optional parameters (prefix and postfix) similar to \texttt{cite} taken from the biblatex package. The next two sections describe the different options for the use of figures and tables in a document. We start with a couple of figures.
+% A section with a couple of figures
+\section{Figures}
+%
+\begin{marginfigure}%
+    \includegraphics[width=\marginparwidth]{example-image-a}%
+    \caption{A small rectangle put in the margin.\label{rectangle}}%
+\end{marginfigure}%
+%
+There are three basic options to include figures in a document. The first option is a small figure and its caption in the margin. Figure \ref{rectangle} shows that with a gray rectangle framing the letter \emph{A}. We simply use the \texttt{marginfigure} environment instead of the \texttt{figure} one. 
+
+The next alternative is a figure in the text frame. The figure is placed using the regular \LaTeX-figure environment and its  caption, which is displayed in figure~\ref{rectangle2}. 
+%
+\begin{figure}[htbp]%
+	\includegraphics[height=180pt,width=\textwidth]{example-image-b}%
+	\caption{A larger rectangle in the main area of the text, i.e.\ it does not span into the margin.}%
+	\label{rectangle2}%
+\end{figure}%
+%
+
+In case that a wider figure is needed, the third option spans over the text as well as the margin area. Here, the common \texttt{figure*} environment can be used. The figure options make it easy to choose the appropriate size for a given input file. 
+%
+\begin{figure*}[htbp]
+    \includegraphics[height=180pt,width=400pt]{example-image-c}%
+    \caption{An even larger rectangle. This is the widest figure option. Both, the text as well as the margin width are used for the diagram.}
+    \label{rectangle3}
+\end{figure*}
+%
+
+% Next section with a variety of tables
+\section{Tables}
+The same set of options (small, normal and wide) are also available for tables. The first option is a small table in the margin, this \texttt{margintable} is shown in table \ref{table1}.
+%
+\begin{margintable}%
+	\begin{tabular}{lll}%
+     A&B&C\\%
+     0.50&0.47&0.48\\%
+    \end{tabular}%
+	\vspace{2pt}
+	\caption{A couple of numbers in a table in the margin.\label{table1}}%
+\end{margintable}%
+
+Table \ref{table2} displays a larger table with more numbers. This is done using regular \LaTeX-macros for placing the table along with its caption. 
+%
+\begin{table}[htbp]%
+	 \begin{tabular}{lllllllll}%
+     A&B&C&D&E&F&G&H&I\\%
+    0.50&0.47&0.48&0.50&0.47&0.48&0.60&0.39&1.00\\%
+    \end{tabular}%
+	\vspace{2pt}%
+	\captionsetup{width=\textwidth, justification=justified}%
+	\caption{A couple of numbers in a larger table. This table spans the usual text width.\label{table2}}%
+\end{table}%
+
+The \texttt{table*} environment is also defined in analogy to \texttt{figure*} and is demonstrated in table \ref{table3}.
+%
+\begin{table*}[h!]
+ \begin{tabular}{lllllllllllll}%
+     A&B&C&D&E&F&G&H&I&J&K&L&M\\%
+    0.50&0.47&0.48&0.50&0.47&0.48&0.60&0.39&1.00&0.50&0.47&0.48&0.60\\%
+  \end{tabular}%
+  \vspace{2pt}
+  \caption{Even more numbers in a big table are shown here. This table spans across the full page, text width plus margin.\label{table3}}%
+\end{table*}
+
+%
+\section{More information}
+\marginpar{It is also possible to put a comment in the margin without a corresponding mark in the text with \texttt{marginpar}.} This is a short example file to show the features of the caesar class together with the sidenotes package. Sometimes it is necessary to compile the document up to 3 times in order to get the alignment of all objects correctly.
+%
+\printbibliography[heading=bibintoc]
+ %
+\end{document}

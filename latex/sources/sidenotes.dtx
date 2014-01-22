@@ -1,0 +1,339 @@
+% \iffalse meta-comment
+%
+% sidenotes.dtx
+%
+% Copyright (C) 2011 by Andy Thomas <andythomas(at)web.de>
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+% http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2003/12/01 or later.
+% 
+% The author of this work is Andy Thomas
+%
+%<*driver>
+\ProvidesFile{sidenotes.dtx}[%
+%</driver>
+%<package>\ProvidesPackage{sidenotes}[%
+%<*driver|package>
+  2012/04/07 v0.93 rich text in the margin for LaTeX]
+%</driver|package>
+%<package>\RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
+%<package>\RequirePackage{caption} % handles the figure caption (in the margin)
+%<package>\RequirePackage{xifthen} % provide an if command 
+%<package>\RequirePackage{twoopt} % two optional arguments possible
+%<package>\RequirePackage[strict]{changepage} % Changepage package for symmetric twoside handling
+%<*driver>
+\documentclass{ltxdoc}
+\CodelineIndex
+\RecordChanges
+\begin{document}
+  \DocInput{sidenotes.dtx}
+\PrintIndex
+  \PrintChanges
+\end{document}
+%</driver>
+% \fi
+%
+%  \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+%
+%
+% \GetFileInfo{sidenotes.dtx}
+% 
+%
+% \title{The \textsf{sidenotes} package\thanks{This document
+%   corresponds to \textsf{sidenotes}~\fileversion, dated \filedate.}}
+% \author{Andy Thomas\\ \texttt{andythomas(at)web.de}\\ \\Oliver Schebaum }
+%
+% \maketitle
+%
+% \changes{v0.51}{2011/10/05}{Extent the documentation of the macros.}
+% \changes{v0.90}{2012/06/02}{two opt package is required, the definitions are too confusing otherwise}
+% \changes{v0.92}{2012/11/09}{corrected typo in email address}
+% \begin{abstract}
+% This package tries to allow the typesetting of rich content in the margin. 
+% This includes text, but also figures, captions, tables and citations.
+% This is common in science textbooks such as Feynman's \textit{Lectures on Physics}.
+% \end{abstract}
+%
+% \tableofcontents
+%
+% \changes{v0.2}{2011/08/21}{Initial version}
+% \changes{v0.7}{2011/11/09}{rewrite without optional offsets}
+% \changes{v0.91}{2012/06/03}{deleted marginfullcite}
+%
+% \section{Usage}
+%
+% \DescribeMacro{\sidenote}
+% The macro is very similar to
+% the footnote macro and tries to emulate its behavior. But like the name
+% says, the note is put in the margin, hence the name sidenote. It has the
+% same parameters as footnote, plus an additional offset:
+% \verb+\sidenote[number][offset]{text}+. The sidenote moves up or down (floats)
+% to not overlap with other floats in the margin if no offset is given. 
+% and all the sidenotes are subsequently numbered. The
+% first, optional parameter will manually change the numbering.
+% The sidenote will be fixed at a particular position in the margin if the
+% offset parameter is used.
+%
+% \DescribeMacro{\sidenotemark} 
+% Sidenote tries to mimic the footnote behavior and tries to provide the same solutions. 
+% Sometimes it is not possible to directly
+% call a sidenote macro, e.g. in particular environments. Then, 
+% you can also use \verb+\sidenotemark[number]+ and \verb+\sidenotetext[number][offset]{text}+ 
+% commands. \verb+\sidenotemark+ puts a mark at the current position. Then, outside of the environment 
+% \DescribeMacro{\sidenotetext}
+% that causes the trouble, it is possible the call \verb+\sidenotetext[number][offset]{text}+ 
+% to actually make the sidenote. The
+% first, optional parameter will change the numbering of the sidenote and the offset
+% parameter will change the position manually.
+%
+% \changes{v0.61}{2011/10/17}{documentation of sidetext}
+%
+%\DescribeMacro{\sidecaption}
+% The \verb+\sidecaption[entry][offset]{text}+ macro can be used if the caption of a figure or table 
+% is supposed to be in the margin. The caption has to be adjacent to the figure, so a float is not an option
+% here. Therefore, the caption might overlap with sidenotes that have to be manually adjusted. 
+% Please note, that the formatting is done by the caption package by defining a sidecaption style. 
+%\DescribeMacro{\sidecaption*}
+% This macro has a sister \verb+\sidecaption*[offset]{text}+ that generates no entry.
+%
+% \DescribeEnv{marginfigure}
+% The marginfigure environment puts a figure and its caption in the margin. Instead of 
+% \verb+\begin{figure}[htbp]+ use \verb+\begin{marginfigure}[offset]+. The offset switches the behavior
+% from float to fixed position. 
+%
+% \DescribeEnv{margintable}
+% The margintable environment works similarly, but with table environments. Use \verb+\begin{margintable}[offset]+ instead
+% of \verb+\begin{table}[htbp]+.
+%
+% \DescribeEnv{figure*}
+% The \verb+figure*+ environment is used to position figures across the full page, i.e. the text width plus
+% margin. The captions type can be changed by changing the widefigure style. 
+% \DescribeEnv{table*}
+% The \verb+table*+ environment is very similar, but for tables. Use widetable for its caption style.  
+%
+% \section{Technical note}
+%
+% When writing the package, we tried to provide a minimum extension to standard \LaTeX{} for typesetting
+% rich content in the margin. Also, we tried to not break compatibility with packages the user might 
+% want to additionally load in a custom class file or a document. However, the following packages are 
+% needed by this package and might introduce side effects with other packages.
+%
+% \section{Required packages}
+% 
+%  \changes{v0.52}{2011/10/06}{added a section that the package needs marginnote, caption and xifthen.}
+%  \changes{v0.90}{2012/06/02}{added a section that the package needs twoopt and changepage.}
+%  \begin{description}
+%     \item[marginnote]
+%        supports another command to create notes in the margin. The notes are not floats and can be shifted up or down. 
+%     \item[caption]
+%        is used to set figure and table captions in the margin and to allow formatting of these captions.
+%	  \item[xifthen] is used to test for empty, optional arguments.  
+%     \item[twoopt] is used to define macros with two optional arguments.
+%     \item[changepage] is used to correctly shift figure* and table*. It has to use the option [strict]. 
+%  \end{description}%
+%
+% \section{Implementation}
+%
+% \iffalse
+%<*package>
+% \fi
+% \changes{v0.91}{2012/06/03}{sidenotetextstyle is not needed any more}
+% We need a counter similar to the footnote counter and we want to 
+% have a buffer. 
+%    \begin{macrocode}
+\newcounter{sidenote} % make counter
+\newcounter{@sidenotes@buffer}
+\setcounter{sidenote}{1} % init counter 
+%    \end{macrocode}
+% \changes{v0.93}{2012/04/17}{regular ifnextchar gobbles trailing whitespaces, introduce a new one that does not.}
+%    \begin{macrocode}
+\def\@sidenotes@ifnextchar#1#2#3{%
+\let\@sidenotes@buffere #1\def\@sidenotes@buffera{#2}%
+\def\@sidenotes@bufferb{#3}\futurelet\@sidenotes@bufferc\@sidenotes@ifnextchar@real}%
+\def\@sidenotes@ifnextchar@real{%
+\ifx\@sidenotes@bufferc \@sidenotes@buffere \let\@sidenotes@bufferd\@sidenotes@buffera%
+\else\let\@sidenotes@bufferd\@sidenotes@bufferb\fi\@sidenotes@bufferd}%
+%    \end{macrocode}
+%
+% \begin{macro}{\sidenote}
+% Introduce the sidenote macro with an additional optional argument to set the offset.
+% \changes{v0.53}{2011/10/07}{bugfix, now optional number and offset possible}
+% \changes{v0.80}{2011/11/10}{unstar the newcommand.}
+% \changes{v0.81}{2011/11/29}{added a comma between subsequent sidenotes} 
+% \changes{v0.90}{2012/06/02}{add optional offset for sidenote} 
+% \changes{v0.93}{2012/04/17}{removed mandatory whitespace, new ifnextchar takes care of that}
+%    \begin{macrocode}
+\newcommandtwoopt{\sidenote}[3][][]{%
+\sidenotemark[#1]%
+\sidenotetext[#1][#2]{#3}%
+\@sidenotes@ifnextchar\sidenote{\kern-0.07em\textsuperscript{,}}%
+{\@sidenotes@ifnextchar\sidecite{\kern-0.07em\textsuperscript{,}}{}}%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\sidenotemark}
+% Sidenotemark is supposed to work similarly to footnotemark.
+%    \begin{macrocode}
+\newcommand{\sidenotemark}[1][]{%
+\nobreak\hspace{0.1pt}\nobreak%
+\ifthenelse{\isempty{#1}}%
+{\textsuperscript{\thesidenote}%
+\refstepcounter{sidenote}}% if no argument is given use sidenote counter%
+{\setcounter{@sidenotes@buffer}{\value{sidenote}}%
+\setcounter{sidenote}{#1}%
+\textsuperscript{\thesidenote}% print out the argument otherwise
+\setcounter{sidenote}{\value{@sidenotes@buffer}}}%
+\@sidenotes@ifnextchar\sidenote{\textsuperscript{,}}{}%
+\ignorespaces%
+}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\sidenotetext}
+% Sidenotetext is supposed to work similarly to footnotetext. The additional, optional argument sets the offset.
+% \changes{v0.80}{2011/11/10}{unstar the newcommand.}
+% \changes{v0.90}{2012/06/02}{add optional offset for sidenotetext}
+% \changes{v0.93}{2012/04/17}{add missing comment marks}
+%    \begin{macrocode}
+\newcommandtwoopt{\sidenotetext}[3][][]{%
+\ifthenelse{\isempty{#1}}{% sitenotemark given?
+\addtocounter{sidenote}{-1}%
+\ifthenelse{\isempty{#2}}% offset given?
+{\marginpar{\textsuperscript{\thesidenote}{} #3}}%
+{\marginnote{\textsuperscript{\thesidenote}{} #3}[#2]}%
+\addtocounter{sidenote}{1}}%
+{\ifthenelse{\isempty{#2}}% offset given?
+{\marginpar{\textsuperscript{#1} #3}}%
+{\marginnote{\textsuperscript{#1} #3}[#2]}}%
+}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\sidecaption}
+% \changes{v0.91}{2012/06/03}{sidecaption* accompanies sidecaption}
+% Sidecaption puts the caption in the margin.  
+% It never floats with the other text in the margin, since it has to be next to the figure.
+% Sidecaption* works similarly to sidecaption, but without an entry.
+%    \begin{macrocode}
+\DeclareCaptionStyle{sidecaption}{font=footnotesize}
+\newcommand{\sidecaption}{\@ifstar\@sidenotes@sidecaption@starred\@sidenotes@sidecaption@unstarred}
+\newcommandtwoopt{\@sidenotes@sidecaption@unstarred}[3][][]{%
+\captionsetup{style=sidecaption}%
+\ifthenelse{\isempty{#2}}{\marginnote{\caption[#1]{#3}}}{\marginnote{\caption[#1]{#3}}[#2]}}%
+\newcommand{\@sidenotes@sidecaption@starred}[2][]{%
+\captionsetup{style=sidecaption}%
+\ifthenelse{\isempty{#1}}{\marginnote{\caption*{#2}}}{\marginnote{\caption*{#2}}[#1]}}%
+%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{environment}{marginfigure}
+% \changes{v0.3}{2011/09/29}{define the sidefigure enviroment without the environ package}
+% \changes{v0.90}{2012/06/02}{the optional offset parameter is back, renamed environment from sidefigure to marginfigure}
+% The marginfigure is similar to the figure environment. But the figure is put in the margin.
+%    \begin{macrocode}
+\newsavebox{\@sidenotes@sidefigurebox}
+\newboolean{@sidenotes@sidefigure@skip}
+\newcommand{\@sidenotes@sidefigure@skiplength}{}
+\DeclareCaptionStyle{marginfigure}{font=footnotesize}
+\newenvironment{marginfigure}[1][]%
+{\ifthenelse{\isempty{#1}}% offset?
+{\setboolean{@sidenotes@sidefigure@skip}{false}}%
+{\setboolean{@sidenotes@sidefigure@skip}{true}%
+\renewcommand{\@sidenotes@sidefigure@skiplength}{#1}}%
+\begin{lrbox}{\@sidenotes@sidefigurebox}%
+\begin{minipage}{\marginparwidth}%
+\captionsetup{type=figure,style=marginfigure}}%
+{\end{minipage}%
+\end{lrbox}%
+\ifthenelse{\boolean{@sidenotes@sidefigure@skip}}% offset?
+{\marginnote{\usebox{\@sidenotes@sidefigurebox}}[\@sidenotes@sidefigure@skiplength]}% offset
+{\marginpar{\usebox{\@sidenotes@sidefigurebox}}}% no offset
+}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{environment}{margintable}
+% \changes{v0.4}{2011/09/30}{define the sidetable enviroment without the environ package}
+% \changes{v0.90}{2012/06/02}{the optional offset parameter is back, renamed environment from sidetable to margintable}
+% The sidetable is similar to the table environment. But the table is put in the margin.
+%    \begin{macrocode}
+\newsavebox{\@sidenotes@margintablebox}
+\newboolean{@sidenotes@margintable@skip}
+\newcommand{\@sidenotes@margintable@skiplength}{}
+\DeclareCaptionStyle{margintable}{font=footnotesize}
+\newenvironment{margintable}[1][]%
+{\ifthenelse{\isempty{#1}}% 
+{\setboolean{@sidenotes@margintable@skip}{false}}%
+{\setboolean{@sidenotes@margintable@skip}{true}%
+\renewcommand{\@sidenotes@margintable@skiplength}{#1}}%
+\begin{lrbox}{\@sidenotes@margintablebox}%
+\begin{minipage}{\marginparwidth}%
+\captionsetup{type=table,style=margintable}}%
+{\end{minipage}%
+\end{lrbox}%
+\ifthenelse{\boolean{@sidenotes@margintable@skip}}% 
+{\marginnote{\usebox{\@sidenotes@margintablebox}}[\@sidenotes@margintable@skiplength]}% 
+{\marginpar{\usebox{\@sidenotes@margintablebox}}} % 
+}%
+%    \end{macrocode}
+% \end{environment}
+%
+%\begin{environment}{figure*}
+% \changes{v0.85}{2011/06/01}{added the figure* environment}
+% The figure* environment provides a figure environment for figures across text and margin width
+%    \begin{macrocode}  
+\AtBeginDocument{%
+\newlength{\@sidenotes@extrawidth}
+\setlength{\@sidenotes@extrawidth}{\marginparwidth}
+\addtolength{\@sidenotes@extrawidth}{\marginparsep}
+}
+\DeclareCaptionStyle{widefigure}{margin={0pt,-\@sidenotes@extrawidth},font=footnotesize}
+\newcommand{\@sidenotes@adjust}{%
+    \checkoddpage%
+    	\ifoddpage%
+		%
+    	\else%
+		\hspace{-\@sidenotes@extrawidth}%
+    	\fi}
+\renewenvironment{figure*}[1][htbp]{\begin{figure}[#1]%
+    \@sidenotes@adjust%
+    \captionsetup{style=widefigure}%
+}{\end{figure}}%
+%    \end{macrocode}
+% \end{environment}
+
+%\begin{environment}{table*}
+% \changes{v0.85}{2011/06/01}{added the table* environment}
+% The table* environment provides a table environment for figures across text and margin width
+%    \begin{macrocode}  
+\DeclareCaptionStyle{widetable}{margin={0pt,-\@sidenotes@extrawidth},font=footnotesize}
+\renewenvironment{table*}[1][htbp]{\begin{table}[#1]%
+    \@sidenotes@adjust%
+    \captionsetup{style=widetable}%
+}{\end{table}}%
+%    \end{macrocode}
+% \end{environment}
+% \Finale
+\endinput

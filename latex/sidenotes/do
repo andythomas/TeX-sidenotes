@@ -1,7 +1,0 @@
-#!/bin/bash
-pdflatex sidenotes.ins
-pdflatex sidenotes.dtx
-makeindex -s gind.ist -o sidenotes.ind sidenotes.idx
-makeindex -s gglo.ist -o sidenotes.gls sidenotes.glo
-pdflatex sidenotes.dtx
-
