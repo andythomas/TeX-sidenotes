@@ -34,6 +34,10 @@ cp sidenotes.dtx ../ctan
 cp sidenotes.ins ../ctan
 cp sidenotes.pdf ../ctan 
 #
+# update the files in the LaTeX search path
+cp sidenotes.sty ~/Library/texmf/tex/latex/sidenotes.sty
+cp caesar_book.cls ~/Library/texmf/tex/latex/caesar_book.cls
+#
 # update the targets directory
 #
 mv sidenotes.sty ../targets

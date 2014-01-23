@@ -2,7 +2,7 @@
 %
 % sidenotes.dtx
 %
-% Copyright (C) 2011 by Andy Thomas <andythomas(at)web.de>
+% Copyright (C) 2011-2014 by Andy Thomas <andythomas(at)web.de>
 %
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3
@@ -19,12 +19,13 @@
 %</driver>
 %<package>\ProvidesPackage{sidenotes}[%
 %<*driver|package>
-  2012/04/07 v0.93 rich text in the margin for LaTeX]
+  2014/01/22 v0.94 rich text in the margin for LaTeX]
 %</driver|package>
 %<package>\RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
 %<package>\RequirePackage{caption} % handles the figure caption (in the margin)
 %<package>\RequirePackage{xifthen} % provide an if command 
 %<package>\RequirePackage{twoopt} % two optional arguments possible
+%<package>\RequirePackage{xparse} % new LaTeX3 syntax to define macros and environments
 %<package>\RequirePackage[strict]{changepage} % Changepage package for symmetric twoside handling
 %<*driver>
 \documentclass{ltxdoc}
@@ -68,6 +69,7 @@
 % \changes{v0.51}{2011/10/05}{Extent the documentation of the macros.}
 % \changes{v0.90}{2012/06/02}{two opt package is required, the definitions are too confusing otherwise}
 % \changes{v0.92}{2012/11/09}{corrected typo in email address}
+%
 % \begin{abstract}
 % This package tries to allow the typesetting of rich content in the margin. 
 % This includes text, but also figures, captions, tables and citations.
@@ -142,6 +144,7 @@
 % 
 %  \changes{v0.52}{2011/10/06}{added a section that the package needs marginnote, caption and xifthen.}
 %  \changes{v0.90}{2012/06/02}{added a section that the package needs twoopt and changepage.}
+%  \changes{v0.94}{2014/01/22}{start using xparse} 
 %  \begin{description}
 %     \item[marginnote]
 %        supports another command to create notes in the margin. The notes are not floats and can be shifted up or down. 
@@ -149,6 +152,7 @@
 %        is used to set figure and table captions in the margin and to allow formatting of these captions.
 %	  \item[xifthen] is used to test for empty, optional arguments.  
 %     \item[twoopt] is used to define macros with two optional arguments.
+%     \item[xparse] is used to take advantage of the improved LaTeX3 syntax.
 %     \item[changepage] is used to correctly shift figure* and table*. It has to use the option [strict]. 
 %  \end{description}%
 %
@@ -160,10 +164,22 @@
 % \changes{v0.91}{2012/06/03}{sidenotetextstyle is not needed any more}
 % We need a counter similar to the footnote counter and we want to 
 % have a buffer. 
+% \changes{v0.94}{2014/01/22}{change sidenote counter behavior} 
 %    \begin{macrocode}
 \newcounter{sidenote} % make counter
-\newcounter{@sidenotes@buffer}
-\setcounter{sidenote}{1} % init counter 
+\setcounter{sidenote}{0} % init counter 
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\ExplSyntaxOn
+\DeclareExpandableDocumentCommand{\IfNoValueOrEmptyTF}{mmm}
+{
+ \IfNoValueTF{#1}{#2}
+  {
+   \tl_if_empty:nTF {#1} {#2} {#3}
+  }
+}
+\ExplSyntaxOff
 %    \end{macrocode}
 % \changes{v0.93}{2012/04/17}{regular ifnextchar gobbles trailing whitespaces, introduce a new one that does not.}
 %    \begin{macrocode}
@@ -182,8 +198,9 @@
 % \changes{v0.81}{2011/11/29}{added a comma between subsequent sidenotes} 
 % \changes{v0.90}{2012/06/02}{add optional offset for sidenote} 
 % \changes{v0.93}{2012/04/17}{removed mandatory whitespace, new ifnextchar takes care of that}
+% \changes{v0.94}{2014/01/11}{use xparse syntax}
 %    \begin{macrocode}
-\newcommandtwoopt{\sidenote}[3][][]{%
+\NewDocumentCommand \sidenote { o o m } {%
 \sidenotemark[#1]%
 \sidenotetext[#1][#2]{#3}%
 \@sidenotes@ifnextchar\sidenote{\kern-0.07em\textsuperscript{,}}%
@@ -194,16 +211,15 @@
 %
 % \begin{macro}{\sidenotemark}
 % Sidenotemark is supposed to work similarly to footnotemark.
+% \changes{v0.94}{2014/01/11}{use xparse syntax, change counter behavior}
 %    \begin{macrocode}
-\newcommand{\sidenotemark}[1][]{%
+\NewDocumentCommand \sidenotemark { o } {%
 \nobreak\hspace{0.1pt}\nobreak%
-\ifthenelse{\isempty{#1}}%
-{\textsuperscript{\thesidenote}%
-\refstepcounter{sidenote}}% if no argument is given use sidenote counter%
-{\setcounter{@sidenotes@buffer}{\value{sidenote}}%
-\setcounter{sidenote}{#1}%
-\textsuperscript{\thesidenote}% print out the argument otherwise
-\setcounter{sidenote}{\value{@sidenotes@buffer}}}%
+\IfNoValueOrEmptyTF{#1}%
+{\refstepcounter{sidenote}%
+\textsuperscript{\thesidenote}%
+}% if no argument is given use sidenote counter%
+{\textsuperscript{#1}}% print out the argument otherwise
 \@sidenotes@ifnextchar\sidenote{\textsuperscript{,}}{}%
 \ignorespaces%
 }%
@@ -215,15 +231,14 @@
 % \changes{v0.80}{2011/11/10}{unstar the newcommand.}
 % \changes{v0.90}{2012/06/02}{add optional offset for sidenotetext}
 % \changes{v0.93}{2012/04/17}{add missing comment marks}
+% \changes{v0.94}{2014/01/11}{use xparse syntax, change counter behavior}
 %    \begin{macrocode}
-\newcommandtwoopt{\sidenotetext}[3][][]{%
-\ifthenelse{\isempty{#1}}{% sitenotemark given?
-\addtocounter{sidenote}{-1}%
-\ifthenelse{\isempty{#2}}% offset given?
+\NewDocumentCommand \sidenotetext { o o m } {%
+\IfNoValueOrEmptyTF{#1}{% sitenotemark given?
+\IfNoValueOrEmptyTF{#2}% offset given?
 {\marginpar{\textsuperscript{\thesidenote}{} #3}}%
-{\marginnote{\textsuperscript{\thesidenote}{} #3}[#2]}%
-\addtocounter{sidenote}{1}}%
-{\ifthenelse{\isempty{#2}}% offset given?
+{\marginnote{\textsuperscript{\thesidenote}{} #3}[#2]}}%
+{\IfNoValueOrEmptyTF{#2}% offset given?
 {\marginpar{\textsuperscript{#1} #3}}%
 {\marginnote{\textsuperscript{#1} #3}[#2]}}%
 }%
@@ -251,25 +266,20 @@
 % \begin{environment}{marginfigure}
 % \changes{v0.3}{2011/09/29}{define the sidefigure enviroment without the environ package}
 % \changes{v0.90}{2012/06/02}{the optional offset parameter is back, renamed environment from sidefigure to marginfigure}
+% \changes{v0.94}{2014/01/22}{use the xparse syntax to define marginfigure} 
 % The marginfigure is similar to the figure environment. But the figure is put in the margin.
 %    \begin{macrocode}
 \newsavebox{\@sidenotes@sidefigurebox}
-\newboolean{@sidenotes@sidefigure@skip}
-\newcommand{\@sidenotes@sidefigure@skiplength}{}
 \DeclareCaptionStyle{marginfigure}{font=footnotesize}
-\newenvironment{marginfigure}[1][]%
-{\ifthenelse{\isempty{#1}}% offset?
-{\setboolean{@sidenotes@sidefigure@skip}{false}}%
-{\setboolean{@sidenotes@sidefigure@skip}{true}%
-\renewcommand{\@sidenotes@sidefigure@skiplength}{#1}}%
-\begin{lrbox}{\@sidenotes@sidefigurebox}%
+\NewDocumentEnvironment{marginfigure}{o} 
+{\begin{lrbox}{\@sidenotes@sidefigurebox}%
 \begin{minipage}{\marginparwidth}%
 \captionsetup{type=figure,style=marginfigure}}%
 {\end{minipage}%
 \end{lrbox}%
-\ifthenelse{\boolean{@sidenotes@sidefigure@skip}}% offset?
-{\marginnote{\usebox{\@sidenotes@sidefigurebox}}[\@sidenotes@sidefigure@skiplength]}% offset
+\IfNoValueOrEmptyTF{#1}% offset?
 {\marginpar{\usebox{\@sidenotes@sidefigurebox}}}% no offset
+{\marginnote{\usebox{\@sidenotes@sidefigurebox}}[#1]}% offset
 }
 %    \end{macrocode}
 % \end{environment}
@@ -277,25 +287,20 @@
 % \begin{environment}{margintable}
 % \changes{v0.4}{2011/09/30}{define the sidetable enviroment without the environ package}
 % \changes{v0.90}{2012/06/02}{the optional offset parameter is back, renamed environment from sidetable to margintable}
-% The sidetable is similar to the table environment. But the table is put in the margin.
+% \changes{v0.94}{2014/01/22}{use the xparse syntax to define margintable} 
+% The margintable is similar to the table environment. But the table is put in the margin.
 %    \begin{macrocode}
 \newsavebox{\@sidenotes@margintablebox}
-\newboolean{@sidenotes@margintable@skip}
-\newcommand{\@sidenotes@margintable@skiplength}{}
 \DeclareCaptionStyle{margintable}{font=footnotesize}
-\newenvironment{margintable}[1][]%
-{\ifthenelse{\isempty{#1}}% 
-{\setboolean{@sidenotes@margintable@skip}{false}}%
-{\setboolean{@sidenotes@margintable@skip}{true}%
-\renewcommand{\@sidenotes@margintable@skiplength}{#1}}%
-\begin{lrbox}{\@sidenotes@margintablebox}%
+\NewDocumentEnvironment{margintable}{o}
+{\begin{lrbox}{\@sidenotes@margintablebox}%
 \begin{minipage}{\marginparwidth}%
 \captionsetup{type=table,style=margintable}}%
 {\end{minipage}%
 \end{lrbox}%
-\ifthenelse{\boolean{@sidenotes@margintable@skip}}% 
-{\marginnote{\usebox{\@sidenotes@margintablebox}}[\@sidenotes@margintable@skiplength]}% 
+\IfNoValueOrEmptyTF{#1}% offset?
 {\marginpar{\usebox{\@sidenotes@margintablebox}}} % 
+{\marginnote{\usebox{\@sidenotes@margintablebox}}[#1]}% 
 }%
 %    \end{macrocode}
 % \end{environment}
