@@ -23,8 +23,6 @@
 %</driver|package>
 %<package>\RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
 %<package>\RequirePackage{caption} % handles the figure caption (in the margin)
-%<package>\RequirePackage{xifthen} % provide an if command 
-%<package>\RequirePackage{twoopt} % two optional arguments possible
 %<package>\RequirePackage{xparse} % new LaTeX3 syntax to define macros and environments
 %<package>\RequirePackage[strict]{changepage} % Changepage package for symmetric twoside handling
 %<*driver>
@@ -150,8 +148,6 @@
 %        supports another command to create notes in the margin. The notes are not floats and can be shifted up or down. 
 %     \item[caption]
 %        is used to set figure and table captions in the margin and to allow formatting of these captions.
-%	  \item[xifthen] is used to test for empty, optional arguments.  
-%     \item[twoopt] is used to define macros with two optional arguments.
 %     \item[xparse] is used to take advantage of the improved LaTeX3 syntax.
 %     \item[changepage] is used to correctly shift figure* and table*. It has to use the option [strict]. 
 %  \end{description}%
@@ -247,26 +243,35 @@
 %
 % \begin{macro}{\sidecaption}
 % \changes{v0.91}{2012/06/03}{sidecaption* accompanies sidecaption}
+% \changes{v0.94}{2014/01/22}{use xparse syntax} 
 % Sidecaption puts the caption in the margin.  
 % It never floats with the other text in the margin, since it has to be next to the figure.
 % Sidecaption* works similarly to sidecaption, but without an entry.
 %    \begin{macrocode}
 \DeclareCaptionStyle{sidecaption}{font=footnotesize}
-\newcommand{\sidecaption}{\@ifstar\@sidenotes@sidecaption@starred\@sidenotes@sidecaption@unstarred}
-\newcommandtwoopt{\@sidenotes@sidecaption@unstarred}[3][][]{%
+\NewDocumentCommand \sidecaption {s o o m} {%
 \captionsetup{style=sidecaption}%
-\ifthenelse{\isempty{#2}}{\marginnote{\caption[#1]{#3}}}{\marginnote{\caption[#1]{#3}}[#2]}}%
-\newcommand{\@sidenotes@sidecaption@starred}[2][]{%
-\captionsetup{style=sidecaption}%
-\ifthenelse{\isempty{#1}}{\marginnote{\caption*{#2}}}{\marginnote{\caption*{#2}}[#1]}}%
-%
+\IfBooleanTF{#1}%is the macro starred
+{\IfNoValueOrEmptyTF{#2}%
+{\marginnote{\caption*{#4}}}%
+{\marginnote{\caption*{#4}}[#2]}%
+}% yes, starred macro
+{%
+\IfNoValueOrEmptyTF{#2}%
+{\def\@sidenotes@sidecaption@tof{#4}}%
+{\def\@sidenotes@sidecaption@tof{#2}}%
+\IfNoValueOrEmptyTF{#3}%
+{\marginnote{\caption[\@sidenotes@sidecaption@tof]{#4}}}%
+{\marginnote{\caption[\@sidenotes@sidecaption@tof]{#4}}[#3]}%
+}% no, unstarred macro
+}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{environment}{marginfigure}
 % \changes{v0.3}{2011/09/29}{define the sidefigure enviroment without the environ package}
 % \changes{v0.90}{2012/06/02}{the optional offset parameter is back, renamed environment from sidefigure to marginfigure}
-% \changes{v0.94}{2014/01/22}{use the xparse syntax to define marginfigure} 
+% \changes{v0.94}{2014/01/22}{use xparse syntax} 
 % The marginfigure is similar to the figure environment. But the figure is put in the margin.
 %    \begin{macrocode}
 \newsavebox{\@sidenotes@sidefigurebox}
@@ -287,7 +292,7 @@
 % \begin{environment}{margintable}
 % \changes{v0.4}{2011/09/30}{define the sidetable enviroment without the environ package}
 % \changes{v0.90}{2012/06/02}{the optional offset parameter is back, renamed environment from sidetable to margintable}
-% \changes{v0.94}{2014/01/22}{use the xparse syntax to define margintable} 
+% \changes{v0.94}{2014/01/22}{use xparse syntax} 
 % The margintable is similar to the table environment. But the table is put in the margin.
 %    \begin{macrocode}
 \newsavebox{\@sidenotes@margintablebox}
