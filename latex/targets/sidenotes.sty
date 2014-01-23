@@ -13,20 +13,19 @@
 %% about the files the work consists of.
 %% 
 \ProvidesPackage{sidenotes}[%
-  2014/01/22 v0.94 rich text in the margin for LaTeX]
-\RequirePackage{marginnote} % puts the stuff in the margin and provides an offset option instead of a float
-\RequirePackage{caption} % handles the figure caption (in the margin)
+  2014/01/23 v0.95 rich text in the margin for LaTeX]
+\RequirePackage{marginnote} % provides an offset option for the marginals instead of a float
+\RequirePackage{caption} % handles the captions (in the margin)
 \RequirePackage{xparse} % new LaTeX3 syntax to define macros and environments
 \RequirePackage[strict]{changepage} % Changepage package for symmetric twoside handling
-\newcounter{sidenote} % make counter
-\setcounter{sidenote}{0} % init counter
+\newcounter{sidenote} % make a counter
+\setcounter{sidenote}{0} % init the counter
 \ExplSyntaxOn
 \DeclareExpandableDocumentCommand{\IfNoValueOrEmptyTF}{mmm}
 {
- \IfNoValueTF{#1}{#2}
-  {
-   \tl_if_empty:nTF {#1} {#2} {#3}
-  }
+ \IfNoValueTF{#1}
+  {#2} % true
+  {\tl_if_empty:nTF {#1} {#2} {#3}} % false
 }
 \ExplSyntaxOff
 \def\@sidenotes@ifnextchar#1#2#3{%
@@ -35,7 +34,7 @@
 \def\@sidenotes@ifnextchar@real{%
 \ifx\@sidenotes@bufferc \@sidenotes@buffere \let\@sidenotes@bufferd\@sidenotes@buffera%
 \else\let\@sidenotes@bufferd\@sidenotes@bufferb\fi\@sidenotes@bufferd}%
-\NewDocumentCommand \sidenote { o o m } {%
+\NewDocumentCommand \sidenote { o o +m } {%
 \sidenotemark[#1]%
 \sidenotetext[#1][#2]{#3}%
 \@sidenotes@ifnextchar\sidenote{\kern-0.07em\textsuperscript{,}}%
@@ -51,7 +50,7 @@
 \@sidenotes@ifnextchar\sidenote{\textsuperscript{,}}{}%
 \ignorespaces%
 }%
-\NewDocumentCommand \sidenotetext { o o m } {%
+\NewDocumentCommand \sidenotetext { o o +m } {%
 \IfNoValueOrEmptyTF{#1}{% sitenotemark given?
 \IfNoValueOrEmptyTF{#2}% offset given?
 {\marginpar{\textsuperscript{\thesidenote}{} #3}}%
