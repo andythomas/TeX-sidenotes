@@ -19,7 +19,7 @@
 %</driver>
 %<package>\ProvidesPackage{sidenotes}[%
 %<*driver|package>
-  2014/01/23 v0.95 rich text in the margin for LaTeX]
+  2014/02/14 v0.96 rich text in the margin for LaTeX]
 %</driver|package>
 %<package>\RequirePackage{marginnote} % provides an offset option for the marginals instead of a float
 %<package>\RequirePackage{caption} % handles the captions (in the margin)
@@ -194,7 +194,7 @@
 %
 %    \begin{macrocode}
 \newcounter{sidenote} % make a counter 
-\setcounter{sidenote}{0} % init the counter 
+\setcounter{sidenote}{1} % init the counter 
 %    \end{macrocode}
 % 
 % \noindent The \LaTeX3 parts concerning the optional arguments should not 
@@ -254,12 +254,13 @@
 % Sidenotemark is supposed to work similarly to footnotemark.
 %
 % \changes{v0.94}{2014/01/11}{use xparse syntax, change counter behavior}
+% \changes{v0.96}{2014/02/14}{increase the sidenote counter in sidenotetext now}
 %
 %    \begin{macrocode}
 \NewDocumentCommand \sidenotemark { o } {%
 \nobreak\hspace{0.1pt}\nobreak%
 \IfNoValueOrEmptyTF{#1}%
-{\refstepcounter{sidenote}%
+{%
 \textsuperscript{\thesidenote}%
 }% if no argument is given use sidenote counter%
 {\textsuperscript{#1}}% print out the argument otherwise
@@ -288,6 +289,7 @@
 {\IfNoValueOrEmptyTF{#2}% offset given?
 {\marginpar{\textsuperscript{#1} #3}}%
 {\marginnote{\textsuperscript{#1} #3}[#2]}}%
+\refstepcounter{sidenote}%
 }%
 %    \end{macrocode}
 % \end{macro}
