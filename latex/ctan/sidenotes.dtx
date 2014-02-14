@@ -19,7 +19,7 @@
 %</driver>
 %<package>\ProvidesPackage{sidenotes}[%
 %<*driver|package>
-  2014/02/14 v0.96 rich text in the margin for LaTeX]
+  2014/02/14 v0.96a rich text in the margin for LaTeX]
 %</driver|package>
 %<package>\RequirePackage{marginnote} % provides an offset option for the marginals instead of a float
 %<package>\RequirePackage{caption} % handles the captions (in the margin)
@@ -285,11 +285,11 @@
 \IfNoValueOrEmptyTF{#1}{% sitenotemark given?
 \IfNoValueOrEmptyTF{#2}% offset given?
 {\marginpar{\textsuperscript{\thesidenote}{} #3}}%
-{\marginnote{\textsuperscript{\thesidenote}{} #3}[#2]}}%
+{\marginnote{\textsuperscript{\thesidenote}{} #3}[#2]}%
+\refstepcounter{sidenote}}%
 {\IfNoValueOrEmptyTF{#2}% offset given?
 {\marginpar{\textsuperscript{#1} #3}}%
 {\marginnote{\textsuperscript{#1} #3}[#2]}}%
-\refstepcounter{sidenote}%
 }%
 %    \end{macrocode}
 % \end{macro}
