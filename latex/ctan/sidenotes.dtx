@@ -19,7 +19,7 @@
 %</driver>
 %<package>\ProvidesPackage{sidenotes}[%
 %<*driver|package>
-  2014/05/27 v0.97 rich text in the margin for LaTeX]
+  2014/05/27 v0.97a rich text in the margin for LaTeX]
 %</driver|package>
 %<package>\RequirePackage{marginnote} % provides an offset option for the marginals instead of a float
 %<package>\RequirePackage{caption} % handles the captions (in the margin)
@@ -227,6 +227,16 @@
 \else\let\@sidenotes@bufferd\@sidenotes@bufferb\fi\@sidenotes@bufferd}%
 %    \end{macrocode}
 %
+% \noindent Little helper.
+%
+%    \begin{macrocode}
+\NewDocumentCommand \@sidenotes@placemarginal { m m } {%
+\IfNoValueOrEmptyTF{#1}%
+{\marginpar{#2}}% is empty, use marginpar
+{\marginnote{#2}[#1]}}% is not empty, use marginnote
+%
+%    \end{macrocode}
+%
 % \begin{macro}{\sidenote}
 % 
 % Introduce the \verb+\sidenote+ macro with two optional 
@@ -283,13 +293,9 @@
 %    \begin{macrocode}
 \NewDocumentCommand \sidenotetext { o o +m } {%
 \IfNoValueOrEmptyTF{#1}{% sitenotemark given?
-\IfNoValueOrEmptyTF{#2}% offset given?
-{\marginpar{\textsuperscript{\thesidenote}{} #3}}%
-{\marginnote{\textsuperscript{\thesidenote}{} #3}[#2]}%
+\@sidenotes@placemarginal{#2}{\textsuperscript{\thesidenote}{} #3}
 \refstepcounter{sidenote}}%
-{\IfNoValueOrEmptyTF{#2}% offset given?
-{\marginpar{\textsuperscript{#1} #3}}%
-{\marginnote{\textsuperscript{#1} #3}[#2]}}%
+{\@sidenotes@placemarginal{#2}{\textsuperscript{#1} #3}}%
 }%
 %    \end{macrocode}
 % \end{macro}
@@ -334,18 +340,15 @@
 % figure is put in the margin.
 %
 %    \begin{macrocode}
-\newsavebox{\@sidenotes@sidefigurebox}
+\newsavebox{\@sidenotes@marginfigurebox}
 \DeclareCaptionStyle{marginfigure}{font=footnotesize}
 \NewDocumentEnvironment{marginfigure}{o} 
-{\begin{lrbox}{\@sidenotes@sidefigurebox}%
+{\begin{lrbox}{\@sidenotes@marginfigurebox}%
 \begin{minipage}{\marginparwidth}%
 \captionsetup{type=figure,style=marginfigure}}%
 {\end{minipage}%
 \end{lrbox}%
-\IfNoValueOrEmptyTF{#1}% offset?
-{\marginpar{\usebox{\@sidenotes@sidefigurebox}}}% no offset
-{\marginnote{\usebox{\@sidenotes@sidefigurebox}}[#1]}% offset
-}
+\@sidenotes@placemarginal{#1}{\usebox{\@sidenotes@marginfigurebox}}}%
 %    \end{macrocode}
 % \end{environment}
 %
@@ -367,10 +370,7 @@
 \captionsetup{type=table,style=margintable}}%
 {\end{minipage}%
 \end{lrbox}%
-\IfNoValueOrEmptyTF{#1}% offset?
-{\marginpar{\usebox{\@sidenotes@margintablebox}}} % 
-{\marginnote{\usebox{\@sidenotes@margintablebox}}[#1]}% 
-}%
+\@sidenotes@placemarginal{#1}{\usebox{\@sidenotes@margintablebox}}}%
 %    \end{macrocode}
 % \end{environment}
 %
@@ -386,8 +386,8 @@
 \AtBeginDocument{%
 \newlength{\@sidenotes@extrawidth}
 \setlength{\@sidenotes@extrawidth}{\marginparwidth}
-\addtolength{\@sidenotes@extrawidth}{\marginparsep}
-}
+\addtolength{\@sidenotes@extrawidth}{\marginparsep}}
+%
 \DeclareCaptionStyle{widefigure}{font=footnotesize}
 \renewenvironment{figure*}[1][htbp]{%
 \begin{figure}[#1]%
