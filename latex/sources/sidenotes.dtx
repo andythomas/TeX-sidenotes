@@ -19,7 +19,7 @@
 %</driver>
 %<package>\ProvidesPackage{sidenotes}[%
 %<*driver|package>
-  2014/02/14 v0.96a rich text in the margin for LaTeX]
+  2014/05/27 v0.97 rich text in the margin for LaTeX]
 %</driver|package>
 %<package>\RequirePackage{marginnote} % provides an offset option for the marginals instead of a float
 %<package>\RequirePackage{caption} % handles the captions (in the margin)
@@ -377,6 +377,7 @@
 % \begin{environment}{figure*}
 %
 % \changes{v0.85}{2011/06/01}{added the figure* environment}
+% \changes{v0.97}{2014/05/27}{use adjustwidth in figure* environment}
 %
 % The figure* environment provides a figure environment for figures that 
 % span across the full page (text plus margin width).
@@ -387,34 +388,32 @@
 \setlength{\@sidenotes@extrawidth}{\marginparwidth}
 \addtolength{\@sidenotes@extrawidth}{\marginparsep}
 }
-\DeclareCaptionStyle{widefigure}{margin={0pt,-\@sidenotes@extrawidth},font=footnotesize}
-\newcommand{\@sidenotes@adjust}{%
-    \checkoddpage%
-    	\ifoddpage%
-		%
-    	\else%
-		\hspace{-\@sidenotes@extrawidth}%
-    	\fi}
-\renewenvironment{figure*}[1][htbp]{\begin{figure}[#1]%
-    \@sidenotes@adjust%
-    \captionsetup{style=widefigure}%
-}{\end{figure}}%
+\DeclareCaptionStyle{widefigure}{font=footnotesize}
+\renewenvironment{figure*}[1][htbp]{%
+\begin{figure}[#1]%
+    \begin{adjustwidth*}{}{-\@sidenotes@extrawidth}%
+    \captionsetup{style=widefigure}}%
+{   \end{adjustwidth*}%
+    \end{figure}}%
 %    \end{macrocode}
 % \end{environment}
-
+%
 % \begin{environment}{table*}
 %
 % \changes{v0.85}{2011/06/01}{added the table* environment}
+% \changes{v0.97}{2014/05/27}{use adjustwidth in table* environment}
 %
 % The table* environment provides a table environment for figures across 
 % text and margin width.
 %
 %    \begin{macrocode}  
-\DeclareCaptionStyle{widetable}{margin={0pt,-\@sidenotes@extrawidth},font=footnotesize}
-\renewenvironment{table*}[1][htbp]{\begin{table}[#1]%
-    \@sidenotes@adjust%
-    \captionsetup{style=widetable}%
-}{\end{table}}%
+\DeclareCaptionStyle{widetable}{font=footnotesize}
+\renewenvironment{table*}[1][htbp]{%
+\begin{table}[#1]%
+    \begin{adjustwidth*}{}{-\@sidenotes@extrawidth}%
+    \captionsetup{style=widetable}}%
+{   \end{adjustwidth*}%
+    \end{table}}%
 %    \end{macrocode}
 % \end{environment}
 % \Finale

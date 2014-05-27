@@ -13,7 +13,7 @@
 %% about the files the work consists of.
 %% 
 \ProvidesPackage{sidenotes}[%
-  2014/02/14 v0.96a rich text in the margin for LaTeX]
+  2014/05/27 v0.97 rich text in the margin for LaTeX]
 \RequirePackage{marginnote} % provides an offset option for the marginals instead of a float
 \RequirePackage{caption} % handles the captions (in the margin)
 \RequirePackage{xparse} % new LaTeX3 syntax to define macros and environments
@@ -106,23 +106,20 @@
 \setlength{\@sidenotes@extrawidth}{\marginparwidth}
 \addtolength{\@sidenotes@extrawidth}{\marginparsep}
 }
-\DeclareCaptionStyle{widefigure}{margin={0pt,-\@sidenotes@extrawidth},font=footnotesize}
-\newcommand{\@sidenotes@adjust}{%
-    \checkoddpage%
-     \ifoddpage%
-     \else%
-\hspace{-\@sidenotes@extrawidth}%
-     \fi}
-\renewenvironment{figure*}[1][htbp]{\begin{figure}[#1]%
-    \@sidenotes@adjust%
-    \captionsetup{style=widefigure}%
-}{\end{figure}}%
-
-\DeclareCaptionStyle{widetable}{margin={0pt,-\@sidenotes@extrawidth},font=footnotesize}
-\renewenvironment{table*}[1][htbp]{\begin{table}[#1]%
-    \@sidenotes@adjust%
-    \captionsetup{style=widetable}%
-}{\end{table}}%
+\DeclareCaptionStyle{widefigure}{font=footnotesize}
+\renewenvironment{figure*}[1][htbp]{%
+\begin{figure}[#1]%
+    \begin{adjustwidth*}{}{-\@sidenotes@extrawidth}%
+    \captionsetup{style=widefigure}}%
+{   \end{adjustwidth*}%
+    \end{figure}}%
+\DeclareCaptionStyle{widetable}{font=footnotesize}
+\renewenvironment{table*}[1][htbp]{%
+\begin{table}[#1]%
+    \begin{adjustwidth*}{}{-\@sidenotes@extrawidth}%
+    \captionsetup{style=widetable}}%
+{   \end{adjustwidth*}%
+    \end{table}}%
 \endinput
 %%
 %% End of file `sidenotes.sty'.
