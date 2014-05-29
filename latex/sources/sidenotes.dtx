@@ -19,7 +19,7 @@
 %</driver>
 %<package>\ProvidesPackage{sidenotes}[%
 %<*driver|package>
-  2014/05/27 v0.97a rich text in the margin for LaTeX]
+  2014/05/29 v0.97b rich text in the margin for LaTeX]
 %</driver|package>
 %<package>\RequirePackage{marginnote} % provides an offset option for the marginals instead of a float
 %<package>\RequirePackage{caption} % handles the captions (in the margin)
@@ -214,20 +214,32 @@
 %    \end{macrocode}
 %
 % \changes{v0.93}{2012/04/17}{regular ifnextchar gobbles trailing whitespaces, introduce a new one that does not.}
+% \changes{v0.97}{2014/05/29}{New mechanism to detect subsequent sidenotemarks}
 %
-% \noindent The regular \verb+\ifnextchar+ gobbles trailing whitespaces, 
-% introduce a new one that does not.
+% \noindent Put a marker in the horizontal list to detect subsequent sidenotemarks.
 %
 %    \begin{macrocode}
-\def\@sidenotes@ifnextchar#1#2#3{%
-\let\@sidenotes@buffere #1\def\@sidenotes@buffera{#2}%
-\def\@sidenotes@bufferb{#3}\futurelet\@sidenotes@bufferc\@sidenotes@ifnextchar@real}%
-\def\@sidenotes@ifnextchar@real{%
-\ifx\@sidenotes@bufferc \@sidenotes@buffere \let\@sidenotes@bufferd\@sidenotes@buffera%
-\else\let\@sidenotes@bufferd\@sidenotes@bufferb\fi\@sidenotes@bufferd}%
+\NewDocumentCommand \@sidenotes@multisign { } {3sp}
+%
+\NewDocumentCommand \@sidenotes@multimarker { } {%
+\kern-\@sidenotes@multisign%
+\kern\@sidenotes@multisign\relax%
+}
+%
+\ExplSyntaxOn
+\NewDocumentCommand \@sidenotes@multichecker { } 
+{ \dim_compare:nNnTF \lastkern = \@sidenotes@multisign
+  {\textsuperscript{,}}
+  {}
+}
+\ExplSyntaxOff
+%
 %    \end{macrocode}
 %
-% \noindent Little helper.
+% \changes{v0.97}{2014/05/27}{introduce an internal macro to place the marginal text}
+%
+% \noindent Introduce an internal macro to place the marginal text. Use
+% margin note in case an offset is given and marginpar otherwise.  
 %
 %    \begin{macrocode}
 \NewDocumentCommand \@sidenotes@placemarginal { m m } {%
@@ -253,8 +265,7 @@
 \NewDocumentCommand \sidenote { o o +m } {%
 \sidenotemark[#1]%
 \sidenotetext[#1][#2]{#3}%
-\@sidenotes@ifnextchar\sidenote{\kern-0.07em\textsuperscript{,}}%
-{\@sidenotes@ifnextchar\sidecite{\kern-0.07em\textsuperscript{,}}{}}%
+\@sidenotes@multimarker%
 }
 %    \end{macrocode}
 % \end{macro}
@@ -268,14 +279,11 @@
 %
 %    \begin{macrocode}
 \NewDocumentCommand \sidenotemark { o } {%
-\nobreak\hspace{0.1pt}\nobreak%
+\@sidenotes@multichecker%
 \IfNoValueOrEmptyTF{#1}%
-{%
-\textsuperscript{\thesidenote}%
-}% if no argument is given use sidenote counter%
+{\textsuperscript{\thesidenote}}% if no argument is given use sidenote counter
 {\textsuperscript{#1}}% print out the argument otherwise
-\@sidenotes@ifnextchar\sidenote{\textsuperscript{,}}{}%
-\ignorespaces%
+\@sidenotes@multimarker%
 }%
 %    \end{macrocode}
 % \end{macro}
@@ -293,7 +301,7 @@
 %    \begin{macrocode}
 \NewDocumentCommand \sidenotetext { o o +m } {%
 \IfNoValueOrEmptyTF{#1}{% sitenotemark given?
-\@sidenotes@placemarginal{#2}{\textsuperscript{\thesidenote}{} #3}
+\@sidenotes@placemarginal{#2}{\textsuperscript{\thesidenote}{} #3}%
 \refstepcounter{sidenote}}%
 {\@sidenotes@placemarginal{#2}{\textsuperscript{#1} #3}}%
 }%
