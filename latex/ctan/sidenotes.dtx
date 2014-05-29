@@ -19,7 +19,7 @@
 %</driver>
 %<package>\ProvidesPackage{sidenotes}[%
 %<*driver|package>
-  2014/05/29 v0.97b rich text in the margin for LaTeX]
+  2014/05/29 v0.97c rich text in the margin for LaTeX]
 %</driver|package>
 %<package>\RequirePackage{marginnote} % provides an offset option for the marginals instead of a float
 %<package>\RequirePackage{caption} % handles the captions (in the margin)
@@ -204,13 +204,12 @@
 %
 %    \begin{macrocode}
 \ExplSyntaxOn 
-\DeclareExpandableDocumentCommand{\IfNoValueOrEmptyTF}{mmm}
+\DeclareExpandableDocumentCommand{\IfNoValueOrEmptyTF}{ m m m }
 {
  \IfNoValueTF{#1}
-  {#2} % true
-  {\tl_if_empty:nTF {#1} {#2} {#3}} % false
+  {#2} 
+  {\tl_if_empty:nTF {#1} {#2} {#3}} 
 }
-\ExplSyntaxOff
 %    \end{macrocode}
 %
 % \changes{v0.93}{2012/04/17}{regular ifnextchar gobbles trailing whitespaces, introduce a new one that does not.}
@@ -221,18 +220,18 @@
 %    \begin{macrocode}
 \NewDocumentCommand \@sidenotes@multisign { } {3sp}
 %
-\NewDocumentCommand \@sidenotes@multimarker { } {%
-\kern-\@sidenotes@multisign%
-\kern\@sidenotes@multisign\relax%
+\NewDocumentCommand \@sidenotes@multimarker { } 
+{
+  \kern-\@sidenotes@multisign
+  \kern\@sidenotes@multisign\relax 
 }
 %
-\ExplSyntaxOn
 \NewDocumentCommand \@sidenotes@multichecker { } 
-{ \dim_compare:nNnTF \lastkern = \@sidenotes@multisign
+{ 
+  \dim_compare:nNnTF \lastkern = \@sidenotes@multisign
   {\textsuperscript{,}}
   {}
 }
-\ExplSyntaxOff
 %
 %    \end{macrocode}
 %
@@ -242,10 +241,12 @@
 % margin note in case an offset is given and marginpar otherwise.  
 %
 %    \begin{macrocode}
-\NewDocumentCommand \@sidenotes@placemarginal { m m } {%
-\IfNoValueOrEmptyTF{#1}%
-{\marginpar{#2}}% is empty, use marginpar
-{\marginnote{#2}[#1]}}% is not empty, use marginnote
+\NewDocumentCommand \@sidenotes@placemarginal { m m } 
+{ 
+  \IfNoValueOrEmptyTF{#1}
+    {\marginpar{#2}} 
+    {\marginnote{#2}[#1]} 
+}
 %
 %    \end{macrocode}
 %
@@ -262,10 +263,11 @@
 % \changes{v0.94}{2014/01/11}{use xparse syntax}
 %
 %    \begin{macrocode}
-\NewDocumentCommand \sidenote { o o +m } {%
-\sidenotemark[#1]%
-\sidenotetext[#1][#2]{#3}%
-\@sidenotes@multimarker%
+\NewDocumentCommand \sidenote { o o +m } 
+{ 
+  \sidenotemark[#1]
+  \sidenotetext[#1][#2]{#3}
+  \@sidenotes@multimarker
 }
 %    \end{macrocode}
 % \end{macro}
@@ -278,13 +280,14 @@
 % \changes{v0.96}{2014/02/14}{increase the sidenote counter in sidenotetext now}
 %
 %    \begin{macrocode}
-\NewDocumentCommand \sidenotemark { o } {%
-\@sidenotes@multichecker%
-\IfNoValueOrEmptyTF{#1}%
-{\textsuperscript{\thesidenote}}% if no argument is given use sidenote counter
-{\textsuperscript{#1}}% print out the argument otherwise
-\@sidenotes@multimarker%
-}%
+\NewDocumentCommand \sidenotemark { o } 
+{ 
+  \@sidenotes@multichecker
+  \IfNoValueOrEmptyTF{#1}
+    {\textsuperscript{\thesidenote}}
+    {\textsuperscript{#1}}
+  \@sidenotes@multimarker
+}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -299,12 +302,15 @@
 % \changes{v0.94}{2014/01/11}{use xparse syntax, change counter behavior}
 %
 %    \begin{macrocode}
-\NewDocumentCommand \sidenotetext { o o +m } {%
-\IfNoValueOrEmptyTF{#1}{% sitenotemark given?
-\@sidenotes@placemarginal{#2}{\textsuperscript{\thesidenote}{} #3}%
-\refstepcounter{sidenote}}%
-{\@sidenotes@placemarginal{#2}{\textsuperscript{#1} #3}}%
-}%
+\NewDocumentCommand \sidenotetext { o o +m } 
+{ 
+  \IfNoValueOrEmptyTF{#1}
+    { 
+      \@sidenotes@placemarginal{#2}{\textsuperscript{\thesidenote}{} #3}
+	  \refstepcounter{sidenote}
+	}
+    {\@sidenotes@placemarginal{#2}{\textsuperscript{#1} #3}}
+}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -319,21 +325,23 @@
 %
 %    \begin{macrocode}
 \DeclareCaptionStyle{sidecaption}{font=footnotesize}
-\NewDocumentCommand \sidecaption {s o o m} {%
-\captionsetup{style=sidecaption}%
-\IfBooleanTF{#1}%is the macro starred
-{\IfNoValueOrEmptyTF{#2}%
-{\marginnote{\caption*{#4}}}%
-{\marginnote{\caption*{#4}}[#2]}%
-}% yes, starred macro
-{%
-\IfNoValueOrEmptyTF{#2}%
-{\def\@sidenotes@sidecaption@tof{#4}}%
-{\def\@sidenotes@sidecaption@tof{#2}}%
-\IfNoValueOrEmptyTF{#3}%
-{\marginnote{\caption[\@sidenotes@sidecaption@tof]{#4}}}%
-{\marginnote{\caption[\@sidenotes@sidecaption@tof]{#4}}[#3]}%
-}% no, unstarred macro
+\NewDocumentCommand \sidecaption {s o o m} 
+{ 
+  \captionsetup{style=sidecaption}
+  \IfBooleanTF{#1} 
+  { % starred
+    \IfNoValueOrEmptyTF{#2}
+    {\marginnote{\caption*{#4}}}
+    {\marginnote{\caption*{#4}}[#2]}
+  }
+  { % unstarred
+  \IfNoValueOrEmptyTF{#2}
+    {\def\@sidenotes@sidecaption@tof{#4}}
+    {\def\@sidenotes@sidecaption@tof{#2}}
+  \IfNoValueOrEmptyTF{#3}
+    {\marginnote{\caption[\@sidenotes@sidecaption@tof]{#4}}}
+    {\marginnote{\caption[\@sidenotes@sidecaption@tof]{#4}}[#3]}
+  }
 }
 %    \end{macrocode}
 % \end{macro}
@@ -350,13 +358,17 @@
 %    \begin{macrocode}
 \newsavebox{\@sidenotes@marginfigurebox}
 \DeclareCaptionStyle{marginfigure}{font=footnotesize}
-\NewDocumentEnvironment{marginfigure}{o} 
-{\begin{lrbox}{\@sidenotes@marginfigurebox}%
-\begin{minipage}{\marginparwidth}%
-\captionsetup{type=figure,style=marginfigure}}%
-{\end{minipage}%
-\end{lrbox}%
-\@sidenotes@placemarginal{#1}{\usebox{\@sidenotes@marginfigurebox}}}%
+\NewDocumentEnvironment{marginfigure} { o } 
+{
+  \begin{lrbox}{\@sidenotes@marginfigurebox}
+    \begin{minipage}{\marginparwidth}
+      \captionsetup{type=figure,style=marginfigure}
+}
+{
+    \end{minipage}%
+  \end{lrbox}%
+  \@sidenotes@placemarginal{#1}{\usebox{\@sidenotes@marginfigurebox}}
+}
 %    \end{macrocode}
 % \end{environment}
 %
@@ -372,13 +384,18 @@
 %    \begin{macrocode}
 \newsavebox{\@sidenotes@margintablebox}
 \DeclareCaptionStyle{margintable}{font=footnotesize}
-\NewDocumentEnvironment{margintable}{o}
-{\begin{lrbox}{\@sidenotes@margintablebox}%
-\begin{minipage}{\marginparwidth}%
-\captionsetup{type=table,style=margintable}}%
-{\end{minipage}%
-\end{lrbox}%
-\@sidenotes@placemarginal{#1}{\usebox{\@sidenotes@margintablebox}}}%
+\NewDocumentEnvironment{margintable} { o }
+{
+  \begin{lrbox}{\@sidenotes@margintablebox}
+    \begin{minipage}{\marginparwidth}
+      \captionsetup{type=table,style=margintable}
+}
+{
+    \end{minipage}
+  \end{lrbox}
+  \@sidenotes@placemarginal{#1}{\usebox{\@sidenotes@margintablebox}}
+}
+\ExplSyntaxOff
 %    \end{macrocode}
 % \end{environment}
 %
