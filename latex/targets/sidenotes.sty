@@ -12,15 +12,20 @@
 %% without the source of the work.  See below about more informations
 %% about the files the work consists of.
 %% 
-\ProvidesPackage{sidenotes}[%
-  2014/05/29 v0.97c rich text in the margin for LaTeX]
+\RequirePackage{l3keys2e}%
+\ProvidesExplPackage{sidenotes}{2014/06/05}{0.97d}{rich text in the margin for LaTeX}
 \RequirePackage{marginnote} % provides an offset option for the marginals instead of a float
 \RequirePackage{caption} % handles the captions (in the margin)
 \RequirePackage{xparse} % new LaTeX3 syntax to define macros and environments
 \RequirePackage[strict]{changepage} % Changepage package for symmetric twoside handling
+\ExplSyntaxOn
+\keys_define:nn { sidenotes }
+  {
+    oneside .bool_set:N = \sidenotes_oneside
+  }
+\ProcessKeysOptions { sidenotes }
 \newcounter{sidenote} % make a counter
 \setcounter{sidenote}{1} % init the counter
-\ExplSyntaxOn
 \DeclareExpandableDocumentCommand{\IfNoValueOrEmptyTF}{ m m m }
 {
  \IfNoValueTF{#1}
@@ -63,10 +68,10 @@
 {
   \IfNoValueOrEmptyTF{#1}
     {
-      \@sidenotes@placemarginal{#2}{\textsuperscript{\thesidenote}{} #3}
+      \@sidenotes@placemarginal{#2}{\textsuperscript{\thesidenote}{}~#3}
   \refstepcounter{sidenote}
 }
-    {\@sidenotes@placemarginal{#2}{\textsuperscript{#1} #3}}
+    {\@sidenotes@placemarginal{#2}{\textsuperscript{#1}~#3}}
 }
 \DeclareCaptionStyle{sidecaption}{font=footnotesize}
 \NewDocumentCommand \sidecaption {s o o m}
@@ -113,25 +118,52 @@
   \end{lrbox}
   \@sidenotes@placemarginal{#1}{\usebox{\@sidenotes@margintablebox}}
 }
-\ExplSyntaxOff
 \AtBeginDocument{%
 \newlength{\@sidenotes@extrawidth}
 \setlength{\@sidenotes@extrawidth}{\marginparwidth}
 \addtolength{\@sidenotes@extrawidth}{\marginparsep}}
+\NewDocumentEnvironment{autoadjustwidth}{ m m }%
+{
+    \bool_if:NTF \sidenotes_oneside
+    {
+        \begin{adjustwidth}{#1}{#2}
+    }
+    {
+        \begin{adjustwidth*}{#1}{#2}
+    }
+}
+{
+    \bool_if:NTF \sidenotes_oneside
+    {
+        \end{adjustwidth}
+    }
+    {
+        \end{adjustwidth*}
+    }
+}
 \DeclareCaptionStyle{widefigure}{font=footnotesize}
-\renewenvironment{figure*}[1][htbp]{%
-\begin{figure}[#1]%
-    \begin{adjustwidth*}{}{-\@sidenotes@extrawidth}%
-    \captionsetup{style=widefigure}}%
-{   \end{adjustwidth*}%
-    \end{figure}}%
+\RenewDocumentEnvironment{figure*}{ O{htbp} }
+{
+    \begin{figure}[#1]
+        \begin{autoadjustwidth}{}{-\@sidenotes@extrawidth}
+        \captionsetup{style=widefigure}
+}
+{
+        \end{autoadjustwidth}
+    \end{figure}
+}
 \DeclareCaptionStyle{widetable}{font=footnotesize}
-\renewenvironment{table*}[1][htbp]{%
-\begin{table}[#1]%
-    \begin{adjustwidth*}{}{-\@sidenotes@extrawidth}%
-    \captionsetup{style=widetable}}%
-{   \end{adjustwidth*}%
-    \end{table}}%
+\RenewDocumentEnvironment{table*}{ O{htbp} }
+{
+    \begin{table}[#1]
+        \begin{autoadjustwidth}{}{-\@sidenotes@extrawidth}
+        \captionsetup{style=widetable}
+}
+{
+        \end{autoadjustwidth}
+    \end{table}
+}
+\ExplSyntaxOff
 \endinput
 %%
 %% End of file `sidenotes.sty'.

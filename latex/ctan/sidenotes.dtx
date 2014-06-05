@@ -15,12 +15,10 @@
 % The author of this work is Andy Thomas
 %
 %<*driver>
-\ProvidesFile{sidenotes.dtx}[%
+\ProvidesFile{sidenotes.dtx}[2014/06/05 v0.97d rich text in the margin for LaTeX]%
 %</driver>
-%<package>\ProvidesPackage{sidenotes}[%
-%<*driver|package>
-  2014/05/29 v0.97c rich text in the margin for LaTeX]
-%</driver|package>
+%<package>\RequirePackage{l3keys2e}%
+%<package>\ProvidesExplPackage{sidenotes}{2014/06/05}{0.97d}{rich text in the margin for LaTeX}
 %<package>\RequirePackage{marginnote} % provides an offset option for the marginals instead of a float
 %<package>\RequirePackage{caption} % handles the captions (in the margin)
 %<package>\RequirePackage{xparse} % new LaTeX3 syntax to define macros and environments
@@ -69,6 +67,8 @@
 % \changes{v0.90}{2012/06/02}{two opt package is required, the definitions are too confusing otherwise}
 % \changes{v0.92}{2012/11/09}{corrected typo in email address}
 % \changes{v0.95}{2014/01/23}{cleaned up the documentation.}
+% \changes{v0.97}{2014/06/05}{make it a expl package}
+% \changes{v0.97}{2014/06/05}{introduce package option oneside }
 %
 % \begin{abstract}
 % \noindent This package allows the typesetting of rich content in the margin. 
@@ -163,6 +163,7 @@
 %  \changes{v0.52}{2011/10/06}{added a section that the package needs marginnote, caption and xifthen.}
 %  \changes{v0.90}{2012/06/02}{added a section that the package needs twoopt and changepage.}
 %  \changes{v0.94}{2014/01/22}{start using xparse} 
+%  \changes{v0.97}{2014/06/05}{start using l3keys2e} 
 %
 %  \begin{description}
 %     \item[marginnote]
@@ -176,6 +177,7 @@
 %        \emph{caption} manual for details on styles. 
 %     \item[xparse] is used to take advantage of the improved \LaTeX3 syntax.
 %        All macros and environments are defined using this package.
+%     \item[l3keys2e] provides a key/value mechanism 
 %     \item[changepage] is used to correctly shift figure* and table*. It has 
 %        to use the option [strict] to work properly. This might lead to an 
 %        option clash, if the same package is loaded without this option. 
@@ -186,6 +188,18 @@
 % \iffalse
 %<*package>
 % \fi
+%
+% Process the package options: onside 
+%
+%    \begin{macrocode}
+\ExplSyntaxOn 
+%
+\keys_define:nn { sidenotes }
+  {
+    oneside .bool_set:N = \sidenotes_oneside 
+  }
+\ProcessKeysOptions { sidenotes }
+%    \end{macrocode}
 %
 % \changes{v0.91}{2012/06/03}{sidenotetextstyle is not needed any more}
 % \changes{v0.94}{2014/01/22}{change sidenote counter behavior} 
@@ -203,7 +217,6 @@
 % optional arguments.
 %
 %    \begin{macrocode}
-\ExplSyntaxOn 
 \DeclareExpandableDocumentCommand{\IfNoValueOrEmptyTF}{ m m m }
 {
  \IfNoValueTF{#1}
@@ -306,10 +319,10 @@
 { 
   \IfNoValueOrEmptyTF{#1}
     { 
-      \@sidenotes@placemarginal{#2}{\textsuperscript{\thesidenote}{} #3}
+      \@sidenotes@placemarginal{#2}{\textsuperscript{\thesidenote}{}~#3}
 	  \refstepcounter{sidenote}
 	}
-    {\@sidenotes@placemarginal{#2}{\textsuperscript{#1} #3}}
+    {\@sidenotes@placemarginal{#2}{\textsuperscript{#1}~#3}}
 }
 %    \end{macrocode}
 % \end{macro}
@@ -395,7 +408,6 @@
   \end{lrbox}
   \@sidenotes@placemarginal{#1}{\usebox{\@sidenotes@margintablebox}}
 }
-\ExplSyntaxOff
 %    \end{macrocode}
 % \end{environment}
 %
@@ -413,13 +425,37 @@
 \setlength{\@sidenotes@extrawidth}{\marginparwidth}
 \addtolength{\@sidenotes@extrawidth}{\marginparsep}}
 %
+\NewDocumentEnvironment{autoadjustwidth}{ m m }%
+{
+    \bool_if:NTF \sidenotes_oneside
+    {
+        \begin{adjustwidth}{#1}{#2}
+    }
+    {
+        \begin{adjustwidth*}{#1}{#2}
+    }
+}
+{
+    \bool_if:NTF \sidenotes_oneside
+    {
+        \end{adjustwidth}
+    }
+    {
+        \end{adjustwidth*}
+    }
+}
+%
 \DeclareCaptionStyle{widefigure}{font=footnotesize}
-\renewenvironment{figure*}[1][htbp]{%
-\begin{figure}[#1]%
-    \begin{adjustwidth*}{}{-\@sidenotes@extrawidth}%
-    \captionsetup{style=widefigure}}%
-{   \end{adjustwidth*}%
-    \end{figure}}%
+\RenewDocumentEnvironment{figure*}{ O{htbp} }
+{
+    \begin{figure}[#1]
+        \begin{autoadjustwidth}{}{-\@sidenotes@extrawidth}
+        \captionsetup{style=widefigure}
+}
+{
+        \end{autoadjustwidth}
+    \end{figure}
+}
 %    \end{macrocode}
 % \end{environment}
 %
@@ -433,12 +469,17 @@
 %
 %    \begin{macrocode}  
 \DeclareCaptionStyle{widetable}{font=footnotesize}
-\renewenvironment{table*}[1][htbp]{%
-\begin{table}[#1]%
-    \begin{adjustwidth*}{}{-\@sidenotes@extrawidth}%
-    \captionsetup{style=widetable}}%
-{   \end{adjustwidth*}%
-    \end{table}}%
+\RenewDocumentEnvironment{table*}{ O{htbp} }
+{
+    \begin{table}[#1]
+        \begin{autoadjustwidth}{}{-\@sidenotes@extrawidth}
+        \captionsetup{style=widetable}
+}
+{
+        \end{autoadjustwidth}
+    \end{table}
+}
+\ExplSyntaxOff
 %    \end{macrocode}
 % \end{environment}
 % \Finale
