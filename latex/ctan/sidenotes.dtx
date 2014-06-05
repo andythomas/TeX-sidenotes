@@ -15,10 +15,10 @@
 % The author of this work is Andy Thomas
 %
 %<*driver>
-\ProvidesFile{sidenotes.dtx}[2014/06/05 v0.97d rich text in the margin for LaTeX]%
+\ProvidesFile{sidenotes.dtx}[2014/06/05 v0.97e rich text in the margin for LaTeX]%
 %</driver>
 %<package>\RequirePackage{l3keys2e}%
-%<package>\ProvidesExplPackage{sidenotes}{2014/06/05}{0.97d}{rich text in the margin for LaTeX}
+%<package>\ProvidesExplPackage{sidenotes}{2014/06/05}{0.97e}{rich text in the margin for LaTeX}
 %<package>\RequirePackage{marginnote} % provides an offset option for the marginals instead of a float
 %<package>\RequirePackage{caption} % handles the captions (in the margin)
 %<package>\RequirePackage{xparse} % new LaTeX3 syntax to define macros and environments
@@ -231,6 +231,20 @@
 % \noindent Put a marker in the horizontal list to detect subsequent sidenotemarks.
 %
 %    \begin{macrocode}
+\NewDocumentCommand \@sidenotes@thesidenotemark { m }
+{
+    \leavevmode 
+    \ifhmode 
+        \edef \@x@sf {\the \spacefactor }
+        \nobreak 
+    \fi 
+    \hbox {\@textsuperscript {\normalfont #1 }} 
+    \ifhmode 
+        \spacefactor \@x@sf 
+    \fi 
+    \relax
+}
+%
 \NewDocumentCommand \@sidenotes@multisign { } {3sp}
 %
 \NewDocumentCommand \@sidenotes@multimarker { } 
@@ -242,7 +256,7 @@
 \NewDocumentCommand \@sidenotes@multichecker { } 
 { 
   \dim_compare:nNnTF \lastkern = \@sidenotes@multisign
-  {\textsuperscript{,}}
+  {\@sidenotes@thesidenotemark{,}}
   {}
 }
 %
@@ -297,8 +311,8 @@
 { 
   \@sidenotes@multichecker
   \IfNoValueOrEmptyTF{#1}
-    {\textsuperscript{\thesidenote}}
-    {\textsuperscript{#1}}
+    {\@sidenotes@thesidenotemark{\thesidenote}}
+    {\@sidenotes@thesidenotemark{#1}}
   \@sidenotes@multimarker
 }
 %    \end{macrocode}

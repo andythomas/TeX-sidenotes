@@ -13,7 +13,7 @@
 %% about the files the work consists of.
 %% 
 \RequirePackage{l3keys2e}%
-\ProvidesExplPackage{sidenotes}{2014/06/05}{0.97d}{rich text in the margin for LaTeX}
+\ProvidesExplPackage{sidenotes}{2014/06/05}{0.97e}{rich text in the margin for LaTeX}
 \RequirePackage{marginnote} % provides an offset option for the marginals instead of a float
 \RequirePackage{caption} % handles the captions (in the margin)
 \RequirePackage{xparse} % new LaTeX3 syntax to define macros and environments
@@ -32,6 +32,19 @@
   {#2}
   {\tl_if_empty:nTF {#1} {#2} {#3}}
 }
+\NewDocumentCommand \@sidenotes@thesidenotemark { m }
+{
+    \leavevmode
+    \ifhmode
+        \edef \@x@sf {\the \spacefactor }
+        \nobreak
+    \fi
+    \hbox {\@textsuperscript {\normalfont #1 }}
+    \ifhmode
+        \spacefactor \@x@sf
+    \fi
+    \relax
+}
 \NewDocumentCommand \@sidenotes@multisign { } {3sp}
 \NewDocumentCommand \@sidenotes@multimarker { }
 {
@@ -41,7 +54,7 @@
 \NewDocumentCommand \@sidenotes@multichecker { }
 {
   \dim_compare:nNnTF \lastkern = \@sidenotes@multisign
-  {\textsuperscript{,}}
+  {\@sidenotes@thesidenotemark{,}}
   {}
 }
 \NewDocumentCommand \@sidenotes@placemarginal { m m }
@@ -60,8 +73,8 @@
 {
   \@sidenotes@multichecker
   \IfNoValueOrEmptyTF{#1}
-    {\textsuperscript{\thesidenote}}
-    {\textsuperscript{#1}}
+    {\@sidenotes@thesidenotemark{\thesidenote}}
+    {\@sidenotes@thesidenotemark{#1}}
   \@sidenotes@multimarker
 }
 \NewDocumentCommand \sidenotetext { o o +m }
