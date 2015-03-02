@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesFile{caesar_book.cls}[2014/02/14 v0.96 Caesar book]
+\ProvidesFile{caesar_book.cls}[2015/03/02 v0.98 Caesar book]
 % Load the amsmath and the mhchem package before loading microtype
 \RequirePackage{amsmath}% better math handling
 \RequirePackage[version=3]{mhchem}% chemical formulas
@@ -135,4 +135,11 @@
    \addvspace{1.0\baselineskip plus 0.5ex minus 0.2ex}%
    \noindent\textsc{#1}%
 }%
-\newcommandtwoopt{\sidecite}[3][][]{\sidenote{\fullcite[#1][#2]{#3}}}
+\ExplSyntaxOn
+\NewDocumentCommand \sidecite { o o m }
+{
+  \sidenote{\fullcite[#1][#2]{#3}}
+}
+\ExplSyntaxOff
+
+
