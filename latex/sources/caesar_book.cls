@@ -137,8 +137,26 @@
 }%
 \ExplSyntaxOn
 \NewDocumentCommand \sidecite { o o m }
-{
-  \sidenote{\fullcite[#1][#2]{#3}}
+{ 
+  \IfNoValueOrEmptyTF{#1}
+  {
+    \IfNoValueOrEmptyTF{#2}
+    {
+      \sidenote{\fullcite{#3}}
+    }
+    {
+      \sidenote{\fullcite[#2]{#3}}
+    }
+  }
+  {
+    \IfNoValueOrEmptyTF{#2}
+    {
+      \sidenote{\fullcite[#1]{#3}}
+    }
+    {
+      \sidenote{\fullcite[#1][#2]{#3}}
+    }
+  }
 }
 \ExplSyntaxOff
 
