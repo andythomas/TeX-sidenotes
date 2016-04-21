@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesFile{caesar_book.cls}[2015/08/10 v0.99 Caesar book]
+\ProvidesFile{caesar_book.cls}[2016/04/21 v1.00 Caesar book]
 % Load the amsmath and the mhchem package before loading microtype
 \RequirePackage{amsmath}% better math handling
 \RequirePackage[version=3]{mhchem}% chemical formulas
