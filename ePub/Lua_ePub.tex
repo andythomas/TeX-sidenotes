@@ -1,0 +1,73 @@
+\documentclass{caesar_book}
+
+% arara: lualatex
+
+% -- language: German --
+\usepackage{csquotes}
+\usepackage[ngerman]{babel}
+\usepackage{nameref}
+% use the SI system
+\usepackage{siunitx}
+
+\makeatletter
+\def\writetitletofile{%
+	\newwrite\file
+	\immediate\openout\file=title.dat
+	\immediate\write\file{\@title}%
+	\immediate\write\file{\@author}%
+	\immediate\closeout\file%
+	}
+%
+%	
+% define high level macros
+%
+
+\newcommand{\smallfigure}[2]{%
+\begin{marginfigure}%
+    \includegraphics[width=\marginparwidth]{#1}%
+    \caption{#2\label{#1}}%
+\end{marginfigure}%
+}
+
+\newcommand{\normalfigure}[2]{%
+\begin{figure}[tbhp]%
+    \includegraphics[width=\textwidth]{#1}%
+    \caption{#2\label{#1}}%
+\end{figure}%
+}
+
+\newcommand{\largefigure}[2]{%
+\begin{figure*}[h!]%
+    \includegraphics[width=400pt]{#1}%
+    \caption{#2\label{#1}}%
+\end{figure*}%
+}%
+%%
+%% -- jetzt gehts los --
+%%
+
+\title{ePub}
+\author{Kevin Geishendorf}
+\publisher{IFW Dresden}
+
+
+\begin{document}
+%
+%\frontmatter
+%
+\maketitlepage
+%
+\tableofcontents
+%
+\writetitletofile
+%
+%\mainmatter
+% --
+\chapter{Magnetische Kraftmikroskopie}
+%
+
+Aufrufen eines Lua Codes um automatisch Ceasar eBook auszugeben.
+
+\directlua{ require("Lua_ePub.lua")}
+%/home/kevin/Dokumente/ePub/
+\end{document}
