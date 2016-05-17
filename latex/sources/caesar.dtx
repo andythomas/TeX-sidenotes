@@ -1,0 +1,373 @@
+% \iffalse meta-comment
+%
+% sidenotes.dtx
+%
+% Copyright (C) 2011-2016 by Andy Thomas <andythomas(at)web.de>
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+% http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2003/12/01 or later.
+% 
+% The author of this work is Andy Thomas
+%
+%<*driver>
+\ProvidesFile{caesar.dtx}[2016/05/16 v0.10 rich text in the margin for LaTeX]%
+%</driver>
+%<package>\RequirePackage{l3keys2e}%
+%<package>\ProvidesExplPackage{caesar}{2016/05/16}{0.10}{rich text in the margin for LaTeX}
+%<package>\RequirePackage{caption} % handles the captions (in the margin)
+%<package>\RequirePackage{xparse} % new LaTeX3 syntax to define macros and environments
+%<package>\RequirePackage[strict]{changepage} % Changepage package for symmetric twoside handling
+%<*driver>
+\documentclass{ltxdoc}
+\CodelineIndex
+\RecordChanges
+\begin{document}
+  \DocInput{caesar.dtx}
+\PrintIndex
+  \PrintChanges
+\end{document}
+%</driver>
+% \fi
+%
+%  \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+%
+%
+% \GetFileInfo{caesar.dtx}
+% 
+%
+% \title{The \textsf{caesar} package\thanks{This document
+% corresponds to \textsf{caesar}~\fileversion, dated \filedate.}}
+% \author{Andy Thomas\\ \texttt{andythomas(at)web.de}}
+%
+% \maketitle
+%
+% \changes{v0.10}{2016/05/16}{Initial version, inherited from sidenotes.sty}
+%
+% \begin{abstract}
+% \noindent This package allows the typesetting of rich content in the margin. 
+% It includes text, but also figures and tables,
+% which is common in science textbooks such as Feynman's 
+% \textit{Lectures on Physics}.
+% \end{abstract}
+%
+% \tableofcontents
+%
+% \section{Usage}
+%
+% \DescribeMacro{\sidenote}
+% The macro is very similar to the footnote macro and tries to emulate
+% its behavior. It just puts the notes in the margin instead of the bottom
+% of the page, therefore the name \emph{sidenote}. It has the same parameters 
+% as footnote:
+% \verb+\sidenote[number]{text}+. All the sidenotes are subsequently 
+% numbered and float in the margin to avoid overlap.  
+% The optional parameter will manually change the numbering to the given
+% value. 
+%
+% \DescribeMacro{\sidenotemark} 
+% Sidenote tries to mimic the footnote behavior and, consequently, provides the 
+% same solutions. Sometimes, it is not possible to directly call a sidenote 
+% macro, e.g.\ inside of a figure caption. Then, you can use 
+% \verb+\sidenotemark[number]+ and \verb+\sidenotetext[number]{text}+ 
+% macros. \verb+\sidenotemark+ puts a mark at the current position. Afterwards, 
+% outside of the environment that causes the trouble, 
+% \DescribeMacro{\sidenotetext}
+% it is possible the call \verb+\sidenotetext[number]{text}+ to provide 
+% the text and typeset the sidenote. The optional parameter is similar to the 
+% sidenote macro and will change the numbering.
+%
+% \DescribeEnv{marginfigure}
+% The marginfigure environment puts a figure and its caption in the margin. 
+% Instead of \verb+\begin{figure}[htbp]+ use \verb+\begin{marginfigure}+. 
+% The marginfigure has its own caption style named \emph{marginfigure}.   
+%
+% \DescribeEnv{margintable}
+% The margintable environment works similar to marginfigure, but with table 
+% environments. Use \verb+\begin{margintable}+ instead of 
+% \verb+\begin{table}[htbp]+, its caption style is named \emph{margintable}.
+%
+% \DescribeEnv{figure*}
+% The \verb+figure*+ environment is used to position figures across the full 
+% page, i.e. the text width plus the margin. The algorithm has to distinguish
+% between recto and verso (left and right) pages and might need up to three
+% \LaTeX{} runs to provide the desired result. The corresponding caption style
+% is called \emph{widefigure}. 
+% \DescribeEnv{table*}
+% The sister environment for tables is \verb+table*+. Use \emph{widetable} to 
+% change its caption style. 
+%
+% \section{Technical note}
+%
+% When writing the package, we tried to provide a \emph{minimum} extension to 
+% standard \LaTeX{} for typesetting rich content in the margin. This means,
+% that there are no sensible default values for most things such as page
+% geometry, fonts and font sizes. However, the \emph{caesar\textunderscore 
+% book}-class accompanies this package as an example implementation as well 
+% as a template we use for our theses. 
+% 
+% In addition, we tried to keep compatibility with 
+% packages the user might want to use later. However, the following packages 
+% are needed by \emph{sidenotes} and might introduce side effects with other 
+% packages.
+%
+% \section{Required packages}
+%
+%  \begin{description}
+%     \item[caption]
+%        allows easier formatting of captions. Please refer to the  
+%        \emph{caption} manual for details on styles. 
+%     \item[xparse] is used to take advantage of the improved \LaTeX3 syntax.
+%        All macros and environments are defined using this package.
+%     \item[l3keys2e] provides a key/value mechanism 
+%     \item[changepage] is used to correctly shift figure* and table*. It has 
+%        to use the option [strict] to work properly. This might lead to an 
+%        option clash, if the same package is loaded without this option. 
+%  \end{description}%
+%
+% \section{Implementation}
+%
+% \iffalse
+%<*package>
+% \fi
+%
+% Process the package options: onside 
+%
+%    \begin{macrocode}
+\ExplSyntaxOn 
+%
+\keys_define:nn { caesar }
+  {
+    oneside .bool_set:N = \caesar_oneside 
+  }
+\ProcessKeysOptions { caesar }
+%    \end{macrocode}
+%
+% We need a counter similar to the footnote counter.
+%
+%    \begin{macrocode}
+\newcounter{sidenote} % make a counter 
+\setcounter{sidenote}{1} % init the counter 
+%    \end{macrocode}
+%
+% \noindent Put a marker in the horizontal list to detect subsequent sidenotemarks.
+%
+%    \begin{macrocode}
+\NewDocumentCommand \@caesar@thesidenotemark { m }
+{
+    \leavevmode 
+    \ifhmode 
+        \edef \@x@sf {\the \spacefactor }
+        \nobreak 
+    \fi 
+    \hbox {\@textsuperscript {\normalfont #1 }} 
+    \ifhmode 
+        \spacefactor \@x@sf 
+    \fi 
+    \relax
+}
+%
+\NewDocumentCommand \@caesar@multisign { } {3sp}
+%
+\NewDocumentCommand \@caesar@multimarker { } 
+{
+  \kern-\@caesar@multisign
+  \kern\@caesar@multisign\relax 
+}
+%
+\NewDocumentCommand \@caesar@multichecker { } 
+{ 
+  \dim_compare:nNnTF \lastkern = \@caesar@multisign
+  {\@caesar@thesidenotemark{,}}
+  {}
+}
+%
+%    \end{macrocode}
+%
+% \noindent Introduce an internal macro to place the marginal text.
+%
+%    \begin{macrocode}
+\NewDocumentCommand \@caesar@placemarginal { m } 
+{ 
+    \marginpar{#2}
+}
+%
+%    \end{macrocode}
+%
+% \begin{macro}{\sidenote}
+% 
+% Introduce the \verb+\sidenote+ macro with an optional argument.
+%
+%    \begin{macrocode}
+\NewDocumentCommand \sidenote { o +m } 
+{ 
+  \sidenotemark[#1]
+  \sidenotetext[#1]{#2}
+  \@caesar@multimarker
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\sidenotemark}
+%
+% Sidenotemark is supposed to work similarly to footnotemark.
+%
+%    \begin{macrocode}
+\NewDocumentCommand \sidenotemark { o } 
+{ 
+  \@caesar@multichecker
+  \IfNoValueOrEmptyTF{#1}
+    {\@caesar@thesidenotemark{\thesidenote}}
+    {\@caesar@thesidenotemark{#1}}
+  \@caesar@multimarker
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\sidenotetext}
+%
+% Sidenotetext is supposed to work similarly to footnotetext. 
+%
+%    \begin{macrocode}
+\NewDocumentCommand \sidenotetext { o +m } 
+{ 
+  \IfNoValueOrEmptyTF{#1}
+    { 
+      \@caesar@placemarginal{\textsuperscript{\thesidenote}{}~#2}
+	  \refstepcounter{sidenote}
+	}
+    {\@caesar@placemarginal{\textsuperscript{#1}~#2}}
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{environment}{marginfigure}
+%
+% The marginfigure environment is similar to the figure environment. But the 
+% figure is put in the margin.
+%
+%    \begin{macrocode}
+\newsavebox{\@caesar@marginfigurebox}
+\DeclareCaptionStyle{marginfigure}{font=footnotesize}
+\NewDocumentEnvironment{marginfigure} { } 
+{
+  \begin{lrbox}{\@caesar@marginfigurebox}
+    \begin{minipage}{\marginparwidth}
+      \captionsetup{type=figure,style=marginfigure}
+}
+{
+    \end{minipage}%
+  \end{lrbox}%
+  \@caesar@placemarginal{\usebox{\@caesar@marginfigurebox}}
+}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{environment}{margintable}
+%
+% The margintable is similar to the table environment. But the table 
+% is put in the margin.
+%
+%    \begin{macrocode}
+\newsavebox{\@caesar@margintablebox}
+\DeclareCaptionStyle{margintable}{font=footnotesize}
+\NewDocumentEnvironment{margintable} { }
+{
+  \begin{lrbox}{\@caesar@margintablebox}
+    \begin{minipage}{\marginparwidth}
+      \captionsetup{type=table,style=margintable}
+}
+{
+    \end{minipage}
+  \end{lrbox}
+  \@caesar@placemarginal{\usebox{\@caesar@margintablebox}}
+}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{environment}{figure*}
+%
+% The figure* environment provides a figure environment for figures that 
+% span across the full page (text plus margin width).
+%
+%    \begin{macrocode}  
+\AtBeginDocument{%
+\newlength{\@caesar@extrawidth}
+\setlength{\@caesar@extrawidth}{\marginparwidth}
+\addtolength{\@caesar@extrawidth}{\marginparsep}}
+%
+\NewDocumentEnvironment{autoadjustwidth}{ m m }%
+{
+    \bool_if:NTF \caesar_oneside
+    {
+        \begin{adjustwidth}{#1}{#2}
+    }
+    {
+        \begin{adjustwidth*}{#1}{#2}
+    }
+}
+{
+    \bool_if:NTF \caesar_oneside
+    {
+        \end{adjustwidth}
+    }
+    {
+        \end{adjustwidth*}
+    }
+}
+%
+\DeclareCaptionStyle{widefigure}{font=footnotesize}
+\RenewDocumentEnvironment{figure*}{ O{htbp} }
+{
+    \begin{figure}[#1]
+        \begin{autoadjustwidth}{}{-\@caesar@extrawidth}
+        \captionsetup{style=widefigure}
+}
+{
+        \end{autoadjustwidth}
+    \end{figure}
+}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{environment}{table*}
+%
+% The table* environment provides a table environment for figures across 
+% text and margin width.
+%
+%    \begin{macrocode}  
+\DeclareCaptionStyle{widetable}{font=footnotesize}
+\RenewDocumentEnvironment{table*}{ O{htbp} }
+{
+    \begin{table}[#1]
+        \begin{autoadjustwidth}{}{-\@caesar@extrawidth}
+        \captionsetup{style=widetable}
+}
+{
+        \end{autoadjustwidth}
+    \end{table}
+}
+\ExplSyntaxOff
+%    \end{macrocode}
+% \end{environment}
+% \Finale
+\endinput
