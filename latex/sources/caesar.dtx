@@ -15,10 +15,10 @@
 % The author of this work is Andy Thomas
 %
 %<*driver>
-\ProvidesFile{caesar.dtx}[2016/05/16 v0.10 rich text in the margin for LaTeX]%
+\ProvidesFile{caesar.dtx}[2016/05/20 v0.11 rich text in the margin for LaTeX]%
 %</driver>
 %<package>\RequirePackage{l3keys2e}%
-%<package>\ProvidesExplPackage{caesar}{2016/05/16}{0.10}{rich text in the margin for LaTeX}
+%<package>\ProvidesExplPackage{caesar}{2016/05/20}{0.11}{rich text in the margin for LaTeX}
 %<package>\RequirePackage{caption} % handles the captions (in the margin)
 %<package>\RequirePackage{xparse} % new LaTeX3 syntax to define macros and environments
 %<package>\RequirePackage[strict]{changepage} % Changepage package for symmetric twoside handling
@@ -62,6 +62,7 @@
 % \maketitle
 %
 % \changes{v0.10}{2016/05/16}{Initial version, inherited from sidenotes.sty}
+% \changes{v0.11}{2016/05/20}{Found some bugs}
 %
 % \begin{abstract}
 % \noindent This package allows the typesetting of rich content in the margin. 
@@ -168,6 +169,17 @@
 \newcounter{sidenote} % make a counter 
 \setcounter{sidenote}{1} % init the counter 
 %    \end{macrocode}
+
+
+%    \begin{macrocode}
+\DeclareExpandableDocumentCommand{\IfNoValueOrEmptyTF}{ m m m }
+{
+ \IfNoValueTF{#1}
+  {#2} 
+  {\tl_if_empty:nTF {#1} {#2} {#3}} 
+}
+%    \end{macrocode}
+
 %
 % \noindent Put a marker in the horizontal list to detect subsequent sidenotemarks.
 %
@@ -208,7 +220,7 @@
 %    \begin{macrocode}
 \NewDocumentCommand \@caesar@placemarginal { m } 
 { 
-    \marginpar{#2}
+    \marginpar{#1}
 }
 %
 %    \end{macrocode}
