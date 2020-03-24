@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesFile{caesar_book.cls}[2016/04/21 v1.00 Caesar book]
+\ProvidesFile{caesar_book.cls}[2020/03/24 v1.00a Caesar book]
 % Load the amsmath and the mhchem package before loading microtype
 \RequirePackage{amsmath}% better math handling
 \RequirePackage[version=3]{mhchem}% chemical formulas
@@ -42,8 +42,8 @@
 \RequirePackage{ifluatex}
 \ifluatex% in LuaLateX we use fontspec
 	\RequirePackage{fontspec}%
-	\RequirePackage[vargreek-shape=TeX]{unicode-math}% 
-	\setmathfont{Asana-Math.otf}% asana math works well with palatino
+	\RequirePackage{unicode-math}% 
+	\setmathfont{TeX Gyre Pagella Math}% use corresponding math font
 	\setmainfont[Ligatures=TeX, Numbers=OldStyle]{Tex Gyre Pagella}% free Palatino clone
 	\setmonofont{Tex Gyre Cursor}% works okay with palatino
 	\setsansfont{Tex Gyre Heros}% work okay with palatino
@@ -95,6 +95,7 @@
 % compatibility with T-L
 %
 % titlepage
+\RequirePackage{ifthen}
 \newcommand{\publisher}[1]{\gdef\caesar@publisher{#1}}
 \gdef\caesar@thesis{}
 \newcommand{\thesis}[1]{\gdef\caesar@thesis{#1}}
