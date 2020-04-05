@@ -85,7 +85,7 @@
   \@savemarbox\@marbox{\marginparstyle#1}% marginparstyle is a prefix to the marginpar text now
   \global\setbox\@currbox\copy\@marbox % the rest of the definition is taken from original LaTeX
   \@xympar}
-\renewcommand*{\marginfont}{\marginparstyle}
+\@ifpackageloaded{marginnote}{\renewcommand*{\marginfont}{\marginparstyle}}{} % adjust marginnote font in the same way
 % setup itemize and enumerate  
 \RequirePackage{enumitem}
 \setlist[itemize]{leftmargin=*}

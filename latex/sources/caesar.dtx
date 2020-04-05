@@ -15,7 +15,7 @@
 % The author of this work is Andy Thomas
 %
 %<*driver>
-\ProvidesFile{caesar.dtx}[2020/04/05 v0.30 rich text in the margin for LaTeX]%
+\ProvidesFile{caesar.dtx}[2020/04/05 v0.40 rich text in the margin for LaTeX]%
 %</driver>
 %<package>\RequirePackage{l3keys2e}%
 %<package>\ProvidesExplPackage{caesar}{2020/04/05}{0.20}{rich text in the margin for LaTeX}
@@ -64,6 +64,7 @@
 % \changes{v0.10}{2016/05/16}{Initial version, inherited from sidenotes.sty}
 % \changes{v0.11}{2016/05/20}{Found some bugs}
 % \changes{v0.20}{2020/05/05}{Updated for TeX-Live 2019}
+% \changes{v0.30}{2020/04/05}{Placemarginal is obsolete without marginnote}
 %
 % \begin{abstract}
 % \noindent This package allows the typesetting of rich content in the margin. 
@@ -224,15 +225,6 @@
 %
 %    \end{macrocode}
 %
-% \noindent Introduce an internal macro to place the marginal text.
-%
-%    \begin{macrocode}
-\NewDocumentCommand \@caesar@placemarginal { m } 
-{ 
-    \marginpar{#1}
-}
-%
-%    \end{macrocode}
 %
 % \begin{macro}{\sidenote}
 % 
@@ -273,10 +265,10 @@
 { 
   \IfNoValueOrEmptyTF{#1}
     { 
-      \@caesar@placemarginal{\textsuperscript{\thesidenote}{}~#2}
+      \marginpar{\textsuperscript{\thesidenote}{}~#2}
 	  \refstepcounter{sidenote}
 	}
-    {\@caesar@placemarginal{\textsuperscript{#1}~#2}}
+    {\marginpar{\textsuperscript{#1}~#2}}
 }
 %    \end{macrocode}
 % \end{macro}
@@ -298,7 +290,7 @@
 {
     \end{minipage}%
   \end{lrbox}%
-  \@caesar@placemarginal{\usebox{\@caesar@marginfigurebox}}
+  \marginpar{\usebox{\@caesar@marginfigurebox}}
 }
 %    \end{macrocode}
 % \end{environment}
@@ -320,7 +312,7 @@
 {
     \end{minipage}
   \end{lrbox}
-  \@caesar@placemarginal{\usebox{\@caesar@margintablebox}}
+  \marginpar{\usebox{\@caesar@margintablebox}}
 }
 %    \end{macrocode}
 % \end{environment}
