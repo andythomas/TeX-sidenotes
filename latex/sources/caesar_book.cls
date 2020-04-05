@@ -1,18 +1,11 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesFile{caesar_book.cls}[2020/03/24 v1.00a Caesar book]
-% Load the amsmath and the mhchem package before loading microtype
-\RequirePackage{amsmath}% better math handling
-\RequirePackage[version=3]{mhchem}% chemical formulas
+\ProvidesFile{caesar_book.cls}[2020/04/05 v1.10 Caesar book]
 \LoadClassWithOptions{book}% this is derived from the book class
 \RequirePackage{sidenotes}% put annotations, tables and figures in the margin
-\captionsetup{font=footnotesize, skip=4pt}
-\RequirePackage[maxfloats=45]{morefloats}% a lot of marginals need more float 'memory'
+\captionsetup{font=footnotesize, skip=4pt} % use values matching the style
+\extrafloats{45}% a lot of marginals need more float 'memory'
 \RequirePackage{marginfix}% automatically adjust the side-floats nicely 
-\newcommand{\caesar@letterspace}[1]{#1}% allow LuaLaTeX, LaTeX letterspacing
 \RequirePackage{microtype}% microtypography
-\@ifpackagelater{microtype}{2011/08/18}% xxx allow LaTeX and earlier microtype
-{\renewcommand{\caesar@letterspace}[1]{\textls{#1}}}%
-{\AtEndDocument{\ClassWarningNoLine{caesar_book}{Need newest microtype for letterspacing.}}}
 %
 % Set page layout geometry -- default is science-book format
 % this means a (portrait) paper size of 170mm x 240mm
@@ -24,7 +17,9 @@
 %
 \renewcommand{\normalsize}{\fontsize{10pt}{13pt}\selectfont}%
 \renewcommand{\footnotesize}{\fontsize{8pt}{10pt}\selectfont}%
-% fullwidth environment, text across textwidth+marginparsep+marginparwidth
+%
+% fullwidth environment, text across textwidth + marginparsep + marginparwidth
+%
 \newlength{\overhang}
 \setlength{\overhang}{\marginparwidth}
 \addtolength{\overhang}{\marginparsep}
@@ -38,7 +33,9 @@
     {\end{adjustwidth*}}%
     {\end{adjustwidth}}%
   }
+%
 % set up the fonts
+%
 \RequirePackage{ifluatex}
 \ifluatex% in LuaLateX we use fontspec
 	\RequirePackage{fontspec}%
@@ -47,14 +44,15 @@
 	\setmainfont[Ligatures=TeX, Numbers=OldStyle]{Tex Gyre Pagella}% free Palatino clone
 	\setmonofont{Tex Gyre Cursor}% works okay with palatino
 	\setsansfont{Tex Gyre Heros}% work okay with palatino
-	\mhchemoptions{textfontcommand=\addfontfeature{Numbers=Lining}} % use lining numbers for chemical formulas
 \else% in LaTeX we load fonts differently
 	\IfFileExists{mathpazo.sty}{\RequirePackage[osf,sc]{mathpazo}}{}% palatino clone for math
   	\IfFileExists{helvet.sty}{\RequirePackage[scaled=0.90]{helvet}}{}% helvetica is sans serif font
   	\IfFileExists{beramono.sty}{\RequirePackage[scaled=0.85]{beramono}}{}% beramono is tt font
   	\RequirePackage[T1]{fontenc}% finally load fontenc
 \fi
-% nice headings and TOC
+%
+% nice headings, TOC, page numbering ...
+%
 \RequirePackage{titlesec,titletoc}% load the helper package
 \setcounter{secnumdepth}{-1}% no numbering at all
 \titleformat{\chapter}[display]{\relax\itshape\huge}{}{0pt}{\huge\rmfamily\itshape}[]% chapter format
@@ -91,10 +89,9 @@
 % setup itemize and enumerate  
 \RequirePackage{enumitem}
 \setlist[itemize]{leftmargin=*}
-%\renewcommand{\labelitemi}{}
-% compatibility with T-L
 %
 % titlepage
+%
 \RequirePackage{ifthen}
 \newcommand{\publisher}[1]{\gdef\caesar@publisher{#1}}
 \gdef\caesar@thesis{}
@@ -106,7 +103,7 @@
   % first count the number of lines in the title
   \begin{fullwidth}
   \raggedright%
-  \setbox0\vbox{\noindent\fontsize{30}{38}\selectfont\caesar@letterspace{\MakeTextUppercase{\@title}}\par
+  \setbox0\vbox{\noindent\fontsize{30}{38}\selectfont\textls{\MakeTextUppercase{\@title}}\par
   \count@\z@
   \loop
   \unskip\unpenalty\unskip\unpenalty\unskip
@@ -124,12 +121,12 @@
   \sffamily%
   %\begin{fullwidth}%
   \vspace*{0em}% one line extra space
-  \noindent\LARGE\caesar@letterspace{\MakeTextUppercase{\@author}}\par
+  \noindent\LARGE\textls{\MakeTextUppercase{\@author}}\par
   \vfill%
-  \noindent\fontsize{30}{38}\selectfont\textcolor{darkgray}{\caesar@letterspace{\MakeTextUppercase{\@title}}}\par
+  \noindent\fontsize{30}{38}\selectfont\textcolor{darkgray}{\textls{\MakeTextUppercase{\@title}}}\par
   \vfill%
   \vspace{\caesar@titlespace}%
-  \noindent\Large\caesar@letterspace{\MakeTextUppercase{\caesar@publisher}}\par
+  \noindent\Large\textls{\MakeTextUppercase{\caesar@publisher}}\par
   %\end{fullwidth}%
   }%
   \thispagestyle{empty}%
@@ -146,6 +143,9 @@
   \section*{\caesar@thesis\@author}
   % 
 }
+%
+% higher level macros go here
+% 
 \newcommand\newthought[1]{%
    \addvspace{1.0\baselineskip plus 0.5ex minus 0.2ex}%
    \noindent\textsc{#1}%
