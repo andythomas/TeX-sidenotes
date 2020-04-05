@@ -1,0 +1,162 @@
+%%
+%% This is file `caesar.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% caesar.dtx  (with options: `package')
+%% 
+%% IMPORTANT NOTE:
+%% 
+%% This is a generated file and you are not allowed to distribute it
+%% without the source of the work.  See below about more informations
+%% about the files the work consists of.
+%% 
+\RequirePackage{l3keys2e}%
+\ProvidesExplPackage{caesar}{2020/04/05}{0.20}{rich text in the margin for LaTeX}
+\RequirePackage{caption} % handles the captions (in the margin)
+\RequirePackage{xparse} % new LaTeX3 syntax to define macros and environments
+\RequirePackage[strict]{changepage} % Changepage package for symmetric twoside handling
+\ExplSyntaxOn
+\keys_define:nn { caesar }
+  {
+    oneside .bool_set:N = \caesar_oneside
+  }
+\ProcessKeysOptions { caesar }
+\newcounter{sidenote} % make a counter
+\setcounter{sidenote}{1} % init the counter
+
+\DeclareExpandableDocumentCommand{\IfNoValueOrEmptyTF}{ m m m }
+{
+ \IfNoValueTF{#1}
+  {#2}
+  {\tl_if_empty:nTF {#1} {#2} {#3}}
+}
+
+\NewDocumentCommand \@caesar@thesidenotemark { m }
+{
+    \leavevmode
+    \ifhmode
+        \edef \@x@sf {\the \spacefactor }
+        \nobreak
+    \fi
+    \hbox {\@textsuperscript {\normalfont #1 }}
+    \ifhmode
+        \spacefactor \@x@sf
+    \fi
+    \relax
+}
+\NewDocumentCommand \@caesar@multisign { } {3sp}
+\NewDocumentCommand \@caesar@multimarker { }
+{
+  \kern-\@caesar@multisign
+  \kern\@caesar@multisign\relax
+}
+\NewDocumentCommand \@caesar@multichecker { }
+{
+  \dim_compare:nNnTF \lastkern = \@caesar@multisign
+  {\@caesar@thesidenotemark{,}}
+  {}
+}
+\NewDocumentCommand \@caesar@placemarginal { m }
+{
+    \marginpar{#1}
+}
+\NewDocumentCommand \sidenote { o +m }
+{
+  \sidenotemark[#1]
+  \sidenotetext[#1]{#2}
+  \@caesar@multimarker
+}
+\NewDocumentCommand \sidenotemark { o }
+{
+  \@caesar@multichecker
+  \IfNoValueOrEmptyTF{#1}
+    {\@caesar@thesidenotemark{\thesidenote}}
+    {\@caesar@thesidenotemark{#1}}
+  \@caesar@multimarker
+}
+\NewDocumentCommand \sidenotetext { o +m }
+{
+  \IfNoValueOrEmptyTF{#1}
+    {
+      \@caesar@placemarginal{\textsuperscript{\thesidenote}{}~#2}
+  \refstepcounter{sidenote}
+}
+    {\@caesar@placemarginal{\textsuperscript{#1}~#2}}
+}
+\newsavebox{\@caesar@marginfigurebox}
+\DeclareCaptionStyle{marginfigure}{font=footnotesize}
+\NewDocumentEnvironment{marginfigure} { }
+{
+  \begin{lrbox}{\@caesar@marginfigurebox}
+    \begin{minipage}{\marginparwidth}
+      \captionsetup{type=figure,style=marginfigure}
+}
+{
+    \end{minipage}%
+  \end{lrbox}%
+  \@caesar@placemarginal{\usebox{\@caesar@marginfigurebox}}
+}
+\newsavebox{\@caesar@margintablebox}
+\DeclareCaptionStyle{margintable}{font=footnotesize}
+\NewDocumentEnvironment{margintable} { }
+{
+  \begin{lrbox}{\@caesar@margintablebox}
+    \begin{minipage}{\marginparwidth}
+      \captionsetup{type=table,style=margintable}
+}
+{
+    \end{minipage}
+  \end{lrbox}
+  \@caesar@placemarginal{\usebox{\@caesar@margintablebox}}
+}
+\AtBeginDocument{%
+\newlength{\@caesar@extrawidth}
+\setlength{\@caesar@extrawidth}{\marginparwidth}
+\addtolength{\@caesar@extrawidth}{\marginparsep}}
+\NewDocumentEnvironment{autoadjustwidth}{ m m }%
+{
+    \bool_if:NTF \caesar_oneside
+    {
+        \begin{adjustwidth}{#1}{#2}
+    }
+    {
+        \begin{adjustwidth*}{#1}{#2}
+    }
+}
+{
+    \bool_if:NTF \caesar_oneside
+    {
+        \end{adjustwidth}
+    }
+    {
+        \end{adjustwidth*}
+    }
+}
+\DeclareCaptionStyle{widefigure}{font=footnotesize}
+\RenewDocumentEnvironment{figure*}{ O{htbp} }
+{
+    \begin{figure}[#1]
+        \begin{autoadjustwidth}{}{-\@caesar@extrawidth}
+        \captionsetup{style=widefigure}
+}
+{
+        \end{autoadjustwidth}
+    \end{figure}
+}
+\DeclareCaptionStyle{widetable}{font=footnotesize}
+\RenewDocumentEnvironment{table*}{ O{htbp} }
+{
+    \begin{table}[#1]
+        \begin{autoadjustwidth}{}{-\@caesar@extrawidth}
+        \captionsetup{style=widetable}
+}
+{
+        \end{autoadjustwidth}
+    \end{table}
+}
+\ExplSyntaxOff
+\endinput
+%%
+%% End of file `caesar.sty'.

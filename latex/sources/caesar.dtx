@@ -15,10 +15,10 @@
 % The author of this work is Andy Thomas
 %
 %<*driver>
-\ProvidesFile{caesar.dtx}[2016/05/20 v0.11 rich text in the margin for LaTeX]%
+\ProvidesFile{caesar.dtx}[2020/04/05 v0.20 rich text in the margin for LaTeX]%
 %</driver>
 %<package>\RequirePackage{l3keys2e}%
-%<package>\ProvidesExplPackage{caesar}{2016/05/20}{0.11}{rich text in the margin for LaTeX}
+%<package>\ProvidesExplPackage{caesar}{2020/04/05}{0.20}{rich text in the margin for LaTeX}
 %<package>\RequirePackage{caption} % handles the captions (in the margin)
 %<package>\RequirePackage{xparse} % new LaTeX3 syntax to define macros and environments
 %<package>\RequirePackage[strict]{changepage} % Changepage package for symmetric twoside handling
@@ -63,6 +63,7 @@
 %
 % \changes{v0.10}{2016/05/16}{Initial version, inherited from sidenotes.sty}
 % \changes{v0.11}{2016/05/20}{Found some bugs}
+% \changes{v0.20}{2020/05/05}{Updated for TeX-Live 2019}
 %
 % \begin{abstract}
 % \noindent This package allows the typesetting of rich content in the margin. 
@@ -88,7 +89,7 @@
 % \DescribeMacro{\sidenotemark} 
 % Sidenote tries to mimic the footnote behavior and, consequently, provides the 
 % same solutions. Sometimes, it is not possible to directly call a sidenote 
-% macro, e.g.\ inside of a figure caption. Then, you can use 
+% macro, e.g.\ inside of a figure caption. Then, you can use the
 % \verb+\sidenotemark[number]+ and \verb+\sidenotetext[number]{text}+ 
 % macros. \verb+\sidenotemark+ puts a mark at the current position. Afterwards, 
 % outside of the environment that causes the trouble, 
@@ -100,7 +101,8 @@
 % \DescribeEnv{marginfigure}
 % The marginfigure environment puts a figure and its caption in the margin. 
 % Instead of \verb+\begin{figure}[htbp]+ use \verb+\begin{marginfigure}+. 
-% The marginfigure has its own caption style named \emph{marginfigure}.   
+% The marginfigure has its own caption style named \emph{marginfigure}. 
+% Please refer to the \emph{caption} package for styles and their definitions.    
 %
 % \DescribeEnv{margintable}
 % The margintable environment works similar to marginfigure, but with table 
@@ -125,10 +127,17 @@
 % geometry, fonts and font sizes. However, the \emph{caesar\textunderscore 
 % book}-class accompanies this package as an example implementation as well 
 % as a template we use for our theses. 
+%
+% Also, this package has less feature than its sister package \emph{sidenotes}.
+% It was stripped by the offset functionality and the associated marginnote 
+% package completely. The caesar style files are meant to generate different
+% output files from the same input file, which does not allow for manual
+% intervention. In some sense, caesar tries to completely separate presentation
+% and content.
 % 
 % In addition, we tried to keep compatibility with 
 % packages the user might want to use later. However, the following packages 
-% are needed by \emph{sidenotes} and might introduce side effects with other 
+% are needed by \emph{caesar} and might introduce side effects with other 
 % packages.
 %
 % \section{Required packages}

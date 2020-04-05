@@ -19,8 +19,8 @@ sidenotes:
 caesar:
 	pdflatex caesar.ins
 	pdflatex caesar.dtx
-	makeindex -s caesar.ist -o caesar.ind caesar.idx
-	makeindex -s caesar.ist -o caesar.gls caesar.glo
+	makeindex -s gind.ist -o caesar.ind caesar.idx
+	makeindex -s gglo.ist -o caesar.gls caesar.glo
 	pdflatex caesar.dtx
 	rm caesar.glo caesar.gls caesar.ind caesar.idx
 	rm caesar.ilg caesar.toc caesar.log caesar.aux
@@ -53,7 +53,9 @@ ctan: sidenotes example
 #
 # update the targets directory
 #
-targets: sidenotes example
+targets: sidenotes caesar example
 	mv sidenotes.sty ../targets
 	mv sidenotes.pdf ../targets
 	mv caesar_example.pdf ../targets
+	mv caesar.sty ../targets
+	mv caesar.pdf ../targets
