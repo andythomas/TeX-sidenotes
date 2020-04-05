@@ -15,7 +15,7 @@
 % The author of this work is Andy Thomas
 %
 %<*driver>
-\ProvidesFile{caesar.dtx}[2020/04/05 v0.20 rich text in the margin for LaTeX]%
+\ProvidesFile{caesar.dtx}[2020/04/05 v0.30 rich text in the margin for LaTeX]%
 %</driver>
 %<package>\RequirePackage{l3keys2e}%
 %<package>\ProvidesExplPackage{caesar}{2020/04/05}{0.20}{rich text in the margin for LaTeX}
@@ -327,6 +327,8 @@
 %
 % \begin{environment}{figure*}
 %
+% \changes{v0.30}{2020/04/05}{address issue with figures across the full width}
+%
 % The figure* environment provides a figure environment for figures that 
 % span across the full page (text plus margin width).
 %
@@ -361,9 +363,11 @@
 {
     \begin{figure}[#1]
         \begin{autoadjustwidth}{}{-\@caesar@extrawidth}
+        \begin{minipage}{\linewidth}
         \captionsetup{style=widefigure}
 }
 {
+		\end{minipage}
         \end{autoadjustwidth}
     \end{figure}
 }
@@ -371,6 +375,8 @@
 % \end{environment}
 %
 % \begin{environment}{table*}
+%
+% \changes{v0.30}{2020/04/05}{address issue with tables across the full width}
 %
 % The table* environment provides a table environment for figures across 
 % text and margin width.
@@ -381,9 +387,11 @@
 {
     \begin{table}[#1]
         \begin{autoadjustwidth}{}{-\@caesar@extrawidth}
+        \begin{minipage}{\linewidth}
         \captionsetup{style=widetable}
 }
 {
+		\end{minipage}
         \end{autoadjustwidth}
     \end{table}
 }

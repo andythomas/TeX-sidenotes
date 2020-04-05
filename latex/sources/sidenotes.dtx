@@ -15,7 +15,7 @@
 % The author of this work is Andy Thomas
 %
 %<*driver>
-\ProvidesFile{sidenotes.dtx}[2016/04/21 v1.00 rich text in the margin for LaTeX]%
+\ProvidesFile{sidenotes.dtx}[2020/04/05 v1.10 rich text in the margin for LaTeX]%
 %</driver>
 %<package>\RequirePackage{l3keys2e}%
 %<package>\ProvidesExplPackage{sidenotes}{2016/04/21}{1.00}{rich text in the margin for LaTeX}
@@ -433,6 +433,7 @@
 %
 % \changes{v0.85}{2011/06/01}{added the figure* environment}
 % \changes{v0.97}{2014/05/27}{use adjustwidth in figure* environment}
+% \changes{v1.10}{2020/04/05}{address issue with figures across the full width}
 %
 % The figure* environment provides a figure environment for figures that 
 % span across the full page (text plus margin width).
@@ -468,9 +469,11 @@
 {
     \begin{figure}[#1]
         \begin{autoadjustwidth}{}{-\@sidenotes@extrawidth}
+        \begin{minipage}{\linewidth}
         \captionsetup{style=widefigure}
 }
 {
+		\end{minipage}
         \end{autoadjustwidth}
     \end{figure}
 }
@@ -481,6 +484,7 @@
 %
 % \changes{v0.85}{2011/06/01}{added the table* environment}
 % \changes{v0.97}{2014/05/27}{use adjustwidth in table* environment}
+% \changes{v1.10}{2020/04/05}{address issue with tables across the full width}
 %
 % The table* environment provides a table environment for figures across 
 % text and margin width.
@@ -491,9 +495,11 @@
 {
     \begin{table}[#1]
         \begin{autoadjustwidth}{}{-\@sidenotes@extrawidth}
+        \begin{minipage}{\linewidth}
         \captionsetup{style=widetable}
 }
 {
+		\end{minipage}
         \end{autoadjustwidth}
     \end{table}
 }
