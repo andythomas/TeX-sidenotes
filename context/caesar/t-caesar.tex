@@ -1,11 +1,11 @@
 %D \module
-%D   [     file=t-caesar.tex, 
+%D   [     file=t-caesar.tex,
 %D      version=0.55,
-%D        title=caesar, 
+%D        title=caesar,
 %D     subtitle=sidenotes,
 %D       author=Andy Thomas,
-%D         date=2012.05.27, 
-%D    copyright=Andy Thomas, 
+%D         date=2012.05.27,
+%D    copyright=Andy Thomas,
 %D      license=Public Domain]
 
 \unprotect
@@ -43,26 +43,26 @@
 \usemodule[annotation]
 
 % setup the numbering of the side notes
-\define[2]\caesar_sidenote_command 
-    {\high{\rawnumber[sidenote]}% 
-     \margintext{\high{#1}\,#2\vskip4pt}} 
+\define[2]\caesar_sidenote_command
+    {\high{\rawnumber[sidenote]}%
+     \margintext{\high{#1}\,#2\vskip4pt}}
 
-\defineannotation 
-    [sidenote] 
-    [alternative=command, 
-     command=\caesar_sidenote_command, 
-     number=yes] 
+\defineannotation
+    [sidenote]
+    [alternative=command,
+     command=\caesar_sidenote_command,
+     number=yes]
 
 % text across the full width of the page
-\define[1]\caesar_fullwidth_command 
-    {\doifoddpageelse 
-        {\doadaptrightskip{-\measure{fullwidth_extra}}} 
-        {\doadaptleftskip {-\measure{fullwidth_extra}}}} %#2 
+\define[1]\caesar_fullwidth_command
+    {\doifoddpageelse
+        {\doadaptrightskip{-\measure{fullwidth_extra}}}
+        {\doadaptleftskip {-\measure{fullwidth_extra}}}} %#2
 
-\defineannotation 
-    [fullwidth] 
-    [alternative=command, 
-     command=\caesar_fullwidth_command] 
+\defineannotation
+    [fullwidth]
+    [alternative=command,
+     command=\caesar_fullwidth_command]
 
 % put citations in the margin
 \unexpanded\def\sidecite{\dodoubleempty\sidecite_indeed}
@@ -77,7 +77,7 @@
             \else
             \sidenote{\cite[data][#1]}
             \fi}
-                
+
 % Enable old style numbers and protrusion
 \definefontfeature[default][default][onum=yes, protrusion=quality, expansion=quality]
 
@@ -92,7 +92,7 @@
 % Enable protrusion
 \setupalign[hz,hanging]
 
-\setupindenting[10pt, yes]
+\setupindenting[10pt,yes,next]
 
 % setup the headings
 \setuphead[chapter]
@@ -116,8 +116,8 @@
   [chapter]
   [
     style=\itc,
-    width=0pt, 
-    margin=0pt, 
+    width=0pt,
+    margin=0pt,
     before={\blank[2*big]},
   ]
 
@@ -161,7 +161,7 @@
 \definefloat [widetable][widetables][table]
 \setupcaption[widetable][width=\the\dimexpr\textwidth+\measure{fullwidth_extra}\relax]
 
-% Margin table is same as margin figure but 
+% Margin table is same as margin figure but
 % the following does not work if | in used in the table
 \unexpanded\def\placemargintable
     {\dodoubleargument\caesar_placemargintable_indeed}
@@ -201,4 +201,5 @@
     {\ssc\noindentation\kerncharacters[0.125]\WORD{\getvariable{titlepage}{publisher}}\endgraf}
 \stopsetups
 
-\protect \endinput
+\protect
+\endinput
