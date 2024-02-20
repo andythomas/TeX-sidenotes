@@ -1,14 +1,20 @@
-%% content from here
+%% Load the module
 \usemodule[caesar]
-%text is in English
+
+% Setup language (english in this case)
 \mainlanguage[en]
 \language[en]
 
 \useMPlibrary[dum] % To get dummy figures
 
-%the bibliography
-\setupbibtex[database={library.bib},sort=author]
-\setuppublications[alternative=apa]
+% Setup the bibliography
+\definebtxdataset[default] % choose a name for a dataset to use
+\usebtxdataset[default][library.bib] % fill the dataset with bib entries
+\setupbtx[dataset=default] % make \cite use our dataset by default
+\setupbtx[default:cite][alternative=authoryear] % make \cite[ref] work like \cite[authoryear][ref]
+\usebtxdefinitions[apa] % activate apa style for \cite rendering (also *load* apa style for bib entry rendering)
+\setupbtx[apa:cite][otherstext={ et al.}] % modify the apa \cite rendering style (remove comma after sole author name)
+\definebtxrendering[mainlist][apa][dataset=main] % define a bib entry rendering to use with \placebtxrendering
 
 \starttext
 \setvariables
@@ -17,11 +23,12 @@
    author={Andy Thomas},
    publisher={Bielefeld University}]
 
-\title{Contents} 
+\starttitle[title={Contents} ]
 \placelist[chapter]
+\stoptitle
 
 %
-\chapter{Quick start}
+\startchapter[title={Quick start}]
 We compiled a minimal example file to show the basic use of the caesar module, which allows the typesetting of (science) text- books or theses. The module provides the additional functionality\sidenote{namely the use of marginal material such as this note or even figures or tables.} as well as sensible default values for page margins, chapter formatting and such.
 
 The layout has ample margins to allow annotations. A main feature of the module is the sidenote, which is a footnote in the margin and can be placed with the {\tt sidenote} macro.\sidenote{All information is on the same page, no turning of pages is necessary.} It is very similar to a footnote and tries to emulate its behavior. The sidenote moves up or down (floats) to not overlap with other floats in the margin. All the sidenotes are subsequently numbered.
@@ -29,7 +36,7 @@ The layout has ample margins to allow annotations. A main feature of the module 
 References can be put in the margin as well.\sidecite[left={For the ideas behind all this, please see: }, right={ and more work by Tufte.}][Tufte1990,Tufte2006] The macro is named {\tt sidecite} and is defined with two parameters ({\tt left} and {\tt right}). The next two sections describe the different options for the use of figures and tables in a document. We start with figures.
 
 % A section with a couple of figures
-\section{Figures}
+\startsection[title={Figures}]
 %
 \startplacemarginfigure[ title={A small rectangle put in the margin.}, reference=fig1]
   \externalfigure[dummy][marginwidth]
@@ -45,16 +52,17 @@ The next alternative is a figure in the text frame. The figure is placed using t
 \stopplacefigure
 %
 
-In case that a wider figure is needed, the third option spans over the text as well as the margin area. Here, the figure can also be placed using the regular ConTeXt-figure with title.  
+In case that a wider figure is needed, the third option spans over the text as well as the margin area. Here, the figure can also be placed using the regular ConTeXt-figure with title.
 %
 \startplacefigure[title={An even larger rectangle. This is the widest figure option. Both, the text as well as the margin width are used for the diagram.}]
   \externalfigure[rectangle][fullwidth]
 \stopplacefigure
+\stopsection
 % Next section with a variety of tables
 %
-\section{Tables}
+\startsection[title={Tables}]
 %
-The same set of options (small, normal and wide) are also available for tables. 
+The same set of options (small, normal and wide) are also available for tables.
 
 \placemargintable[table1]{A couple of numbers in a table in the margin.}{%
 \starttable[|c|c|c|]%
@@ -82,11 +90,18 @@ The last choice is again a table over the full width of the page. This is demons
 \NC 0.21	\NC 0.23 \NC 0.34 \NC 0.42 \NC 0.53 \NC 0.64 \NC 0.72	\NC 0.33 \NC 0.22\NC 0.04 \NC 0.93 \NC 0.81 \NC\FR
 \stoptable
 \stopplacewidetable
+\stopsection
 %
-\section{More information}
+\startsection[title={More information}]
 This is a short example file to show the features of the caesar module. Please use the example input file as a starting point for your own projects.
+\stopsection
+\stopchapter
 %
-\chapter{References}
-\placepublications[criterium=text]
- %
+\startchapter[title={References}]
+% Simple example
+\placelistofpublications
+% Other styles of rendering are possible
+%\placebtxrendering[default][method=global]
+\stopchapter
+%
 \stoptext
