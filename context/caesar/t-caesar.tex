@@ -72,10 +72,10 @@
             \getparameters[caesar_sidecite_][left=,right=,#1]%
             \sidenote
                {\getvalue{caesar_sidecite_left}%
-                \cite[#2]%
+                \cite[data][#2]%
                 \getvalue{caesar_sidecite_right}}
             \else
-            \sidenote{\cite[#1]}
+            \sidenote{\cite[data][#1]}
             \fi}
 
 % Enable old style numbers and protrusion
@@ -92,7 +92,7 @@
 % Enable protrusion
 \setupalign[hz,hanging]
 
-\setupindenting[big,yes,next]
+\setupindenting[10pt,yes,first]
 
 % setup the headings
 \setuphead[chapter]
