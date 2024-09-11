@@ -26,7 +26,6 @@ jobs:
 
       - name: Compile sidenotes
         run: |
-          pdflatex -interaction=nonstopmode main.tex
           pdflatex -interaction=nonstopmode sidenotes.ins
           pdflatex -interaction=nonstopmode sidenotes.dtx
           makeindex -s gind.ist -o sidenotes.ind sidenotes.idx
