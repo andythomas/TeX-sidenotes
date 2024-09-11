@@ -31,7 +31,8 @@ jobs:
               - 'latex/sources/caesar_book.cls'
 
       - name: Set up LaTeX environment
-        run: sudo apt-get update && sudo apt-get install -y texlive-full
+        run: |
+          sudo apt-get update && sudo apt-get install -y texlive-latex-extra biber
 
       - name: Compile sidenotes
         if: steps.changes.outputs.sidenotes == 'true'
@@ -52,11 +53,11 @@ jobs:
         if: steps.changes.outputs.example == 'true'
         working-directory: latex/sources
         run: |
-          pdflatex caesar_example.tex
-          biber caesar_example.tex
-          pdflatex caesar_example.tex
-          pdflatex caesar_example.tex
-          pdflatex caesar_example.tex
+          pdflatex caesar_example
+          biber caesar_example
+          pdflatex caesar_example
+          pdflatex caesar_example
+          pdflatex caesar_example
           rm caesar_example.aux caesar_example.bbl caesar_example.bcf
           rm caesar_example.bib caesar_example.blg caesar_example.log
           rm caesar_example.run.xml caesar_example.toc
