@@ -19,7 +19,7 @@ jobs:
       - name: check the pull request (branch) out
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.head_ref }}
           fetch-depth: 0
 
       - name: Set up LaTeX environment
@@ -36,6 +36,13 @@ jobs:
           rm sidenotes.glo sidenotes.gls sidenotes.ind sidenotes.idx
           rm sidenotes.ilg sidenotes.toc sidenotes.log sidenotes.aux
 
+      - name: Copy/move the files
+        working-directory: latex/sources
+        run: |
+          mv sidenotes.sty ../targets
+          cp sidenotes.pdf ../ctan
+          mv sidenotes.pdf ../targets
+
       - name: Create pull request
         uses: peter-evans/create-pull-request@v6
         with:
@@ -44,4 +51,3 @@ jobs:
           body: This is an auto-generated PR with dependend files (sidenotes).
           labels: automated pr
           branch: "sidenotes/${{ github.ref }}"
-          base: ${{ github.ref }}
