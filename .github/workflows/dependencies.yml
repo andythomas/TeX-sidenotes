@@ -4,8 +4,6 @@ name: Generate-dependencies
 
 on:
   pull_request:
-    branches-ignore:
-      - master
 
 jobs:
   generate:
