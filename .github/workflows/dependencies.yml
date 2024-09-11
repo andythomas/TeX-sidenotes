@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up LaTeX environment
-        run: sudo apt-get update && sudo apt-get install -y texlive-full
+        run: sudo apt-get update && sudo apt-get install -y texlive
 
       - name: Go into subdirectory
         run: cd latex/sources
