@@ -31,6 +31,7 @@ jobs:
               - 'latex/sources/caesar_book.cls'
 
       - name: Set up LaTeX environment
+        if: steps.changes.outputs.sidenotes == 'true' || steps.changes.outputs.example == 'true'
         run: |
           sudo apt-get update && sudo apt-get install -y texlive-latex-extra biber
 
