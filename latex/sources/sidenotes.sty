@@ -1,0 +1,186 @@
+%%
+%% This is file `sidenotes.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% sidenotes.dtx  (with options: `package')
+%% 
+%% IMPORTANT NOTE:
+%% 
+%% This is a generated file and you are not allowed to distribute it
+%% without the source of the work.  See below about more informations
+%% about the files the work consists of.
+%% 
+\RequirePackage{l3keys2e}%
+\ProvidesExplPackage{sidenotes}{2016/04/21}{1.00}{rich text in the margin for LaTeX}
+\RequirePackage{marginnote} % provides an offset option for the marginals instead of a float
+\RequirePackage{caption} % handles the captions (in the margin)
+\RequirePackage{xparse} % new LaTeX3 syntax to define macros and environments
+\RequirePackage[strict]{changepage} % Changepage package for symmetric twoside handling
+\ExplSyntaxOn
+\keys_define:nn { sidenotes }
+  {
+    oneside .bool_set:N = \sidenotes_oneside
+  }
+\ProcessKeysOptions { sidenotes }
+\newcounter{sidenote} % make a counter
+\setcounter{sidenote}{1} % init the counter
+\DeclareExpandableDocumentCommand{\IfNoValueOrEmptyTF}{ m m m }
+{
+ \IfNoValueTF{#1}
+  {#2}
+  {\tl_if_empty:nTF {#1} {#2} {#3}}
+}
+\NewDocumentCommand \@sidenotes@thesidenotemark { m }
+{
+    \leavevmode
+    \ifhmode
+        \edef \@x@sf {\the \spacefactor }
+        \nobreak
+    \fi
+    \hbox {\@textsuperscript {\normalfont #1 }}
+    \ifhmode
+        \spacefactor \@x@sf
+    \fi
+    \relax
+}
+\NewDocumentCommand \@sidenotes@multisign { } {3sp}
+\NewDocumentCommand \@sidenotes@multimarker { }
+{
+  \kern-\@sidenotes@multisign
+  \kern\@sidenotes@multisign\relax
+}
+\NewDocumentCommand \@sidenotes@multichecker { }
+{
+  \dim_compare:nNnTF \lastkern = \@sidenotes@multisign
+  {\@sidenotes@thesidenotemark{,}}
+  {}
+}
+\NewDocumentCommand \@sidenotes@placemarginal { m m }
+{
+  \IfNoValueOrEmptyTF{#1}
+    {\marginpar{#2}}
+    {\marginnote{#2}[#1]}
+}
+\NewDocumentCommand \sidenote { o o +m }
+{
+  \sidenotemark[#1]
+  \sidenotetext[#1][#2]{#3}
+  \@sidenotes@multimarker
+}
+\NewDocumentCommand \sidenotemark { o }
+{
+  \@sidenotes@multichecker
+  \IfNoValueOrEmptyTF{#1}
+    {\@sidenotes@thesidenotemark{\thesidenote}}
+    {\@sidenotes@thesidenotemark{#1}}
+  \@sidenotes@multimarker
+}
+\NewDocumentCommand \sidenotetext { o o +m }
+{
+  \IfNoValueOrEmptyTF{#1}
+    {
+      \@sidenotes@placemarginal{#2}{\textsuperscript{\thesidenote}{}~#3}
+  \refstepcounter{sidenote}
+}
+    {\@sidenotes@placemarginal{#2}{\textsuperscript{#1}~#3}}
+}
+\DeclareCaptionStyle{sidecaption}{font=footnotesize}
+\NewDocumentCommand \sidecaption {s o o m}
+{
+  \captionsetup{style=sidecaption}
+  \IfBooleanTF{#1}
+  { % starred
+    \IfNoValueOrEmptyTF{#2}
+    {\marginnote{\caption*{#4}}}
+    {\marginnote{\caption*{#4}}[#2]}
+  }
+  { % unstarred
+  \IfNoValueOrEmptyTF{#2}
+    {\def\@sidenotes@sidecaption@tof{#4}}
+    {\def\@sidenotes@sidecaption@tof{#2}}
+  \IfNoValueOrEmptyTF{#3}
+    {\marginnote{\caption[\@sidenotes@sidecaption@tof]{#4}}}
+    {\marginnote{\caption[\@sidenotes@sidecaption@tof]{#4}}[#3]}
+  }
+}
+\newsavebox{\@sidenotes@marginfigurebox}
+\DeclareCaptionStyle{marginfigure}{font=footnotesize}
+\NewDocumentEnvironment{marginfigure} { o }
+{
+  \begin{lrbox}{\@sidenotes@marginfigurebox}
+    \begin{minipage}{\marginparwidth}
+      \captionsetup{type=figure,style=marginfigure}
+}
+{
+    \end{minipage}%
+  \end{lrbox}%
+  \@sidenotes@placemarginal{#1}{\usebox{\@sidenotes@marginfigurebox}}
+}
+\newsavebox{\@sidenotes@margintablebox}
+\DeclareCaptionStyle{margintable}{font=footnotesize}
+\NewDocumentEnvironment{margintable} { o }
+{
+  \begin{lrbox}{\@sidenotes@margintablebox}
+    \begin{minipage}{\marginparwidth}
+      \captionsetup{type=table,style=margintable}
+}
+{
+    \end{minipage}
+  \end{lrbox}
+  \@sidenotes@placemarginal{#1}{\usebox{\@sidenotes@margintablebox}}
+}
+\AtBeginDocument{%
+\newlength{\@sidenotes@extrawidth}
+\setlength{\@sidenotes@extrawidth}{\marginparwidth}
+\addtolength{\@sidenotes@extrawidth}{\marginparsep}}
+\NewDocumentEnvironment{autoadjustwidth}{ m m }%
+{
+    \bool_if:NTF \sidenotes_oneside
+    {
+        \begin{adjustwidth}{#1}{#2}
+    }
+    {
+        \begin{adjustwidth*}{#1}{#2}
+    }
+}
+{
+    \bool_if:NTF \sidenotes_oneside
+    {
+        \end{adjustwidth}
+    }
+    {
+        \end{adjustwidth*}
+    }
+}
+\DeclareCaptionStyle{widefigure}{font=footnotesize}
+\RenewDocumentEnvironment{figure*}{ O{htbp} }
+{
+    \begin{figure}[#1]
+        \begin{autoadjustwidth}{}{-\@sidenotes@extrawidth}
+        \begin{minipage}{\linewidth}
+        \captionsetup{style=widefigure}
+}
+{
+\end{minipage}
+        \end{autoadjustwidth}
+    \end{figure}
+}
+\DeclareCaptionStyle{widetable}{font=footnotesize}
+\RenewDocumentEnvironment{table*}{ O{htbp} }
+{
+    \begin{table}[#1]
+        \begin{autoadjustwidth}{}{-\@sidenotes@extrawidth}
+        \begin{minipage}{\linewidth}
+        \captionsetup{style=widetable}
+}
+{
+\end{minipage}
+        \end{autoadjustwidth}
+    \end{table}
+}
+\ExplSyntaxOff
+\endinput
+%%
+%% End of file `sidenotes.sty'.
