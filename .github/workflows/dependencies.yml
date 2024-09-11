@@ -24,6 +24,11 @@ jobs:
             sidenotes:
               - 'latex/sources/sidenotes.dtx'
               - 'latex/sources/sidenotes.ins'
+            example:
+              - 'latex/sources/sidenotes.dtx'
+              - 'latex/sources/sidenotes.ins'
+              - 'latex/sources/caesar_example.tex'
+              - 'latex/sources/caesar_book.cls'
 
       - name: Set up LaTeX environment
         run: sudo apt-get update && sudo apt-get install -y texlive
@@ -39,9 +44,25 @@ jobs:
           pdflatex -interaction=nonstopmode sidenotes.dtx
           rm sidenotes.glo sidenotes.gls sidenotes.ind sidenotes.idx
           rm sidenotes.ilg sidenotes.toc sidenotes.log sidenotes.aux
-          mv sidenotes.sty ../targets
           cp sidenotes.pdf ../ctan
-          mv sidenotes.pdf ../targets
+          cp sidenotes.ins ../ctan
+          cp sidenotes.dtx ../ctan
+
+      - name: Compile example
+        if: steps.changes.outputs.example == 'true'
+        working-directory: latex/sources
+        run: |
+          pdflatex caesar_example.tex
+          biber caesar_example.tex
+          pdflatex caesar_example.tex
+          pdflatex caesar_example.tex
+          pdflatex caesar_example.tex
+          rm caesar_example.aux caesar_example.bbl caesar_example.bcf
+          rm caesar_example.bib caesar_example.blg caesar_example.log
+          rm caesar_example.run.xml caesar_example.toc
+          cp caesar_example.tex ../ctan
+          cp caesar_example.pdf ../ctan
+          cp caesar_book.cls ../ctan
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v6
