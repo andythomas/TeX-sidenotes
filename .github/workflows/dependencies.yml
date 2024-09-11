@@ -64,6 +64,14 @@ jobs:
           cp caesar_example.tex ../ctan
           cp caesar_example.pdf ../ctan
           cp caesar_book.cls ../ctan
+          mv caesar_example.pdf ../targets
+
+      - name: Move sidenotes
+        if: steps.changes.outputs.sidenotes == 'true'
+        working-directory: latex/sources
+        run: |
+          mv sidenotes.pdf ../targets
+          mv sidenotes.sty ../targets
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v6
