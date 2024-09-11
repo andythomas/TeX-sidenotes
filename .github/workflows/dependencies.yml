@@ -3,7 +3,7 @@
 name: Generate-dependencies
 
 on:
-  push:
+  pull_request:
     branches-ignore:
       - master
 
