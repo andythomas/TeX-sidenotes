@@ -31,7 +31,7 @@ jobs:
               - 'latex/sources/caesar_book.cls'
 
       - name: Set up LaTeX environment
-        run: sudo apt-get update && sudo apt-get install -y texlive
+        run: sudo apt-get update && sudo apt-get install -y texlive-latex-extra
 
       - name: Compile sidenotes
         if: steps.changes.outputs.sidenotes == 'true'
