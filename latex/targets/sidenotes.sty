@@ -26,7 +26,7 @@
 \ProcessKeysOptions { sidenotes }
 \newcounter{sidenote} % make a counter
 \setcounter{sidenote}{1} % init the counter
-\DeclareExpandableDocumentCommand{\IfNoValueOrEmptyTF}{ m m m }
+\DeclareExpandableDocumentCommand{\IfNoValueOrEmptyTF}{ m +m +m }
 {
  \IfNoValueTF{#1}
   {#2}
@@ -57,7 +57,7 @@
   {\@sidenotes@thesidenotemark{,}}
   {}
 }
-\NewDocumentCommand \@sidenotes@placemarginal { m m }
+\NewDocumentCommand \@sidenotes@placemarginal { +m +m }
 {
   \IfNoValueOrEmptyTF{#1}
     {\marginpar{#2}}
