@@ -16,9 +16,13 @@ jobs:
   LaTeX:
     if: >
       startsWith(github.head_ref, 'update-dependencies') == false &&
-      github.event.pull_request.head.repo.full_name == github.repository
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      ${{ github.event.head_commit.message }} != 'target files generated'
     runs-on: ubuntu-latest
     steps:
+      - name: debug info
+        run: ${{ github.event.head_commit.message }}
+
       - name: check the pull request (branch) out
         uses: actions/checkout@v4
         with:
