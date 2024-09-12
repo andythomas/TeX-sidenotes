@@ -2,7 +2,7 @@
 %
 % sidenotes.dtx
 %
-% Copyright (C) 2011-2020 by Andy Thomas <andythomas(at)web.de>
+% Copyright (C) 2011-2024 by Andy Thomas <andythomas(at)web.de>
 %
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3
@@ -11,11 +11,11 @@
 % http://www.latex-project.org/lppl.txt
 % and version 1.3 or later is part of all distributions of LaTeX
 % version 2003/12/01 or later.
-% 
+%
 % The author of this work is Andy Thomas
 %
 %<*driver>
-\ProvidesFile{sidenotes.dtx}[2020/04/05 v1.10 rich text in the margin for LaTeX]%
+\ProvidesFile{sidenotes.dtx}[2024/09/12 v1.20 rich text in the margin for LaTeX]%
 %</driver>
 %<package>\RequirePackage{l3keys2e}%
 %<package>\ProvidesExplPackage{sidenotes}{2016/04/21}{1.00}{rich text in the margin for LaTeX}
@@ -54,10 +54,10 @@
 %
 %
 % \GetFileInfo{sidenotes.dtx}
-% 
+%
 %
 % \title{The \textsf{sidenotes} package\thanks{This document
-% corresponds to \textsf{sidenotes}~\fileversion, dated \filedate. 
+% corresponds to \textsf{sidenotes}~\fileversion, dated \filedate.
 % Earlier versions by Oliver Schebaum.}}
 % \author{Andy Thomas\\ \texttt{andythomas(at)web.de}}
 %
@@ -74,9 +74,9 @@
 % \changes{v1.00}{2016/04/21}{no changes, tag v1.0}
 %
 % \begin{abstract}
-% \noindent This package allows the typesetting of rich content in the margin. 
+% \noindent This package allows the typesetting of rich content in the margin.
 % It includes text, but also figures, captions, tables and citations,
-% which is common in science textbooks such as Feynman's 
+% which is common in science textbooks such as Feynman's
 % \textit{Lectures on Physics}.
 % \end{abstract}
 %
@@ -91,99 +91,99 @@
 % \DescribeMacro{\sidenote}
 % The macro is very similar to the footnote macro and tries to emulate
 % its behavior. It just puts the notes in the margin instead of the bottom
-% of the page, therefore the name \emph{sidenote}. It has the same parameters 
+% of the page, therefore the name \emph{sidenote}. It has the same parameters
 % as footnote as well as an additional offset:
-% \verb+\sidenote[number][offset]{text}+. All the sidenotes are subsequently 
-% numbered and float in the margin to avoid overlap.  
+% \verb+\sidenote[number][offset]{text}+. All the sidenotes are subsequently
+% numbered and float in the margin to avoid overlap.
 % The first, optional parameter will manually change the numbering to the given
-% value. The second offset parameter will fix the text at a certain position 
-% in the margin. In particular, there is a difference between not providing an 
+% value. The second offset parameter will fix the text at a certain position
+% in the margin. In particular, there is a difference between not providing an
 % offset (floating text) and an offset of 0 (fix text at actual position).
 %
-% \DescribeMacro{\sidenotemark} 
-% Sidenote tries to mimic the footnote behavior and, consequently, provides the 
-% same solutions. Sometimes, it is not possible to directly call a sidenote 
-% macro, e.g.\ inside of a figure caption. Then, you can use 
-% \verb+\sidenotemark[number]+ and \verb+\sidenotetext[number][offset]{text}+ 
-% macros. \verb+\sidenotemark+ puts a mark at the current position. Afterwards, 
-% outside of the environment that causes the trouble, 
+% \DescribeMacro{\sidenotemark}
+% Sidenote tries to mimic the footnote behavior and, consequently, provides the
+% same solutions. Sometimes, it is not possible to directly call a sidenote
+% macro, e.g.\ inside of a figure caption. Then, you can use
+% \verb+\sidenotemark[number]+ and \verb+\sidenotetext[number][offset]{text}+
+% macros. \verb+\sidenotemark+ puts a mark at the current position. Afterwards,
+% outside of the environment that causes the trouble,
 % \DescribeMacro{\sidenotetext}
-% it is possible the call \verb+\sidenotetext[number][offset]{text}+ to provide 
-% the text and typeset the sidenote. The optional parameters are similar to the 
-% sidenote macro. The first, optional parameter will change the numbering and 
+% it is possible the call \verb+\sidenotetext[number][offset]{text}+ to provide
+% the text and typeset the sidenote. The optional parameters are similar to the
+% sidenote macro. The first, optional parameter will change the numbering and
 % the offset will change the position.
 %
 % \changes{v0.61}{2011/10/17}{documentation of sidetext}
 %
 %\DescribeMacro{\sidecaption}
-% The \verb+\sidecaption[entry][offset]{text}+ macro can be used if the caption 
-% of a figure or table should be in the margin. The caption has to be adjacent 
-% to the figure, so a float is not an option here. Therefore, the caption might 
+% The \verb+\sidecaption[entry][offset]{text}+ macro can be used if the caption
+% of a figure or table should be in the margin. The caption has to be adjacent
+% to the figure, so a float is not an option here. Therefore, the caption might
 % overlap with other marginals. Then, these marginals have to be adjusted with
 % offset parameters. The formatting of the caption is done by the \emph{caption}
-% package by defining a \emph{sidecaption} style. Please refer to the 
+% package by defining a \emph{sidecaption} style. Please refer to the
 % documentation of the caption package for information on styles. The macro can
-% be starred, which is analog to the regular starred caption (no numbering, no 
+% be starred, which is analog to the regular starred caption (no numbering, no
 % tof entry): \verb+\sidecaption*[offset]{text}+.
 %
 % \DescribeEnv{marginfigure}
-% The marginfigure environment puts a figure and its caption in the margin. 
-% Instead of \verb+\begin{figure}[htbp]+ use \verb+\begin{marginfigure}[offset]+. 
-% Again, using an offset value switches the behavior from float to fixed 
-% position. The marginfigure has its own caption style named \emph{marginfigure}.   
+% The marginfigure environment puts a figure and its caption in the margin.
+% Instead of \verb+\begin{figure}[htbp]+ use \verb+\begin{marginfigure}[offset]+.
+% Again, using an offset value switches the behavior from float to fixed
+% position. The marginfigure has its own caption style named \emph{marginfigure}.
 %
 % \DescribeEnv{margintable}
-% The margintable environment works similar to marginfigure, but with table 
-% environments. Use \verb+\begin{margintable}[offset]+ instead of 
+% The margintable environment works similar to marginfigure, but with table
+% environments. Use \verb+\begin{margintable}[offset]+ instead of
 % \verb+\begin{table}[htbp]+, its caption style is named \emph{margintable}.
 %
 % \DescribeEnv{figure*}
-% The \verb+figure*+ environment is used to position figures across the full 
+% The \verb+figure*+ environment is used to position figures across the full
 % page, i.e. the text width plus the margin. The algorithm has to distinguish
 % between recto and verso (left and right) pages and might need up to three
 % \LaTeX{} runs to provide the desired result. The corresponding caption style
-% is called \emph{widefigure}. 
+% is called \emph{widefigure}.
 % \DescribeEnv{table*}
-% The sister environment for tables is \verb+table*+. Use \emph{widetable} to 
-% change its caption style. 
+% The sister environment for tables is \verb+table*+. Use \emph{widetable} to
+% change its caption style.
 %
 % \section{Technical note}
 %
-% When writing the package, we tried to provide a \emph{minimum} extension to 
+% When writing the package, we tried to provide a \emph{minimum} extension to
 % standard \LaTeX{} for typesetting rich content in the margin. This means,
 % that there are no sensible default values for most things such as page
-% geometry, fonts and font sizes. However, the \emph{caesar\textunderscore 
-% book}-class accompanies this package as an example implementation as well 
-% as a template we use for our theses. 
-% 
-% In addition, we tried to keep compatibility with 
-% packages the user might want to use later. However, the following packages 
-% are needed by \emph{sidenotes} and might introduce side effects with other 
+% geometry, fonts and font sizes. However, the \emph{caesar\textunderscore
+% book}-class accompanies this package as an example implementation as well
+% as a template we use for our theses.
+%
+% In addition, we tried to keep compatibility with
+% packages the user might want to use later. However, the following packages
+% are needed by \emph{sidenotes} and might introduce side effects with other
 % packages.
 %
 % \section{Required packages}
-% 
+%
 %  \changes{v0.52}{2011/10/06}{added a section that the package needs marginnote, caption and xifthen.}
 %  \changes{v0.90}{2012/06/02}{added a section that the package needs twoopt and changepage.}
-%  \changes{v0.94}{2014/01/22}{start using xparse} 
-%  \changes{v0.97}{2014/06/05}{start using l3keys2e} 
+%  \changes{v0.94}{2014/01/22}{start using xparse}
+%  \changes{v0.97}{2014/06/05}{start using l3keys2e}
 %
 %  \begin{description}
 %     \item[marginnote]
-%        supports an alternative to \verb+\marginpar+ and creates notes in the 
-%        margin. The notes are not floats and can be shifted up or down. 
-%        Technically, every time an offset is provided the package uses 
+%        supports an alternative to \verb+\marginpar+ and creates notes in the
+%        margin. The notes are not floats and can be shifted up or down.
+%        Technically, every time an offset is provided the package uses
 %        \verb+\marginnote+ and \verb+\marginpar+ otherwise.
 %     \item[caption]
-%        allows to set figure and table captions in the margin and allows 
-%        easier formatting of these captions. Please refer to the  
-%        \emph{caption} manual for details on styles. 
+%        allows to set figure and table captions in the margin and allows
+%        easier formatting of these captions. Please refer to the
+%        \emph{caption} manual for details on styles.
 %     \item[xparse] is used to take advantage of the improved \LaTeX3 syntax.
 %        All macros and environments are defined using this package.
-%     \item[l3keys2e] provides a key/value mechanism 
-%     \item[changepage] is used to correctly shift figure* and table*. It has 
-%        to use the option [strict] to work properly. This might lead to an 
-%        option clash, if the same package is loaded without this option. 
+%     \item[l3keys2e] provides a key/value mechanism
+%     \item[changepage] is used to correctly shift figure* and table*. It has
+%        to use the option [strict] to work properly. This might lead to an
+%        option clash, if the same package is loaded without this option.
 %  \end{description}%
 %
 % \section{Implementation}
@@ -192,39 +192,41 @@
 %<*package>
 % \fi
 %
-% Process the package options: onside 
+% Process the package options: onside
 %
 %    \begin{macrocode}
-\ExplSyntaxOn 
+\ExplSyntaxOn
 %
 \keys_define:nn { sidenotes }
   {
-    oneside .bool_set:N = \sidenotes_oneside 
+    oneside .bool_set:N = \sidenotes_oneside
   }
 \ProcessKeysOptions { sidenotes }
 %    \end{macrocode}
 %
 % \changes{v0.91}{2012/06/03}{sidenotetextstyle is not needed any more}
-% \changes{v0.94}{2014/01/22}{change sidenote counter behavior} 
+% \changes{v0.94}{2014/01/22}{change sidenote counter behavior}
 %
 % We need a counter similar to the footnote counter.
 %
 %    \begin{macrocode}
-\newcounter{sidenote} % make a counter 
-\setcounter{sidenote}{1} % init the counter 
+\newcounter{sidenote} % make a counter
+\setcounter{sidenote}{1} % init the counter
 %    \end{macrocode}
-% 
-% \noindent The \LaTeX3 parts concerning the optional arguments should not 
-% distinguish between an empty bracket pair and no optional 
-% argument. This is required to keep macros with two leading 
+%
+% \noindent The \LaTeX3 parts concerning the optional arguments should not
+% distinguish between an empty bracket pair and no optional
+% argument. This is required to keep macros with two leading
 % optional arguments.
 %
+% \changes{v1.20}{2024/09/12}{Allow long arguments.}
+%
 %    \begin{macrocode}
-\DeclareExpandableDocumentCommand{\IfNoValueOrEmptyTF}{ m m m }
+\DeclareExpandableDocumentCommand{\IfNoValueOrEmptyTF}{ m +m +m }
 {
  \IfNoValueTF{#1}
-  {#2} 
-  {\tl_if_empty:nTF {#1} {#2} {#3}} 
+  {#2}
+  {\tl_if_empty:nTF {#1} {#2} {#3}}
 }
 %    \end{macrocode}
 %
@@ -237,28 +239,28 @@
 %    \begin{macrocode}
 \NewDocumentCommand \@sidenotes@thesidenotemark { m }
 {
-    \leavevmode 
-    \ifhmode 
+    \leavevmode
+    \ifhmode
         \edef \@x@sf {\the \spacefactor }
-        \nobreak 
-    \fi 
-    \hbox {\@textsuperscript {\normalfont #1 }} 
-    \ifhmode 
-        \spacefactor \@x@sf 
-    \fi 
+        \nobreak
+    \fi
+    \hbox {\@textsuperscript {\normalfont #1 }}
+    \ifhmode
+        \spacefactor \@x@sf
+    \fi
     \relax
 }
 %
 \NewDocumentCommand \@sidenotes@multisign { } {3sp}
 %
-\NewDocumentCommand \@sidenotes@multimarker { } 
+\NewDocumentCommand \@sidenotes@multimarker { }
 {
   \kern-\@sidenotes@multisign
-  \kern\@sidenotes@multisign\relax 
+  \kern\@sidenotes@multisign\relax
 }
 %
-\NewDocumentCommand \@sidenotes@multichecker { } 
-{ 
+\NewDocumentCommand \@sidenotes@multichecker { }
+{
   \dim_compare:nNnTF \lastkern = \@sidenotes@multisign
   {\@sidenotes@thesidenotemark{,}}
   {}
@@ -269,33 +271,35 @@
 % \changes{v0.97}{2014/05/27}{introduce an internal macro to place the marginal text}
 %
 % \noindent Introduce an internal macro to place the marginal text. Use
-% margin note in case an offset is given and marginpar otherwise.  
+% margin note in case an offset is given and marginpar otherwise.
+%
+% \changes{v1.20}{2024/09/12}{Allow long arguments.}
 %
 %    \begin{macrocode}
-\NewDocumentCommand \@sidenotes@placemarginal { m m } 
-{ 
+\NewDocumentCommand \@sidenotes@placemarginal { +m +m }
+{
   \IfNoValueOrEmptyTF{#1}
-    {\marginpar{#2}} 
-    {\marginnote{#2}[#1]} 
+    {\marginpar{#2}}
+    {\marginnote{#2}[#1]}
 }
 %
 %    \end{macrocode}
 %
 % \begin{macro}{\sidenote}
-% 
-% Introduce the \verb+\sidenote+ macro with two optional 
+%
+% Introduce the \verb+\sidenote+ macro with two optional
 % arguments to set the number and the offset.
 %
 % \changes{v0.53}{2011/10/07}{bugfix, now optional number and offset possible}
 % \changes{v0.80}{2011/11/10}{unstar the newcommand.}
-% \changes{v0.81}{2011/11/29}{added a comma between subsequent sidenotes} 
-% \changes{v0.90}{2012/06/02}{add optional offset for sidenote} 
+% \changes{v0.81}{2011/11/29}{added a comma between subsequent sidenotes}
+% \changes{v0.90}{2012/06/02}{add optional offset for sidenote}
 % \changes{v0.93}{2012/04/17}{removed mandatory whitespace, new ifnextchar takes care of that}
 % \changes{v0.94}{2014/01/11}{use xparse syntax}
 %
 %    \begin{macrocode}
-\NewDocumentCommand \sidenote { o o +m } 
-{ 
+\NewDocumentCommand \sidenote { o o +m }
+{
   \sidenotemark[#1]
   \sidenotetext[#1][#2]{#3}
   \@sidenotes@multimarker
@@ -311,8 +315,8 @@
 % \changes{v0.96}{2014/02/14}{increase the sidenote counter in sidenotetext now}
 %
 %    \begin{macrocode}
-\NewDocumentCommand \sidenotemark { o } 
-{ 
+\NewDocumentCommand \sidenotemark { o }
+{
   \@sidenotes@multichecker
   \IfNoValueOrEmptyTF{#1}
     {\@sidenotes@thesidenotemark{\thesidenote}}
@@ -324,7 +328,7 @@
 %
 % \begin{macro}{\sidenotetext}
 %
-% Sidenotetext is supposed to work similarly to footnotetext. The additional, 
+% Sidenotetext is supposed to work similarly to footnotetext. The additional,
 % optional argument sets the offset.
 %
 % \changes{v0.80}{2011/11/10}{unstar the newcommand.}
@@ -333,10 +337,10 @@
 % \changes{v0.94}{2014/01/11}{use xparse syntax, change counter behavior}
 %
 %    \begin{macrocode}
-\NewDocumentCommand \sidenotetext { o o +m } 
-{ 
+\NewDocumentCommand \sidenotetext { o o +m }
+{
   \IfNoValueOrEmptyTF{#1}
-    { 
+    {
       \@sidenotes@placemarginal{#2}{\textsuperscript{\thesidenote}{}~#3}
 	  \refstepcounter{sidenote}
 	}
@@ -348,18 +352,18 @@
 % \begin{macro}{\sidecaption}
 %
 % \changes{v0.91}{2012/06/03}{sidecaption* accompanies sidecaption}
-% \changes{v0.94}{2014/01/22}{use xparse syntax} 
+% \changes{v0.94}{2014/01/22}{use xparse syntax}
 %
-% Sidecaption puts the caption in the margin. It never floats with the other 
+% Sidecaption puts the caption in the margin. It never floats with the other
 % text in the margin, since it has to be next to the figure.
 % Sidecaption* works similarly to sidecaption, but without an entry.
 %
 %    \begin{macrocode}
 \DeclareCaptionStyle{sidecaption}{font=footnotesize}
-\NewDocumentCommand \sidecaption {s o o m} 
-{ 
+\NewDocumentCommand \sidecaption {s o o m}
+{
   \captionsetup{style=sidecaption}
-  \IfBooleanTF{#1} 
+  \IfBooleanTF{#1}
   { % starred
     \IfNoValueOrEmptyTF{#2}
     {\marginnote{\caption*{#4}}}
@@ -381,15 +385,15 @@
 %
 % \changes{v0.3}{2011/09/29}{define the sidefigure enviroment without the environ package}
 % \changes{v0.90}{2012/06/02}{the optional offset parameter is back, renamed environment from sidefigure to marginfigure}
-% \changes{v0.94}{2014/01/22}{use xparse syntax} 
+% \changes{v0.94}{2014/01/22}{use xparse syntax}
 %
-% The marginfigure environment is similar to the figure environment. But the 
+% The marginfigure environment is similar to the figure environment. But the
 % figure is put in the margin.
 %
 %    \begin{macrocode}
 \newsavebox{\@sidenotes@marginfigurebox}
 \DeclareCaptionStyle{marginfigure}{font=footnotesize}
-\NewDocumentEnvironment{marginfigure} { o } 
+\NewDocumentEnvironment{marginfigure} { o }
 {
   \begin{lrbox}{\@sidenotes@marginfigurebox}
     \begin{minipage}{\marginparwidth}
@@ -407,9 +411,9 @@
 %
 % \changes{v0.4}{2011/09/30}{define the sidetable enviroment without the environ package}
 % \changes{v0.90}{2012/06/02}{the optional offset parameter is back, renamed environment from sidetable to margintable}
-% \changes{v0.94}{2014/01/22}{use xparse syntax} 
+% \changes{v0.94}{2014/01/22}{use xparse syntax}
 %
-% The margintable is similar to the table environment. But the table 
+% The margintable is similar to the table environment. But the table
 % is put in the margin.
 %
 %    \begin{macrocode}
@@ -435,10 +439,10 @@
 % \changes{v0.97}{2014/05/27}{use adjustwidth in figure* environment}
 % \changes{v1.10}{2020/04/05}{address issue with figures across the full width}
 %
-% The figure* environment provides a figure environment for figures that 
+% The figure* environment provides a figure environment for figures that
 % span across the full page (text plus margin width).
 %
-%    \begin{macrocode}  
+%    \begin{macrocode}
 \AtBeginDocument{%
 \newlength{\@sidenotes@extrawidth}
 \setlength{\@sidenotes@extrawidth}{\marginparwidth}
@@ -486,10 +490,10 @@
 % \changes{v0.97}{2014/05/27}{use adjustwidth in table* environment}
 % \changes{v1.10}{2020/04/05}{address issue with tables across the full width}
 %
-% The table* environment provides a table environment for figures across 
+% The table* environment provides a table environment for figures across
 % text and margin width.
 %
-%    \begin{macrocode}  
+%    \begin{macrocode}
 \DeclareCaptionStyle{widetable}{font=footnotesize}
 \RenewDocumentEnvironment{table*}{ O{htbp} }
 {
