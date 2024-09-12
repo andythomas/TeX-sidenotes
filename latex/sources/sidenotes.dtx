@@ -219,8 +219,9 @@
 % argument. This is required to keep macros with two leading
 % optional arguments.
 %
-%    \begin{macrocode}
 % \changes{v1.20}{2024/09/12}{Allow long arguments.}
+%
+%    \begin{macrocode}
 \DeclareExpandableDocumentCommand{\IfNoValueOrEmptyTF}{ m +m +m }
 {
  \IfNoValueTF{#1}
@@ -272,8 +273,9 @@
 % \noindent Introduce an internal macro to place the marginal text. Use
 % margin note in case an offset is given and marginpar otherwise.
 %
-%    \begin{macrocode}
 % \changes{v1.20}{2024/09/12}{Allow long arguments.}
+%
+%    \begin{macrocode}
 \NewDocumentCommand \@sidenotes@placemarginal { +m +m }
 {
   \IfNoValueOrEmptyTF{#1}
