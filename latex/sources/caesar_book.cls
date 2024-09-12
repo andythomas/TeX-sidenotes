@@ -73,7 +73,7 @@
 \renewcommand{\headrulewidth}{0pt}% The running heads and feet do not have rules
 \renewcommand{\footrulewidth}{0pt}
 \fancyhf{}% set up the page numbering 
-{\fancyfoot[LE,RO]{\thepage}}
+\fancyfoot[LE,RO]{\thepage}
 \fancypagestyle{plain}{%
 	\fancyhf{}
 }
