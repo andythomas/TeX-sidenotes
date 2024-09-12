@@ -7,9 +7,6 @@ on:
 
 jobs:
   LaTeX:
-    if: >
-      startsWith(github.head_ref, 'dependencies') == false &&
-      github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: check the pull request (branch) out
