@@ -7,7 +7,7 @@
 \RequirePackage{marginfix}% automatically adjust the side-floats nicely 
 \RequirePackage{microtype}% microtypography
 %
-% Set page layout geometry -- default is science-book format
+% Set page layout geometry - default is science-book format
 % this means a (portrait) paper size of 170mm x 240mm
 %
 \RequirePackage{geometry}
