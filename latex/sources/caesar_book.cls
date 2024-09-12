@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesFile{caesar_book.cls}[2020/04/05 v1.10 Caesar book]
+\ProvidesFile{caesar_book.cls}[2024/09/12 v1.20 Caesar book]
 \LoadClassWithOptions{book}% this is derived from the book class
 \RequirePackage{sidenotes}% put annotations, tables and figures in the margin
 \captionsetup{font=footnotesize, skip=4pt} % use values matching the style
