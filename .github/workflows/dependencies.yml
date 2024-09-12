@@ -62,7 +62,7 @@ jobs:
           pdflatex -interaction=nonstopmode sidenotes.dtx
           rm sidenotes.glo sidenotes.gls sidenotes.ind sidenotes.idx
           rm sidenotes.ilg sidenotes.toc sidenotes.log sidenotes.aux
-          cp sidenotes.pdf ../ctan
+          mv sidenotes.pdf ../ctan
           cp sidenotes.ins ../ctan
           cp sidenotes.dtx ../ctan
 
@@ -79,15 +79,13 @@ jobs:
           rm caesar_example.bib caesar_example.blg caesar_example.log
           rm caesar_example.run.xml caesar_example.toc
           cp caesar_example.tex ../ctan
-          cp caesar_example.pdf ../ctan
+          mv caesar_example.pdf ../ctan
           cp caesar_book.cls ../ctan
-          mv caesar_example.pdf ../targets
 
       - name: Move sidenotes
         if: steps.changes.outputs.sidenotes == 'true'
         working-directory: latex/sources
         run: |
-          mv sidenotes.pdf ../targets
           mv sidenotes.sty ../targets
 
       - name: Create pull request
