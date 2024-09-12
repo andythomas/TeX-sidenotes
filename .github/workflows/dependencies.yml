@@ -4,6 +4,8 @@ name: dependencies
 
 on:
   push:
+    branches-ignore:
+      - master
     paths:
       - "latex/sources/sidenotes.dtx"
       - "latex/sources/sidenotes.ins"
