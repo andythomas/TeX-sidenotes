@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesFile{caesar_book.cls}[2020/04/05 v1.10 Caesar book]
+\ProvidesFile{caesar_book.cls}[2024/09/12 v1.20 Caesar book]
 \LoadClassWithOptions{book}% this is derived from the book class
 \RequirePackage{sidenotes}% put annotations, tables and figures in the margin
 \captionsetup{font=footnotesize, skip=4pt} % use values matching the style
@@ -7,7 +7,7 @@
 \RequirePackage{marginfix}% automatically adjust the side-floats nicely 
 \RequirePackage{microtype}% microtypography
 %
-% Set page layout geometry -- default is science-book format
+% Set page layout geometry - default is science-book format
 % this means a (portrait) paper size of 170mm x 240mm
 %
 \RequirePackage{geometry}
@@ -73,7 +73,7 @@
 \renewcommand{\headrulewidth}{0pt}% The running heads and feet do not have rules
 \renewcommand{\footrulewidth}{0pt}
 \fancyhf{}% set up the page numbering 
-{\fancyfoot[LE,RO]{\thepage}}
+\fancyfoot[LE,RO]{\thepage}
 \fancypagestyle{plain}{%
 	\fancyhf{}
 }
