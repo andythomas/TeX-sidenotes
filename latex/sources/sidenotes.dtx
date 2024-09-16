@@ -125,6 +125,10 @@
 % documentation of the caption package for information on styles. The macro can
 % be starred, which is analog to the regular starred caption (no numbering, no
 % tof entry): \verb+\sidecaption*[offset]{text}+.
+% Note that the \verb+\label+ should go inside of \verb+text+. If it is
+% placed in the \verb+figure+ or \verb+table+ environment but after the
+% caption, the reference will be out of scope. This leads to undefined reference
+% errors that will not be resolved by any number of \LaTeX{} runs.
 %
 % \DescribeEnv{marginfigure}
 % The marginfigure environment puts a figure and its caption in the margin.
